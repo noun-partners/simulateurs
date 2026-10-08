@@ -1,0 +1,48 @@
+<!-- Simulateur de droits de succession : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     np-sim.js ne fait que recalculer quand une valeur change. -->
+<div class="np-sim" data-sim="droits-succession">
+  <form class="np-sim__form" onsubmit="return false">
+    <h2 class="heading-style-h4 np-sim__title">Votre situation</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-patrimoine">Patrimoine net transmis</label>
+      <div class="np-sim__input"><input id="np-sim-patrimoine" name="patrimoine" type="number" inputmode="numeric" min="0" step="10000" value="1200000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Biens immobiliers, placements et liquidités, dettes déduites. Hors assurance-vie.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-enfants">Nombre d'enfants</label>
+      <div class="np-sim__input"><input id="np-sim-enfants" name="enfants" type="number" inputmode="numeric" min="1" max="10" step="1" value="2"></div>
+      <span class="np-sim__help">Le patrimoine est partagé à parts égales entre eux.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">Droits de succession à payer</span>
+      <span class="np-sim__headline-value" data-out="total">196 388 €</span>
+      <span class="np-sim__headline-note">soit <span data-out="taux">16,4 %</span> du patrimoine transmis</span>
+    </div>
+    <dl class="np-sim__lines">
+      <div class="np-sim__line"><dt>Part reçue par enfant</dt><dd data-out="part">600 000 €</dd></div>
+      <div class="np-sim__line"><dt>Abattement par enfant</dt><dd data-out="abattement">100 000 €</dd></div>
+      <div class="np-sim__line"><dt>Part taxable par enfant</dt><dd data-out="taxable">500 000 €</dd></div>
+      <div class="np-sim__line"><dt>Droits par enfant</dt><dd data-out="droits">98 194 €</dd></div>
+      <div class="np-sim__line"><dt>Net reçu par enfant</dt><dd data-out="net">501 806 €</dd></div>
+    </dl>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : succession en ligne directe, sans donation antérieure. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- CTA : séparé du calcul. Le gain affiché reprend le même barème (abattement reconstitué après 15 ans).
+       data-si="gain" s'affiche quand des droits sont dus, data-si="aucun" sinon. -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Réduire ces droits avant la succession</div>
+      <p class="np-sim__next-text" data-si="gain">Exemple : une donation de 100 000 € à chaque enfant, faite au moins 15 ans avant la succession, réduirait ces droits de <strong data-out="gain">40 000 €</strong>. D'autres leviers existent selon votre situation : démembrement, assurance-vie, pacte Dutreil.</p>
+      <p class="np-sim__next-text" data-si="aucun" hidden>Dans cette situation, l'abattement couvre la part de chaque enfant : aucun droit n'est dû. L'assurance-vie, les donations déjà faites ou un patrimoine professionnel peuvent changer ce résultat.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+    </div>
+  </div>
+</div>

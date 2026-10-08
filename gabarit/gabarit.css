@@ -1,0 +1,38 @@
+/* Gabarit des pages simulateur (en-tête, texte sous l'outil).
+   Référence pour le gabarit Webflow : ces styles ne concernent pas le simulateur lui-même. */
+
+/* En-tête : fond crème et marges du header des articles */
+.np-sim-hero{padding:20px 40px 40px;background:#F8F4F0}
+.np-sim-cream{background:#F8F4F0}
+.np-sim-breadcrumb ol{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;padding:0;list-style:none;font-size:14px;color:#737373}
+.np-sim-breadcrumb li+li::before{content:">";margin-right:8px}
+.np-sim-breadcrumb a{color:inherit;text-decoration:none}
+.np-sim-breadcrumb a:hover{color:#121426;text-decoration:underline}
+.np-sim-h1{margin:0 0 16px}
+.np-sim-intro{max-width:65ch;margin:0 0 20px;font-size:18px;line-height:1.5}
+.np-sim-section{padding:40px 40px 0;background:#fff}
+.np-sim-section--text{padding:0}
+.np-sim-pad{padding:80px 40px}
+
+/* Texte sous l'outil. Si le style Rich Text des articles peut être réutilisé, ces règles sont inutiles. */
+.np-sim-text{max-width:760px;margin:0 auto}
+.np-sim-text .np-rdv{margin:48px 0 32px;border:1px solid #EBE4DC}
+.np-sim-text h2{margin:48px 0 16px;font-size:32px;line-height:1.25}
+.np-sim-text h2:first-child{margin-top:0}
+.np-sim-text h3{margin:32px 0 12px;font-size:24px;line-height:1.3}
+.np-sim-text p,.np-sim-text ul,.np-sim-text ol{margin:0 0 16px;font-size:17px;line-height:1.65}
+.np-sim-text table{width:100%;margin:24px 0;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.np-sim-text th,.np-sim-text td{padding:12px 16px;border-bottom:1px solid #E7E8F1;text-align:left;font-size:16px;font-weight:400}
+.np-sim-text th{background:#F8F4F0;font-weight:700}
+.np-sim-text td:last-child,.np-sim-text th:last-child{text-align:right;white-space:nowrap}
+
+@media (max-width:767px){
+  .np-sim-hero{padding:16px 16px 24px}
+  .np-sim-section{padding:24px 16px 0}
+  .np-sim-section--text{padding:0}
+  .np-sim-pad{padding:48px 16px}
+  .np-sim-intro{font-size:16px}
+  .np-sim-text h2{margin-top:36px;font-size:26px}
+  .np-sim-text h3{font-size:20px}
+  .np-sim-text th,.np-sim-text td{padding:10px 8px;font-size:15px}
+}

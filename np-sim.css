@@ -1,0 +1,48 @@
+/* Simulateurs Noun Partners : styles communs à tous les simulateurs.
+   Tout est sous .np-sim. Aucune police chargée : Figtree et Playfair Display viennent du site.
+   Le bouton du CTA utilise les classes du site (button w-button). */
+
+/* Simulateur : deux blocs côte à côte, sur le modèle des articles
+   (bloc crème « L'essentiel », rayon 12 px ; bloc sombre de la newsletter, rayon 16 px) */
+.np-sim{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:32px;align-items:start;font-family:Figtree,Arial,sans-serif;color:#121426}
+.np-sim *{box-sizing:border-box}
+.np-sim__title{margin:0}
+.np-sim__form{display:flex;flex-direction:column;gap:24px;margin:0;padding:24px;border-radius:12px;background:#F8F4F0}
+.np-sim__field{display:flex;flex-direction:column;gap:8px}
+.np-sim__label{margin:0;font-size:16px;font-weight:700}
+.np-sim__help{font-size:14px;line-height:1.4;color:rgba(18,20,38,.7)}
+/* Champs : ceux des formulaires du site (capsule, bordure sombre) */
+.np-sim__input{display:flex;align-items:center;height:53px;border:1px solid #121426;border-radius:50px;background:#fff}
+.np-sim__input:focus-within{outline:2px solid #CF9804;outline-offset:2px}
+.np-sim__input input,.np-sim__input select{flex:1;min-width:0;height:100%;margin:0;padding:0 20px;border:0;border-radius:50px;background:none;color:inherit;font:inherit;font-size:16px;font-variant-numeric:tabular-nums;outline:0}
+.np-sim__unit{padding-right:20px;color:#737373}
+.np-sim__result{display:flex;flex-direction:column;gap:24px;padding:32px;border-radius:16px;background:#121426;color:#fff}
+.np-sim__headline{display:flex;flex-direction:column;gap:4px}
+.np-sim__headline-label{font-size:16px;color:#CFD1DE}
+.np-sim__headline-value{font-family:"Playfair Display",Georgia,serif;font-size:48px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums lining-nums}
+.np-sim__headline-note{font-size:14px;color:#CFD1DE}
+.np-sim__lines{margin:0;border-top:1px solid rgba(255,255,255,.18)}
+.np-sim__line{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.18);font-size:16px}
+.np-sim__line dt{font-weight:400;color:#CFD1DE}
+.np-sim__line dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.np-sim__disclaimer{grid-column:1/-1;margin:-8px 0 0;font-size:14px;line-height:1.5;color:#737373}
+
+/* CTA sous le calcul : fond doré clair des encarts auteur du site */
+.np-sim__next{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:32px;padding:24px 32px;border-radius:16px;background:#FFF9EB}
+.np-sim__next-content{display:flex;flex-direction:column;gap:8px;max-width:62ch}
+.np-sim__next-title{margin:0}
+.np-sim__next-text{margin:0;font-size:16px;line-height:1.5}
+.np-sim__next-action{flex-shrink:0}
+
+@media (max-width:991px){
+  .np-sim{grid-template-columns:1fr;gap:20px}
+  .np-sim__headline-value{font-size:40px}
+  .np-sim__disclaimer{margin-top:0}
+  .np-sim__next{flex-direction:column;align-items:flex-start;gap:20px}
+}
+@media (max-width:767px){
+  .np-sim__form{padding:20px}
+  .np-sim__result{padding:24px 20px}
+  .np-sim__next{padding:20px}
+  .np-sim__headline-value{font-size:34px}
+}

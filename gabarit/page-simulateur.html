@@ -1,0 +1,80 @@
+<!-- Gabarit d'une page simulateur. Remplace le contenu de <main class="page_main">.
+     Les {{ … }} indiquent le champ à lier (CMS) ou le texte à saisir (page statique).
+     Classes sans préfixe : celles du site. Classes .np-sim-… : dans gabarit.css.
+     À charger une fois dans le gabarit (remplacer v1.0.0 par le tag activé) :
+       <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/noun-partners/simulateurs@v1.0.0/np-sim.css">
+       <script defer src="https://cdn.jsdelivr.net/gh/noun-partners/simulateurs@v1.0.0/np-sim.js"></script> -->
+
+<!-- 1. En-tête : même fond crème et mêmes marges que le header des articles -->
+<header class="np-sim-hero">
+  <div class="container-large">
+
+    <nav aria-label="Fil d'Ariane" class="np-sim-breadcrumb">
+      <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a itemprop="item" href="/simulateurs"><span itemprop="name">Simulateurs</span></a>
+          <meta itemprop="position" content="1">
+        </li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+          <span itemprop="name">{{ nom court }}</span>
+          <meta itemprop="position" content="2">
+        </li>
+      </ol>
+    </nav>
+
+    <h1 class="heading-style-h2 np-sim-h1">{{ H1 }}</h1>
+    <p class="np-sim-intro">{{ introduction, 1 à 2 phrases }}</p>
+
+    <!-- Signature : la même que dans le header des articles (.np-byline, ticket 19), sans la durée de lecture -->
+    <div class="np-byline">
+      <img src="{{ auteur.photo }}" alt="Malek Ziane" class="np-byline_img" loading="eager">
+      <div>
+        <div class="np-byline_name">Par <a href="/auteur">Malek Ziane</a>, conseiller financier indépendant de tout groupe financier · ORIAS n° 20002359</div>
+        <div class="np-byline_meta">
+          <span>Mis à jour le {{ date de mise à jour }}</span>
+          <span aria-hidden="true">·</span>
+          <span>{{ source du barème }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 2. Simulateur, juste sous l'en-tête pour rester visible sans défiler.
+     Bloc code : le contenu de <simulateur>/embed.html (un dossier par simulateur) -->
+<section class="np-sim-section">
+  <div class="container-large">
+    {{ embed simulateur }}
+  </div>
+</section>
+
+<!-- 3. Texte sous l'outil : Rich Text classique, éditable dans Webflow -->
+<section class="np-sim-section np-sim-section--text">
+  <div class="np-sim-pad">
+    <div class="container-large">
+      <div class="np-sim-text">
+        <div class="rich-text-basic w-richtext">{{ contenu (Rich Text) }}</div>
+
+        <!-- Bloc RDV du cluster (base Notion des CTA), comme en fin d'article -->
+        {{ CTA rendez-vous }}
+
+        <!-- Encart auteur : le composant « Card author Malek » des articles, sans modification -->
+        {{ composant encart auteur }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. FAQ : composant FAQ existant du site, questions propres à chaque simulateur -->
+<section class="section np-sim-cream">
+  <div class="section-padding">
+    <div class="container-large">
+      <div class="section-wrapper">
+        <div class="section-heading"><h2 class="heading-style-h3 text-align-center">{{ titre de la FAQ }}</h2></div>
+        <div class="section-info">
+          <div class="faq_component">{{ questions / réponses }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
