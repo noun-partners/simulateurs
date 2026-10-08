@@ -34,14 +34,7 @@ Un tag par version (`v1.0.0`, `v1.0.1`…). Le site charge un tag précis : une 
 
 ## Règles
 
-- **JS sans global** : tout est dans une IIFE, sans variable ni fonction globale (en particulier pas de `$`, qui masquerait le jQuery du site).
-- **Un init par conteneur** `.np-sim`, les éléments sont cherchés dans le conteneur. Un conteneur déjà initialisé est ignoré (`data-sim-pret`), donc un double chargement du script est sans effet.
-- **Pas d'écoute globale des erreurs**, pas de mode sombre, aucune police chargée.
-- **CSS sous `.np-sim`** : toutes les classes commencent par `np-sim`, aucun sélecteur global.
-- **Lisible sans JavaScript** : les résultats du cas par défaut sont écrits dans le HTML. Le script ne fait que recalculer.
-- **Saisies bornées** : une valeur vide, négative ou hors limites ne produit jamais de `NaN` ni de montant négatif.
-- **Avertissement sous le résultat**, dans le bloc du simulateur.
-- **CTA en `<button data-cta="/chemin">`**, sans `<a href>` : le footer du site fige les liens vers la prise de rendez-vous.
+Les règles de code, de calcul et de version sont dans [AGENTS.md](AGENTS.md). À lire avant toute modification, par une personne comme par un agent.
 
 ## Suivi
 
