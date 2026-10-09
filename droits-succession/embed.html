@@ -1,8 +1,9 @@
 <!-- Simulateur de droits de succession : HTML à coller dans le bloc code de l'item CMS.
      Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
-     np-sim.js ne fait que recalculer quand une valeur change. -->
+     np-sim.js ne fait que recalculer quand une valeur change.
+     Balises limitées à div, span, p, form, label, input, button : le Rich Text de Webflow retire dl, dt, dd et les attributs on…. -->
 <div class="np-sim" data-sim="droits-succession">
-  <form class="np-sim__form" onsubmit="return false">
+  <form class="np-sim__form">
     <h2 class="heading-style-h4 np-sim__title">Votre situation</h2>
     <div class="np-sim__field">
       <label class="np-sim__label" for="np-sim-patrimoine">Patrimoine net transmis</label>
@@ -22,13 +23,13 @@
       <span class="np-sim__headline-value" data-out="total">196 388 €</span>
       <span class="np-sim__headline-note">soit <span data-out="taux">16,4 %</span> du patrimoine transmis</span>
     </div>
-    <dl class="np-sim__lines">
-      <div class="np-sim__line"><dt>Part reçue par enfant</dt><dd data-out="part">600 000 €</dd></div>
-      <div class="np-sim__line"><dt>Abattement par enfant</dt><dd data-out="abattement">100 000 €</dd></div>
-      <div class="np-sim__line"><dt>Part taxable par enfant</dt><dd data-out="taxable">500 000 €</dd></div>
-      <div class="np-sim__line"><dt>Droits par enfant</dt><dd data-out="droits">98 194 €</dd></div>
-      <div class="np-sim__line"><dt>Net reçu par enfant</dt><dd data-out="net">501 806 €</dd></div>
-    </dl>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Part reçue par enfant</span><span class="np-sim__line-value" data-out="part">600 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Abattement par enfant</span><span class="np-sim__line-value" data-out="abattement">100 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Part taxable par enfant</span><span class="np-sim__line-value" data-out="taxable">500 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Droits par enfant</span><span class="np-sim__line-value" data-out="droits">98 194 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Net reçu par enfant</span><span class="np-sim__line-value" data-out="net">501 806 €</span></div>
+    </div>
   </div>
 
   <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : succession en ligne directe, sans donation antérieure. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>

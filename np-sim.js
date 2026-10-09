@@ -60,6 +60,9 @@
     if (!moteur || !form || sim.hasAttribute('data-sim-pret')) return
     sim.setAttribute('data-sim-pret', '')
 
+    // Entrée dans un champ ne doit pas recharger la page
+    form.addEventListener('submit', function (e) { e.preventDefault() })
+
     var utilise = false
     form.addEventListener('input', function () {
       var r = moteur(form)

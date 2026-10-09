@@ -33,6 +33,7 @@ Le [README](README.md) décrit les fichiers, l'intégration dans Webflow et les 
 ## HTML
 
 - **L'embed ne contient que du HTML** : ni `<style>`, ni `<script>`. Il doit rester très en dessous de la limite Webflow de 50 000 caractères (viser moins de 8 000).
+- **Balises limitées à `div`, `span`, `p`, `h2`, `strong`, `form`, `label`, `input`, `button`.** Le Rich Text de Webflow retire `dl`, `dt`, `dd` et les attributs `on…` : le libellé et la valeur se retrouvent collés et la valeur ne se met plus à jour.
 - **Lisible sans JavaScript** : les résultats du cas par défaut sont dans le HTML servi. Pas d'iframe.
 - **CTA en `<button type="button" data-cta="/chemin">`**. Pas de `<a href>` vers la prise de rendez-vous ni vers calendly.com, pas de `mailto:` : le footer du site fige ces liens au chargement.
 - **Chaque champ a un `<label for>`** et un texte d'aide ; les `id` sont préfixés `np-sim-` et uniques dans la page.
