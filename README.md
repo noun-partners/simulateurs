@@ -8,7 +8,7 @@ Code des simulateurs intégrés aux pages `/simulateurs/…` du site. Le HTML de
 |---|---|
 | `np-sim.css` | Styles communs à tous les simulateurs. |
 | `np-sim.js` | Script unique : le noyau (formatage, bornes de saisie, suivi, CTA) et un moteur de calcul par simulateur. |
-| `<simulateur>/embed.html` | Le HTML à coller dans le bloc code de l'item CMS. |
+| `<simulateur>/embed.html` | Le HTML à coller dans le bloc code de l'item CMS. Les choix exclusifs (situation familiale, forme de société) sont des boutons radio `.np-sim__choice`. |
 | `gabarit/` | Structure et styles de la page (en-tête, texte, FAQ), pour le gabarit Webflow. Ne concerne pas le simulateur lui-même. |
 
 ## Simulateurs
@@ -16,6 +16,9 @@ Code des simulateurs intégrés aux pages `/simulateurs/…` du site. Le HTML de
 | `data-sim` | Dossier | Calcul |
 |---|---|---|
 | `droits-succession` | `droits-succession/` | Droits de succession en ligne directe : abattement de 100 000 € par enfant, barème de 5 à 45 %. |
+| `revenu-exceptionnel` | `revenu-exceptionnel/` | Impôt sur un revenu exceptionnel, avec et sans le système du quotient (CGI, art. 163-0 A) : barème de l'IR 2026, plafonnement du quotient familial, décote. |
+| `salaire-dirigeant` | `salaire-dirigeant/` | Répartition rémunération et dividendes qui maximise le revenu net, en SAS ou en SARL : taux moyens de cotisations, IS, PFU de 31,4 %, IR, CEHR et CDHR. Recherche à l'euro près. |
+| `placement-tresorerie` | `placement-tresorerie/` | Gain net après IS d'un placement imposé chaque année et d'un contrat de capitalisation (CGI, art. 238 septies E : forfait de 105 % du TME, régularisé au rachat). |
 
 ## Intégration dans Webflow
 
@@ -26,7 +29,7 @@ Dans le gabarit, une seule fois (remplacer `v1.0.0` par le tag activé) :
 <script defer src="https://cdn.jsdelivr.net/gh/noun-partners/simulateurs@v1.0.0/np-sim.js"></script>
 ```
 
-Dans l'item CMS : le contenu de `<simulateur>/embed.html`. Le simulateur de droits de succession fait environ 3 500 caractères.
+Dans l'item CMS : le contenu de `<simulateur>/embed.html`. Chaque embed fait entre 3 500 et 6 500 caractères.
 
 ### Dans un article exporté par StickHub
 

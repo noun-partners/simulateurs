@@ -1,0 +1,64 @@
+<!-- Simulateur de placement de trésorerie d'entreprise : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="placement-tresorerie">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre trésorerie</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-pt-montant">Montant placé</label>
+      <div class="np-sim__input"><input id="np-sim-pt-montant" name="montant" type="number" inputmode="numeric" min="0" step="10000" value="500000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Trésorerie dont la société n'aura pas besoin pendant la durée choisie.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-pt-duree">Durée du placement</label>
+      <div class="np-sim__input"><input id="np-sim-pt-duree" name="duree" type="number" inputmode="numeric" min="1" max="30" step="1" value="5"><span class="np-sim__unit">ans</span></div>
+      <span class="np-sim__help">Entre 1 et 30 ans.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-pt-taux">Taux d'impôt sur les sociétés</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-pt-taux">
+        <label class="np-sim__choice"><input type="radio" name="taux" value="25" checked><span>25 %</span></label>
+        <label class="np-sim__choice"><input type="radio" name="taux" value="15"><span>15 %</span></label>
+      </div>
+      <span class="np-sim__help">15 % si le bénéfice reste sous 42 500 € et que la société a droit au taux réduit.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-pt-annuel">Rendement d'un placement imposé chaque année</label>
+      <div class="np-sim__input"><input id="np-sim-pt-annuel" name="annuel" type="number" inputmode="decimal" min="0" max="20" step="0.1" value="2.5"><span class="np-sim__unit">% par an</span></div>
+      <span class="np-sim__help">Compte à terme, compte rémunéré, fonds monétaire : le taux brut de votre offre.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-pt-contrat">Rendement du contrat de capitalisation</label>
+      <div class="np-sim__input"><input id="np-sim-pt-contrat" name="contrat" type="number" inputmode="decimal" min="0" max="20" step="0.1" value="2.5"><span class="np-sim__unit">% par an</span></div>
+      <span class="np-sim__help">Net de frais. Par défaut, le même taux, pour ne comparer que la fiscalité.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">Gain net après impôt sur les sociétés</span>
+      <span class="np-sim__headline-value" data-out="meilleur">49 278 €</span>
+      <span class="np-sim__headline-note">en <span data-out="duree">5 ans</span>, <span data-out="support">avec le contrat de capitalisation</span></span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Placement imposé chaque année</span><span class="np-sim__line-value" data-out="annuel">48 666 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Contrat de capitalisation</span><span class="np-sim__line-value" data-out="contrat">49 278 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Revenu forfaitaire imposé chaque année sur le contrat</span><span class="np-sim__line-value" data-out="forfait">4,7 %</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">IS payé sur ce forfait avant le rachat</span><span class="np-sim__line-value" data-out="avance">32 378 €</span></div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : impôt sur les sociétés au taux choisi ; contrat de capitalisation soumis au revenu forfaitaire de l'article 238 septies E du CGI (105 % du TME de septembre 2026), régularisé au rachat. Rendements supposés constants et non garantis : hors compte à terme et fonds en euros, un placement présente un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- data-si="contrat" quand le contrat de capitalisation rapporte plus, data-si="annuel" sinon -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Choisir le support selon le besoin</div>
+      <p class="np-sim__next-text" data-si="contrat">À rendement égal, le contrat reporte l'impôt et rapporte <strong data-out="ecart">612 €</strong> de plus en <span data-out="dureeCta">5 ans</span>. En contrepartie, la société paie <span data-out="avanceCta">32 378 €</span> d'IS sur le forfait avant le rachat : un coût de trésorerie à mettre en face.</p>
+      <p class="np-sim__next-text" data-si="annuel" hidden>Ici, le placement imposé chaque année rapporte le plus. La date du besoin, le risque accepté et les frais comptent autant que la fiscalité.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+    </div>
+  </div>
+</div>

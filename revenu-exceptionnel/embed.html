@@ -1,0 +1,60 @@
+<!-- Simulateur d'impôt sur un revenu exceptionnel (système du quotient) : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="revenu-exceptionnel">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre situation</h2>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-re-situation">Situation familiale</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-re-situation">
+        <label class="np-sim__choice"><input type="radio" name="situation" value="seul"><span>Seul</span></label>
+        <label class="np-sim__choice"><input type="radio" name="situation" value="couple" checked><span>Marié ou pacsé</span></label>
+      </div>
+      <span class="np-sim__help">Déclaration commune pour un couple marié ou pacsé.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-re-enfants">Enfants à charge</label>
+      <div class="np-sim__input"><input id="np-sim-re-enfants" name="enfants" type="number" inputmode="numeric" min="0" max="10" step="1" value="2"></div>
+      <span class="np-sim__help">Une demi-part pour chacun des deux premiers, une part à partir du troisième.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-re-revenu">Revenu net imposable habituel du foyer</label>
+      <div class="np-sim__input"><input id="np-sim-re-revenu" name="revenu" type="number" inputmode="numeric" min="0" step="1000" value="80000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Revenus de l'année hors revenu exceptionnel, après l'abattement de 10 % sur les salaires.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-re-exceptionnel">Revenu exceptionnel net imposable</label>
+      <div class="np-sim__input"><input id="np-sim-re-exceptionnel" name="exceptionnel" type="number" inputmode="numeric" min="0" step="1000" value="150000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Prime exceptionnelle, indemnité de départ ou de rupture imposable : un revenu qui ne se reproduira pas.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">Impôt supplémentaire dû sur ce revenu</span>
+      <span class="np-sim__headline-value" data-out="supplement">45 000 €</span>
+      <span class="np-sim__headline-note">soit <span data-out="part">30 %</span> du revenu exceptionnel</span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt sans le revenu exceptionnel</span><span class="np-sim__line-value" data-out="sans">6 594 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt total avec le quotient</span><span class="np-sim__line-value" data-out="quotient">51 594 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt total sans le quotient</span><span class="np-sim__line-value" data-out="direct">58 287 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Économie due au quotient</span><span class="np-sim__line-value" data-out="economie">6 693 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Tranche marginale habituelle</span><span class="np-sim__line-value" data-out="tmi">30 %</span></div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : barème de l'impôt sur le revenu 2026 (revenus 2025), plafonnement du quotient familial et décote. Hors parent isolé, réductions d'impôt et contributions sur les hauts revenus. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- data-si="normal" sous les seuils des contributions sur les hauts revenus, data-si="hauts" au-delà -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Réduire l'impôt sur ce revenu</div>
+      <p class="np-sim__next-text" data-si="normal">Le quotient lisse déjà l'impôt sur ce revenu. Un versement sur un PER, déductible dans la limite de vos plafonds, ou l'affectation d'une prime d'intéressement à un plan d'épargne salariale peuvent encore le réduire.</p>
+      <p class="np-sim__next-text" data-si="hauts" hidden>Au-delà de 250 000 € de revenu fiscal de référence (500 000 € pour un couple), la contribution exceptionnelle et la contribution différentielle sur les hauts revenus s'ajoutent, avec des règles propres aux revenus exceptionnels. Ce calcul ne les inclut pas.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+    </div>
+  </div>
+</div>
