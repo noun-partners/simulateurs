@@ -15,7 +15,7 @@
       <span class="np-sim__help">Entre 1 et 30 ans.</span>
     </div>
     <div class="np-sim__field">
-      <span class="np-sim__label" id="np-sim-pt-taux">Taux d'impôt sur les sociétés</span>
+      <span class="np-sim__label" id="np-sim-pt-taux">Taux d'impôt sur les sociétés chaque année</span>
       <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-pt-taux">
         <label class="np-sim__choice"><input type="radio" name="taux" value="25" checked><span>25 %</span></label>
         <label class="np-sim__choice"><input type="radio" name="taux" value="15"><span>15 %</span></label>
@@ -25,7 +25,7 @@
     <div class="np-sim__field">
       <label class="np-sim__label" for="np-sim-pt-annuel">Rendement d'un placement imposé chaque année</label>
       <div class="np-sim__input"><input id="np-sim-pt-annuel" name="annuel" type="number" inputmode="decimal" min="0" max="20" step="0.1" value="2.5"><span class="np-sim__unit">% par an</span></div>
-      <span class="np-sim__help">Compte à terme, compte rémunéré, fonds monétaire : le taux brut de votre offre. La plupart des ETF sont aussi imposés chaque année, sur leur plus-value latente.</span>
+      <span class="np-sim__help">Compte à terme, compte rémunéré, fonds monétaire, et la plupart des ETF : le taux brut.</span>
     </div>
     <div class="np-sim__field">
       <label class="np-sim__label" for="np-sim-pt-titres">Rendement du compte-titres</label>
@@ -39,8 +39,22 @@
     </div>
     <div class="np-sim__field">
       <label class="np-sim__label" for="np-sim-pt-tme">TME connu à la souscription du contrat</label>
+      <div class="np-sim__choices" role="radiogroup" aria-label="Date de souscription du contrat">
+        <label class="np-sim__choice"><input type="radio" name="tmeChoix" value="4.49" data-remplit="tme" checked><span>Nouveau contrat</span></label>
+        <label class="np-sim__choice"><input type="radio" name="tmeChoix" value="3.75" data-remplit="tme"><span>Ouvert au printemps 2026</span></label>
+        <label class="np-sim__choice"><input type="radio" name="tmeChoix" value="0.20" data-remplit="tme"><span>Ouvert en 2021</span></label>
+      </div>
       <div class="np-sim__input"><input id="np-sim-pt-tme" name="tme" type="number" inputmode="decimal" min="0" max="10" step="0.01" value="4.49"><span class="np-sim__unit">%</span></div>
-      <span class="np-sim__help">Taux moyen des emprunts d'État, figé pour toute la vie du contrat : 4,49 % (septembre 2026) pour un contrat ouvert en octobre 2026. Pour un contrat déjà ouvert, le dernier TME publié à sa souscription.</span>
+      <span class="np-sim__help">Taux moyen des emprunts d'État, figé pour toute la vie du contrat : 4,49 % (septembre 2026) pour un contrat ouvert en octobre 2026.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-pt-rachat">Taux d'IS l'année du rachat du contrat</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-pt-rachat">
+        <label class="np-sim__choice"><input type="radio" name="rachat" value="25" checked><span>25 %</span></label>
+        <label class="np-sim__choice"><input type="radio" name="rachat" value="15"><span>15 %</span></label>
+        <label class="np-sim__choice"><input type="radio" name="rachat" value="0"><span>0 % (déficit)</span></label>
+      </div>
+      <span class="np-sim__help">0 % si la société est en déficit : l'excédent de forfaits grossit alors le déficit reportable.</span>
     </div>
   </form>
 
@@ -55,12 +69,12 @@
       <div class="np-sim__line"><span class="np-sim__line-label">Compte-titres, imposé à la cession</span><span class="np-sim__line-value" data-out="titres">49 278 €</span></div>
       <div class="np-sim__line"><span class="np-sim__line-label">Contrat de capitalisation</span><span class="np-sim__line-value" data-out="contrat">48 098 €</span></div>
       <div class="np-sim__line"><span class="np-sim__line-label">Revenu forfaitaire imposé chaque année sur le contrat</span><span class="np-sim__line-value" data-out="forfait">4,71 %</span></div>
-      <div class="np-sim__line"><span class="np-sim__line-label">IS payé d'avance sur ce forfait, récupéré au rachat</span><span class="np-sim__line-value" data-out="avance">32 378 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">IS payé d'avance sur ce forfait avant le rachat</span><span class="np-sim__line-value" data-out="avance">32 378 €</span></div>
       <div class="np-sim__line"><span class="np-sim__line-label">Coût de cette avance pour la société</span><span class="np-sim__line-value" data-out="cout">1 180 €</span></div>
     </div>
   </div>
 
-  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : impôt sur les sociétés au taux choisi ; contrat de capitalisation soumis au revenu forfaitaire de l'article 238 septies E du CGI (105 % du TME connu à la souscription), l'excédent étant déduit au rachat ; coût de l'avance calculé au rendement net du placement imposé chaque année. Rendements supposés constants et non garantis : hors compte à terme et fonds en euros, un placement présente un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : impôt sur les sociétés au taux choisi ; contrat de capitalisation soumis au revenu forfaitaire de l'article 238 septies E du CGI (105 % du TME connu à la souscription), l'excédent étant déduit au rachat au taux d'IS de cette année-là ; coût de l'avance calculé au rendement net du placement imposé chaque année. Rendements supposés constants et non garantis : hors compte à terme et fonds en euros, un placement présente un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
 
   <!-- data-si : le support qui rapporte le plus (annuel, titres ou contrat) -->
   <div class="np-sim__next">

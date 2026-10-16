@@ -233,6 +233,9 @@
       var montant = nombre(form.montant, 0, 1e9)
       var duree = Math.round(nombre(form.duree, 1, 30))
       var is = form.taux.value === '15' ? .15 : .25
+      // Taux d'IS l'année du rachat du contrat : 0 % si la société est en déficit (l'excédent de forfaits grossit le déficit)
+      var isRachat = { '25': .25, '15': .15, '0': 0 }[form.rachat.value]
+      if (isRachat === undefined) isRachat = is
       var annuel = nombre(form.annuel, 0, 20) / 100
       var titres = nombre(form.titres, 0, 20) / 100
       var contrat = nombre(form.contrat, 0, 20) / 100
@@ -245,8 +248,8 @@
       // Contrat de capitalisation (CGI, art. 238 septies E) : chaque année, IS sur un revenu forfaitaire de 105 % du
       // TME connu à la souscription, figé pour la vie du contrat, appliqué aux primes et aux forfaits déjà imposés.
       // Au rachat, l'IS porte sur le gain réel moins les forfaits imposés : un excédent est déduit (BOI-BIC-PDSTK-10-20-60-20
-      // § 310). L'IS total est celui du gain réel, mais payé d'avance ; l'avance aurait rapporté le taux net du placement
-      // imposé chaque année jusqu'au rachat
+      // § 310), au taux d'IS de l'année du rachat. Les forfaits sont imposés au taux de chaque année ; cet IS avancé
+      // aurait rapporté le taux net du placement imposé chaque année jusqu'au rachat
       var forfait = 1.05 * nombre(form.tme, 0, 10) / 100
       var avance = 0, cout = 0
       for (var annee = 1; annee <= duree; annee++) {
@@ -254,8 +257,10 @@
         avance += impotAnnee
         cout += impotAnnee * (Math.pow(1 + net, duree - annee) - 1)
       }
+      var gainBrut = montant * (Math.pow(1 + contrat, duree) - 1)
+      var forfaits = montant * (Math.pow(1 + forfait, duree) - 1)
       // Un contrat qui rapporte moins que le coût de l'avance n'affiche pas de gain négatif
-      var gainContrat = Math.max(0, montant * (Math.pow(1 + contrat, duree) - 1) * (1 - is) - cout)
+      var gainContrat = Math.max(0, gainBrut - avance - isRachat * (gainBrut - forfaits) - cout)
       var gains = { annuel: gainAnnuel, titres: gainTitres, contrat: gainContrat }
       var meilleur = Object.keys(gains).reduce(function (a, b) { return gains[b] > gains[a] ? b : a })
       var dureeTexte = duree + ' an' + (duree > 1 ? 's' : '')
@@ -290,7 +295,12 @@
     form.addEventListener('submit', function (e) { e.preventDefault() })
 
     var utilise = false
-    form.addEventListener('input', function () {
+    form.addEventListener('input', function (e) {
+      // Boutons qui remplissent un champ (data-remplit) ; une saisie dans ce champ les décoche
+      var champ = e && e.target
+      var cible = champ && champ.getAttribute && champ.getAttribute('data-remplit')
+      if (cible && form[cible]) form[cible].value = champ.value
+      else if (champ && champ.name) sim.querySelectorAll('[data-remplit="' + champ.name + '"]').forEach(function (b) { b.checked = false })
       var r = moteur(form)
       Object.keys(r.out).forEach(function (nom) {
         var el = sim.querySelector('[data-out="' + nom + '"]')
