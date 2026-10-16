@@ -16,9 +16,9 @@ Code des simulateurs intégrés aux pages `/simulateurs/…` du site. Le HTML de
 | `data-sim` | Dossier | Calcul |
 |---|---|---|
 | `droits-succession` | `droits-succession/` | Droits de succession en ligne directe : abattement de 100 000 € par enfant, barème de 5 à 45 %. |
-| `revenu-exceptionnel` | `revenu-exceptionnel/` | Impôt sur un revenu exceptionnel, avec et sans le système du quotient (CGI, art. 163-0 A) : barème de l'IR 2026, plafonnement du quotient familial, décote. |
-| `salaire-dirigeant` | `salaire-dirigeant/` | Répartition rémunération et dividendes qui maximise le revenu net, en SAS ou en SARL : taux moyens de cotisations, IS, PFU de 31,4 %, IR, CEHR et CDHR. Recherche à l'euro près. |
-| `placement-tresorerie` | `placement-tresorerie/` | Gain net après IS d'un placement imposé chaque année et d'un contrat de capitalisation (CGI, art. 238 septies E : forfait de 105 % du TME, régularisé au rachat). |
+| `revenu-exceptionnel` | `revenu-exceptionnel/` | Impôt sur un revenu exceptionnel, avec et sans le système du quotient (CGI, art. 163-0 A) : barème de l'IR 2026, plafonnement du quotient familial, décote. CEHR avec son lissage (art. 223 sexies II) et CDHR avec le revenu exceptionnel compté pour un quart (art. 224), en supposant les revenus des années précédentes égaux au revenu habituel. |
+| `salaire-dirigeant` | `salaire-dirigeant/` | Répartition rémunération et dividendes qui maximise le revenu net, en SAS ou en SARL : taux moyens de cotisations, IS, PFU de 31,4 % (en SARL, coefficient net de 0,692 sur les dividendes au-delà de 10 % du capital), IR, CEHR et CDHR. Recherche à l'euro près. |
+| `placement-tresorerie` | `placement-tresorerie/` | Gain net après IS d'un placement imposé chaque année, d'un compte-titres imposé à la cession et d'un contrat de capitalisation (CGI, art. 238 septies E : forfait de 105 % du TME saisi, figé à la souscription, excédent déduit au rachat). Le coût de l'IS avancé sur le forfait est compté au rendement net du placement imposé chaque année. |
 
 ## Intégration dans Webflow
 

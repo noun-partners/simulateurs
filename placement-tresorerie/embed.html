@@ -25,12 +25,22 @@
     <div class="np-sim__field">
       <label class="np-sim__label" for="np-sim-pt-annuel">Rendement d'un placement imposé chaque année</label>
       <div class="np-sim__input"><input id="np-sim-pt-annuel" name="annuel" type="number" inputmode="decimal" min="0" max="20" step="0.1" value="2.5"><span class="np-sim__unit">% par an</span></div>
-      <span class="np-sim__help">Compte à terme, compte rémunéré, fonds monétaire : le taux brut de votre offre.</span>
+      <span class="np-sim__help">Compte à terme, compte rémunéré, fonds monétaire : le taux brut de votre offre. La plupart des ETF sont aussi imposés chaque année, sur leur plus-value latente.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-pt-titres">Rendement du compte-titres</label>
+      <div class="np-sim__input"><input id="np-sim-pt-titres" name="titres" type="number" inputmode="decimal" min="0" max="20" step="0.1" value="2.5"><span class="np-sim__unit">% par an</span></div>
+      <span class="np-sim__help">Actions détenues en direct, imposées seulement à la cession. Net de frais.</span>
     </div>
     <div class="np-sim__field">
       <label class="np-sim__label" for="np-sim-pt-contrat">Rendement du contrat de capitalisation</label>
       <div class="np-sim__input"><input id="np-sim-pt-contrat" name="contrat" type="number" inputmode="decimal" min="0" max="20" step="0.1" value="2.5"><span class="np-sim__unit">% par an</span></div>
-      <span class="np-sim__help">Net de frais. Par défaut, le même taux, pour ne comparer que la fiscalité.</span>
+      <span class="np-sim__help">Net de frais. Par défaut, le même taux partout, pour ne comparer que la fiscalité.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-pt-tme">TME connu à la souscription du contrat</label>
+      <div class="np-sim__input"><input id="np-sim-pt-tme" name="tme" type="number" inputmode="decimal" min="0" max="10" step="0.01" value="4.49"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">Taux moyen des emprunts d'État, figé pour toute la vie du contrat : 4,49 % (septembre 2026) pour un contrat ouvert en octobre 2026. Pour un contrat déjà ouvert, le dernier TME publié à sa souscription.</span>
     </div>
   </form>
 
@@ -38,23 +48,26 @@
     <div class="np-sim__headline">
       <span class="np-sim__headline-label">Gain net après impôt sur les sociétés</span>
       <span class="np-sim__headline-value" data-out="meilleur">49 278 €</span>
-      <span class="np-sim__headline-note">en <span data-out="duree">5 ans</span>, <span data-out="support">avec le contrat de capitalisation</span></span>
+      <span class="np-sim__headline-note">en <span data-out="duree">5 ans</span>, <span data-out="support">avec le compte-titres</span></span>
     </div>
     <div class="np-sim__lines">
       <div class="np-sim__line"><span class="np-sim__line-label">Placement imposé chaque année</span><span class="np-sim__line-value" data-out="annuel">48 666 €</span></div>
-      <div class="np-sim__line"><span class="np-sim__line-label">Contrat de capitalisation</span><span class="np-sim__line-value" data-out="contrat">49 278 €</span></div>
-      <div class="np-sim__line"><span class="np-sim__line-label">Revenu forfaitaire imposé chaque année sur le contrat</span><span class="np-sim__line-value" data-out="forfait">4,7 %</span></div>
-      <div class="np-sim__line"><span class="np-sim__line-label">IS payé sur ce forfait avant le rachat</span><span class="np-sim__line-value" data-out="avance">32 378 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Compte-titres, imposé à la cession</span><span class="np-sim__line-value" data-out="titres">49 278 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Contrat de capitalisation</span><span class="np-sim__line-value" data-out="contrat">48 098 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Revenu forfaitaire imposé chaque année sur le contrat</span><span class="np-sim__line-value" data-out="forfait">4,71 %</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">IS payé d'avance sur ce forfait, récupéré au rachat</span><span class="np-sim__line-value" data-out="avance">32 378 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Coût de cette avance pour la société</span><span class="np-sim__line-value" data-out="cout">1 180 €</span></div>
     </div>
   </div>
 
-  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : impôt sur les sociétés au taux choisi ; contrat de capitalisation soumis au revenu forfaitaire de l'article 238 septies E du CGI (105 % du TME de septembre 2026), régularisé au rachat. Rendements supposés constants et non garantis : hors compte à terme et fonds en euros, un placement présente un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : impôt sur les sociétés au taux choisi ; contrat de capitalisation soumis au revenu forfaitaire de l'article 238 septies E du CGI (105 % du TME connu à la souscription), l'excédent étant déduit au rachat ; coût de l'avance calculé au rendement net du placement imposé chaque année. Rendements supposés constants et non garantis : hors compte à terme et fonds en euros, un placement présente un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
 
-  <!-- data-si="contrat" quand le contrat de capitalisation rapporte plus, data-si="annuel" sinon -->
+  <!-- data-si : le support qui rapporte le plus (annuel, titres ou contrat) -->
   <div class="np-sim__next">
     <div class="np-sim__next-content">
       <div class="heading-style-h4 np-sim__next-title">Choisir le support selon le besoin</div>
-      <p class="np-sim__next-text" data-si="contrat">À rendement égal, le contrat reporte l'impôt et rapporte <strong data-out="ecart">612 €</strong> de plus en <span data-out="dureeCta">5 ans</span>. En contrepartie, la société paie <span data-out="avanceCta">32 378 €</span> d'IS sur le forfait avant le rachat : un coût de trésorerie à mettre en face.</p>
+      <p class="np-sim__next-text" data-si="titres">Le compte-titres ne fait payer l'IS qu'à la cession. Le contrat de capitalisation ferait avancer <span data-out="avanceCta">32 378 €</span> d'IS sur le forfait, ce qui coûte <strong data-out="coutCta">1 180 €</strong> à la société en <span data-out="dureeCta">5 ans</span>. Un contrat ouvert quand le TME était bas garde son petit forfait : c'est une raison de ne pas le clôturer.</p>
+      <p class="np-sim__next-text" data-si="contrat" hidden>Ici, le rendement du contrat de capitalisation compense l'IS payé d'avance sur le forfait. La date du besoin, le risque accepté et les frais comptent autant que la fiscalité.</p>
       <p class="np-sim__next-text" data-si="annuel" hidden>Ici, le placement imposé chaque année rapporte le plus. La date du besoin, le risque accepté et les frais comptent autant que la fiscalité.</p>
     </div>
     <div class="np-sim__next-action">

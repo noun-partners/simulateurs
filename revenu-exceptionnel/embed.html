@@ -36,22 +36,23 @@
       <span class="np-sim__headline-note">soit <span data-out="part">30 %</span> du revenu exceptionnel</span>
     </div>
     <div class="np-sim__lines">
-      <div class="np-sim__line"><span class="np-sim__line-label">Impôt sans le revenu exceptionnel</span><span class="np-sim__line-value" data-out="sans">6 594 €</span></div>
-      <div class="np-sim__line"><span class="np-sim__line-label">Impôt total avec le quotient</span><span class="np-sim__line-value" data-out="quotient">51 594 €</span></div>
-      <div class="np-sim__line"><span class="np-sim__line-label">Impôt total sans le quotient</span><span class="np-sim__line-value" data-out="direct">58 287 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur le revenu sans le revenu exceptionnel</span><span class="np-sim__line-value" data-out="sans">6 594 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur le revenu avec le quotient</span><span class="np-sim__line-value" data-out="quotient">51 594 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur le revenu sans le quotient</span><span class="np-sim__line-value" data-out="direct">58 287 €</span></div>
       <div class="np-sim__line"><span class="np-sim__line-label">Économie due au quotient</span><span class="np-sim__line-value" data-out="economie">6 693 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Contributions sur les hauts revenus en plus</span><span class="np-sim__line-value" data-out="contributions">0 €</span></div>
       <div class="np-sim__line"><span class="np-sim__line-label">Tranche marginale habituelle</span><span class="np-sim__line-value" data-out="tmi">30 %</span></div>
     </div>
   </div>
 
-  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : barème de l'impôt sur le revenu 2026 (revenus 2025), plafonnement du quotient familial et décote. Hors parent isolé, réductions d'impôt et contributions sur les hauts revenus. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : barème de l'impôt sur le revenu 2026 (revenus 2025), plafonnement du quotient familial et décote ; CEHR et CDHR avec leurs règles pour les revenus exceptionnels, en supposant que les revenus des années précédentes étaient égaux au revenu habituel. Hors parent isolé, réductions et crédits d'impôt. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
 
-  <!-- data-si="normal" sous les seuils des contributions sur les hauts revenus, data-si="hauts" au-delà -->
+  <!-- data-si="hauts" quand le revenu exceptionnel déclenche des contributions sur les hauts revenus, data-si="normal" sinon -->
   <div class="np-sim__next">
     <div class="np-sim__next-content">
       <div class="heading-style-h4 np-sim__next-title">Réduire l'impôt sur ce revenu</div>
       <p class="np-sim__next-text" data-si="normal">Le quotient lisse déjà l'impôt sur ce revenu. Un versement sur un PER, déductible dans la limite de vos plafonds, ou l'affectation d'une prime d'intéressement à un plan d'épargne salariale peuvent encore le réduire.</p>
-      <p class="np-sim__next-text" data-si="hauts" hidden>Au-delà de 250 000 € de revenu fiscal de référence (500 000 € pour un couple), la contribution exceptionnelle et la contribution différentielle sur les hauts revenus s'ajoutent, avec des règles propres aux revenus exceptionnels. Ce calcul ne les inclut pas.</p>
+      <p class="np-sim__next-text" data-si="hauts" hidden>Ce revenu fait passer votre foyer au-delà des seuils des contributions sur les hauts revenus : <strong data-out="contributionsCta">0 €</strong> de plus, déjà comptés dans l'impôt supplémentaire. La CEHR et la CDHR ont chacune leur lissage pour un revenu exceptionnel : le montant dépend de vos revenus des années précédentes.</p>
     </div>
     <div class="np-sim__next-action">
       <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>

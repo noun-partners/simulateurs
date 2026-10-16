@@ -3,6 +3,7 @@
 (function () {
   var eur = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
   var pct = new Intl.NumberFormat('fr-FR', { style: 'percent', maximumFractionDigits: 1 })
+  var pct2 = new Intl.NumberFormat('fr-FR', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
   // Saisie bornée : vide, négative ou hors limites, jamais NaN
   function nombre(champ, min, max) {
@@ -121,7 +122,24 @@
       var quotient = Math.round(decote(base + 4 * (impotBrut(revenu + exceptionnel / 4, f) - base), f))
       var direct = impot(revenu + exceptionnel, f)
       // Le quotient est une option : on retient le montant le plus bas
-      var total = Math.min(quotient, direct)
+      var ir = Math.min(quotient, direct)
+
+      // Contributions sur les hauts revenus, en supposant les revenus des années précédentes égaux au revenu habituel
+      var rfr = revenu + exceptionnel
+      var seuil = f.couple ? 500000 : 250000
+      var avant = cehr(revenu, f) + cdhr(revenu, impotBrut(revenu, f) + cehr(revenu, f), f)
+      // CEHR lissée (CGI, art. 223 sexies II) : années précédentes sous le seuil et revenu de l'année d'au moins
+      // une fois et demie leur moyenne. Double de la contribution sur le revenu habituel plus la moitié de l'écart
+      var ce = cehr(rfr, f)
+      if (revenu <= seuil && rfr >= 1.5 * revenu) ce = Math.min(ce, 2 * cehr(revenu + exceptionnel / 2, f))
+      // CDHR (CGI, art. 224) : un revenu exceptionnel par son montant (au-delà de la moyenne des trois années
+      // précédentes) compte pour un quart, et l'impôt sur le revenu et la CEHR qui s'y rapportent aussi
+      // (droits simples sans quotient, CEHR sans lissage, au prorata)
+      var quart = exceptionnel > revenu ? .25 : 1
+      var retenu = rfr ? (revenu + quart * exceptionnel) / rfr : 0
+      var cd = cdhr(revenu + quart * exceptionnel, (impotBrut(rfr, f) + cehr(rfr, f)) * retenu, f)
+      var contributions = Math.round(ce + cd - avant)
+      var total = ir + contributions
       return {
         out: {
           supplement: eur.format(total - sans),
@@ -129,10 +147,12 @@
           sans: eur.format(sans),
           quotient: eur.format(quotient),
           direct: eur.format(direct),
-          economie: eur.format(direct - total),
+          economie: eur.format(direct - ir),
+          contributions: eur.format(contributions),
+          contributionsCta: eur.format(contributions),
           tmi: pct.format(tmi(revenu, f))
         },
-        si: revenu + exceptionnel > (f.couple ? 500000 : 250000) ? 'hauts' : 'normal'
+        si: contributions > 0 ? 'hauts' : 'normal'
       }
     },
 
@@ -161,9 +181,10 @@
         var impotSoc = impotSocietes(budget - cout)
         var dividendes = budget - cout - impotSoc
         // SARL : au-delà de 10 % du capital, primes et comptes courants, les dividendes du gérant majoritaire
-        // supportent les cotisations sociales (taux moyen de 40 %, hypothèse) en plus des 12,8 % d'impôt
+        // supportent les cotisations sociales en plus des 12,8 % d'impôt. Coefficient net de 0,692 retenu par Malek :
+        // le taux de cotisations baisse quand rémunération et dividendes augmentent
         var franchise = forme === 'sarl' ? Math.min(dividendes, .1 * capital) : dividendes
-        var prelevements = .314 * franchise + .528 * (dividendes - franchise)
+        var prelevements = .314 * franchise + (1 - .692) * (dividendes - franchise)
         var ir = impotsFoyer(salaire - abattement + autres, dividendes) - avant
         return {
           cout: cout, verse: remu * k.verse, dividendes: dividendes, cotisations: cout - remu * k.verse,
@@ -213,32 +234,47 @@
       var duree = Math.round(nombre(form.duree, 1, 30))
       var is = form.taux.value === '15' ? .15 : .25
       var annuel = nombre(form.annuel, 0, 20) / 100
+      var titres = nombre(form.titres, 0, 20) / 100
       var contrat = nombre(form.contrat, 0, 20) / 100
-      // Contrat de capitalisation détenu par une société à l'IS (CGI, art. 238 septies E) : un revenu forfaitaire
-      // de 105 % du TME connu à la souscription est imposé chaque année ; au rachat, l'IS porte sur le gain réel
-      // moins les forfaits déjà imposés (hypothèse : un excédent de forfaits est déduit)
-      var TME = .0449
-      var forfait = 1.05 * TME
-      // Placement imposé chaque année (compte à terme, compte rémunéré, fonds monétaire)
-      var gainAnnuel = montant * (Math.pow(1 + annuel * (1 - is), duree) - 1)
-      var gainContrat = montant * (Math.pow(1 + contrat, duree) - 1) * (1 - is)
-      // IS payé pendant la vie du contrat : la base de chaque forfait comprend les forfaits précédents
-      var avance = is * montant * (Math.pow(1 + forfait, duree) - 1)
-      var meilleur = Math.max(gainAnnuel, gainContrat)
+      // Placement imposé chaque année (compte à terme, compte rémunéré, fonds monétaire, la plupart des ETF) :
+      // seul le rendement net d'IS continue de travailler
+      var net = annuel * (1 - is)
+      var gainAnnuel = montant * (Math.pow(1 + net, duree) - 1)
+      // Compte-titres d'actions détenues en direct : l'IS porte sur la plus-value, à la cession
+      var gainTitres = montant * (Math.pow(1 + titres, duree) - 1) * (1 - is)
+      // Contrat de capitalisation (CGI, art. 238 septies E) : chaque année, IS sur un revenu forfaitaire de 105 % du
+      // TME connu à la souscription, figé pour la vie du contrat, appliqué aux primes et aux forfaits déjà imposés.
+      // Au rachat, l'IS porte sur le gain réel moins les forfaits imposés : un excédent est déduit (BOI-BIC-PDSTK-10-20-60-20
+      // § 310). L'IS total est celui du gain réel, mais payé d'avance ; l'avance aurait rapporté le taux net du placement
+      // imposé chaque année jusqu'au rachat
+      var forfait = 1.05 * nombre(form.tme, 0, 10) / 100
+      var avance = 0, cout = 0
+      for (var annee = 1; annee <= duree; annee++) {
+        var impotAnnee = is * forfait * montant * Math.pow(1 + forfait, annee - 1)
+        avance += impotAnnee
+        cout += impotAnnee * (Math.pow(1 + net, duree - annee) - 1)
+      }
+      // Un contrat qui rapporte moins que le coût de l'avance n'affiche pas de gain négatif
+      var gainContrat = Math.max(0, montant * (Math.pow(1 + contrat, duree) - 1) * (1 - is) - cout)
+      var gains = { annuel: gainAnnuel, titres: gainTitres, contrat: gainContrat }
+      var meilleur = Object.keys(gains).reduce(function (a, b) { return gains[b] > gains[a] ? b : a })
+      var dureeTexte = duree + ' an' + (duree > 1 ? 's' : '')
       return {
         out: {
-          meilleur: eur.format(meilleur),
-          support: gainContrat > gainAnnuel ? 'avec le contrat de capitalisation' : 'avec le placement imposé chaque année',
-          duree: duree + ' an' + (duree > 1 ? 's' : ''),
-          dureeCta: duree + ' an' + (duree > 1 ? 's' : ''),
+          meilleur: eur.format(gains[meilleur]),
+          support: { annuel: 'avec le placement imposé chaque année', titres: 'avec le compte-titres', contrat: 'avec le contrat de capitalisation' }[meilleur],
+          duree: dureeTexte,
+          dureeCta: dureeTexte,
           annuel: eur.format(gainAnnuel),
+          titres: eur.format(gainTitres),
           contrat: eur.format(gainContrat),
-          forfait: pct.format(forfait),
+          forfait: pct2.format(forfait),
           avance: eur.format(avance),
           avanceCta: eur.format(avance),
-          ecart: eur.format(Math.abs(gainContrat - gainAnnuel))
+          cout: eur.format(cout),
+          coutCta: eur.format(cout)
         },
-        si: gainContrat > gainAnnuel ? 'contrat' : 'annuel'
+        si: meilleur
       }
     }
   }
