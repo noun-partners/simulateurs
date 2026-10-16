@@ -53,6 +53,19 @@ Avant le premier export réel, vérifier en préproduction que l'API conserve l'
 
 Un tag par version (`v1.0.0`, `v1.0.1`…). Le site charge un tag précis : une modification du dépôt ne change rien en ligne tant que le tag n'est pas mis à jour dans le gabarit, après recette.
 
+## Mise à jour mensuelle du TME
+
+Le simulateur `placement-tresorerie` propose par défaut le dernier TME publié. La Banque de France publie le TME d'un mois le dernier jour ouvré de ce mois ([série FM.M.FR.EUR.FR2.MM.TME.HSTA](https://webstat.banque-france.fr/fr/catalogue/fm/FM.M.FR.EUR.FR2.MM.TME.HSTA)) : il vaut pour les contrats ouverts le mois suivant. En début de mois, dans `placement-tresorerie/embed.html` :
+
+1. `value` du champ `np-sim-pt-tme` : le TME arrondi à deux décimales (`4.49`).
+2. Texte d'aide du même champ : « 4,49 % (septembre 2026) pour un contrat ouvert en octobre 2026 ».
+3. Valeurs écrites en dur du bloc résultat et du texte du CTA : les reprendre du moteur, en saisissant le nouveau TME dans un aperçu. Si le support qui rapporte le plus change, déplacer aussi l'attribut `hidden` des blocs `data-si`.
+4. Recoller le HTML dans l'item CMS de la page, puis publier l'item.
+
+Pas de tag : `np-sim.js` ne change pas et le HTML du simulateur ne vit que dans l'item CMS. Si un article exporté par StickHub intègre un jour ce simulateur, il gardera l'ancien TME jusqu'au tag suivant. L'exemple du texte de la page est daté (contrat ouvert en octobre 2026) et ne change pas. En janvier, mettre aussi à jour l'année de l'avertissement (« fiscalité AAAA »).
+
+Côté Holly&Stick, `contenu/simulateurs/tme.ts` fait les étapes 1 à 3 avec le moteur de ce dépôt et met à jour l'item CMS, sans le publier : `bun --env-file=.env clients/noun-partners/contenu/simulateurs/tme.ts --tme 4.488 --mois 2026-09`, d'abord à sec, puis avec `--apply`.
+
 ## Règles
 
 Les règles de code, de calcul et de version sont dans [AGENTS.md](AGENTS.md). À lire avant toute modification, par une personne comme par un agent.

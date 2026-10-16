@@ -51,7 +51,7 @@ Le [README](README.md) décrit les fichiers, l'intégration dans Webflow et les 
 
 - **Le site charge un tag précis.** Rien de ce qui est poussé sur `main` n'est en ligne tant qu'Arthur n'a pas activé un nouveau tag dans Webflow, après recette en préprod.
 - **Ne jamais déplacer ni supprimer un tag existant** : poser le suivant (`v1.0.1`, `v1.1.0`…).
-- **Un tag par changement qui touche `np-sim.css`, `np-sim.js` ou un `embed.html`.** Si `embed.html` change, le signaler : il faut aussi recoller le HTML dans l'item CMS.
+- **Un tag par changement qui touche `np-sim.css`, `np-sim.js` ou un `embed.html`.** Si `embed.html` change, le signaler : il faut aussi recoller le HTML dans l'item CMS. Seule exception : la mise à jour mensuelle du TME de `placement-tresorerie/embed.html`, décrite dans le README, ne demande pas de tag.
 - **Mettre à jour le README** (tableau des simulateurs, événements) dans le même commit.
 
 ## Avant de poser un tag
