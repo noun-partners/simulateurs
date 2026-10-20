@@ -365,6 +365,56 @@
         },
         si: p.manque ? 'decote' : 'plein'
       }
+    },
+
+    'ifi-residence-principale': function (form) {
+      // Barème de l'IFI (CGI, art. 977) : [plafond de la tranche, taux]
+      var TRANCHES = [[800000, 0], [1300000, .005], [2570000, .007], [5000000, .01], [10000000, .0125], [Infinity, .015]]
+      var rp = nombre(form.rp, 0, 1e9)
+      var autres = nombre(form.autres, 0, 1e9)
+      var emprunt = nombre(form.emprunt, 0, 1e9)
+      var dettes = nombre(form.dettes, 0, 1e9)
+      var sci = form.detention.value === 'sci'
+
+      function calcul(abattement) {
+        // Abattement de 30 % sur la résidence principale détenue en direct (CGI, art. 973 I). Les dettes de la
+        // résidence principale restent déductibles en totalité, dans la limite de sa valeur imposable (BOI-PAT-IFI-20-40-10 § 160)
+        var rpImposable = rp * (abattement ? .7 : 1)
+        var brut = rpImposable + autres
+        var deduites = Math.min(emprunt, rpImposable) + dettes
+        // Au-delà de 5 M€ de patrimoine imposable, les dettes qui dépassent 60 % de sa valeur ne comptent que pour moitié (art. 974 IV)
+        if (brut > 5000000 && deduites > .6 * brut) deduites = .6 * brut + .5 * (deduites - .6 * brut)
+        deduites = Math.min(deduites, brut)
+        var net = brut - deduites
+        var impot = 0, decote = 0
+        // Imposable au-delà de 1,3 M€ net ; décote de 17 500 € - 1,25 % du patrimoine net jusqu'à 1,4 M€
+        if (net > 1300000) {
+          impot = bareme(net, TRANCHES)
+          if (net < 1400000) decote = Math.min(impot, 17500 - .0125 * net)
+          impot -= decote
+        }
+        return { rpImposable: rpImposable, deduites: deduites, net: net, decote: Math.round(decote), impot: Math.round(impot) }
+      }
+
+      var r = calcul(!sci)
+      // Ce que change l'abattement : gagné en direct, perdu via une SCI
+      var gain = calcul(false).impot - calcul(true).impot
+      return {
+        out: {
+          ifi: eur.format(r.impot),
+          net: eur.format(r.net),
+          rpLabel: sci ? 'Résidence principale, sans abattement (SCI)' : 'Résidence principale, après abattement de 30 %',
+          rp: eur.format(r.rpImposable),
+          autres: eur.format(autres),
+          dettes: eur.format(r.deduites),
+          decote: eur.format(r.decote),
+          gainLabel: sci ? 'IFI en moins si elle était détenue en direct' : 'IFI évité grâce à l\'abattement de 30 %',
+          gain: eur.format(gain),
+          gainCta: eur.format(gain),
+          gainSci: eur.format(gain)
+        },
+        si: gain > 0 ? (sci ? 'sci' : 'direct') : r.impot > 0 ? 'autre' : 'aucun'
+      }
     }
   }
 

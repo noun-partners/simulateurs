@@ -1,0 +1,69 @@
+<!-- Simulateur IFI avec l'abattement de 30 % sur la résidence principale : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     np-sim.js ne fait que recalculer quand une valeur change.
+     Balises limitées à div, span, p, form, label, input, button : le Rich Text de Webflow retire dl, dt, dd et les attributs on…. -->
+<div class="np-sim" data-sim="ifi-residence-principale">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre patrimoine au 1er janvier</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ifi-rp">Valeur de votre résidence principale</label>
+      <div class="np-sim__input"><input id="np-sim-ifi-rp" name="rp" type="number" inputmode="numeric" min="0" step="10000" value="1500000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Prix auquel elle se vendrait libre d'occupation, avant abattement.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-ifi-detention">Vous la détenez</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-ifi-detention">
+        <label class="np-sim__choice"><input type="radio" name="detention" value="direct" checked><span>En direct</span></label>
+        <label class="np-sim__choice"><input type="radio" name="detention" value="sci"><span>Via une SCI</span></label>
+      </div>
+      <span class="np-sim__help">L'abattement de 30 % ne s'applique pas aux parts d'une SCI, même si elle loge votre résidence principale.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ifi-autres">Autres biens immobiliers</label>
+      <div class="np-sim__input"><input id="np-sim-ifi-autres" name="autres" type="number" inputmode="numeric" min="0" step="10000" value="600000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Résidence secondaire, biens loués, SCPI et parts de sociétés pour leur part immobilière.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ifi-emprunt">Emprunt restant sur la résidence principale</label>
+      <div class="np-sim__input"><input id="np-sim-ifi-emprunt" name="emprunt" type="number" inputmode="numeric" min="0" step="10000" value="200000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Capital restant dû au 1er janvier. Si la SCI a emprunté, indiquez sa dette.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ifi-dettes">Autres dettes déductibles</label>
+      <div class="np-sim__input"><input id="np-sim-ifi-dettes" name="dettes" type="number" inputmode="numeric" min="0" step="1000" value="0"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Emprunts sur les autres biens, travaux, taxes foncières dues au 1er janvier.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">IFI à payer en 2026</span>
+      <span class="np-sim__headline-value" data-out="ifi">3 550 €</span>
+      <span class="np-sim__headline-note">sur un patrimoine net taxable de <span data-out="net">1 450 000 €</span></span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label" data-out="rpLabel">Résidence principale, après abattement de 30 %</span><span class="np-sim__line-value" data-out="rp">1 050 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Autres biens immobiliers</span><span class="np-sim__line-value" data-out="autres">600 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Dettes déduites</span><span class="np-sim__line-value" data-out="dettes">200 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Décote</span><span class="np-sim__line-value" data-out="decote">0 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label" data-out="gainLabel">IFI évité grâce à l'abattement de 30 %</span><span class="np-sim__line-value" data-out="gain">3 150 €</span></div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : IFI dû sur le patrimoine au 1er janvier 2026, barème de l'article 977 du CGI. Dettes de la résidence principale retenues dans la limite de sa valeur imposable. Sans plafonnement à 75 % des revenus, réduction pour dons ni biens exonérés. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- CTA : séparé du calcul. Le montant affiché vient du même barème (IFI avec et sans l'abattement de 30 %).
+       data-si="direct" ou "sci" : l'abattement change l'IFI ; "autre" : IFI dû sans effet de l'abattement ; "aucun" : sous le seuil. -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Réduire votre IFI</div>
+      <p class="np-sim__next-text" data-si="direct">L'abattement de 30 % vous évite déjà <strong data-out="gainCta">3 150 €</strong> d'IFI. D'autres leviers dépendent de votre patrimoine : dettes déductibles, démembrement, plafonnement à 75 % de vos revenus, dons.</p>
+      <p class="np-sim__next-text" data-si="sci" hidden>Détenue en direct, la même résidence bénéficierait de l'abattement de 30 % : <strong data-out="gainSci">3 150 €</strong> d'IFI en moins chaque année. Sortir un bien d'une SCI a un coût (droits, plus-value) : il se chiffre avant de décider.</p>
+      <p class="np-sim__next-text" data-si="autre" hidden>Votre résidence principale ne change rien à cet IFI. D'autres leviers dépendent de votre patrimoine : dettes déductibles, démembrement, plafonnement à 75 % de vos revenus, dons.</p>
+      <p class="np-sim__next-text" data-si="aucun" hidden>Votre patrimoine net taxable reste sous le seuil de 1,3 M€ : aucun IFI n'est dû. Il se recalcule au 1er janvier de chaque année : une hausse des prix, un emprunt remboursé ou un héritage peuvent vous y faire entrer.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+    </div>
+  </div>
+</div>
