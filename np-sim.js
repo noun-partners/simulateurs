@@ -63,6 +63,15 @@
     return .03 * Math.max(0, Math.min(rfr, 2 * seuil) - seuil) + .04 * Math.max(0, rfr - 2 * seuil)
   }
 
+  // CEHR lissée (CGI, art. 223 sexies II ; BOI-IR-CHR § 140 à 230) : revenus fiscaux de référence des deux années
+  // précédentes chacun sous le seuil et revenu de l'année d'au moins une fois et demie leur moyenne. Double de la
+  // contribution sur la moyenne plus la moitié de l'écart. null si les conditions ne sont pas remplies
+  function cehrLissee(rfr, n1, n2, f) {
+    var seuil = f.couple ? 500000 : 250000, moyenne = (n1 + n2) / 2
+    if (n1 > seuil || n2 > seuil || rfr < 1.5 * moyenne) return null
+    return 2 * cehr(moyenne + (rfr - moyenne) / 2, f)
+  }
+
   // Contribution différentielle sur les hauts revenus, reconduite par la loi de finances 2026 :
   // 20 % du revenu fiscal de référence moins l'impôt déjà payé, avec décote entre le seuil et 1,32 fois le seuil
   function cdhr(rfr, deja, f) {
@@ -126,12 +135,11 @@
 
       // Contributions sur les hauts revenus, en supposant les revenus des années précédentes égaux au revenu habituel
       var rfr = revenu + exceptionnel
-      var seuil = f.couple ? 500000 : 250000
       var avant = cehr(revenu, f) + cdhr(revenu, impotBrut(revenu, f) + cehr(revenu, f), f)
-      // CEHR lissée (CGI, art. 223 sexies II) : années précédentes sous le seuil et revenu de l'année d'au moins
-      // une fois et demie leur moyenne. Double de la contribution sur le revenu habituel plus la moitié de l'écart
+      // CEHR lissée, les deux années précédentes au revenu habituel (même calcul que le simulateur cehr)
       var ce = cehr(rfr, f)
-      if (revenu <= seuil && rfr >= 1.5 * revenu) ce = Math.min(ce, 2 * cehr(revenu + exceptionnel / 2, f))
+      var lissee = cehrLissee(rfr, revenu, revenu, f)
+      if (lissee !== null) ce = Math.min(ce, lissee)
       // CDHR (CGI, art. 224) : un revenu exceptionnel par son montant (au-delà de la moyenne des trois années
       // précédentes) compte pour un quart, et l'impôt sur le revenu et la CEHR qui s'y rapportent aussi
       // (droits simples sans quotient, CEHR sans lissage, au prorata)
@@ -414,6 +422,32 @@
           gainSci: eur.format(gain)
         },
         si: gain > 0 ? (sci ? 'sci' : 'direct') : r.impot > 0 ? 'autre' : 'aucun'
+      }
+    },
+
+    'cehr': function (form) {
+      // Contribution exceptionnelle sur les hauts revenus (CGI, art. 223 sexies) sur le revenu fiscal de référence,
+      // revenus au quotient comptés en entier. Lissage seulement si les deux années précédentes sont renseignées
+      var f = { couple: form.situation.value === 'couple' }
+      var seuil = f.couple ? 500000 : 250000
+      var rfr = nombre(form.rfr, 0, 1e10)
+      var connus = form.rfr1.value !== '' && form.rfr2.value !== ''
+      var sans = Math.round(cehr(rfr, f))
+      var lissee = connus ? cehrLissee(rfr, nombre(form.rfr1, 0, 1e10), nombre(form.rfr2, 0, 1e10), f) : null
+      var avec = lissee === null ? sans : Math.min(sans, Math.round(lissee))
+      return {
+        out: {
+          cehr: eur.format(avec),
+          taux: pct2.format(rfr ? avec / rfr : 0),
+          depassement: eur.format(Math.max(0, rfr - seuil)),
+          sans: eur.format(sans),
+          avec: lissee === null ? 'Non applicable' : eur.format(avec),
+          economie: eur.format(sans - avec),
+          sansCta: eur.format(sans),
+          avecCta: eur.format(avec),
+          seuil: eur.format(seuil)
+        },
+        si: sans === 0 ? 'aucun' : avec < sans ? 'lissage' : 'normal'
       }
     }
   }

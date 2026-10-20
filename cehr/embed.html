@@ -1,0 +1,60 @@
+<!-- Simulateur de contribution exceptionnelle sur les hauts revenus (CEHR) : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="cehr">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre situation</h2>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-cehr-situation">Situation familiale</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-cehr-situation">
+        <label class="np-sim__choice"><input type="radio" name="situation" value="seul"><span>Seul</span></label>
+        <label class="np-sim__choice"><input type="radio" name="situation" value="couple" checked><span>Marié ou pacsé</span></label>
+      </div>
+      <span class="np-sim__help">Les enfants ne changent rien : la CEHR n'a pas de quotient familial.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cehr-rfr">Revenu fiscal de référence de l'année</label>
+      <div class="np-sim__input"><input id="np-sim-cehr-rfr" name="rfr" type="number" inputmode="numeric" min="0" step="10000" value="900000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Pour l'année en cours, partez de votre dernier avis et ajoutez en entier le revenu exceptionnel : prime, dividendes, plus-value de cession.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cehr-rfr1">Revenu fiscal de référence de l'année précédente</label>
+      <div class="np-sim__input"><input id="np-sim-cehr-rfr1" name="rfr1" type="number" inputmode="numeric" min="0" step="10000" value="300000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Sur votre dernier avis d'impôt. Laissez vide si vous ne le connaissez pas : le lissage ne sera pas calculé.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cehr-rfr2">Revenu fiscal de référence d'il y a deux ans</label>
+      <div class="np-sim__input"><input id="np-sim-cehr-rfr2" name="rfr2" type="number" inputmode="numeric" min="0" step="10000" value="300000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Avec l'année précédente, il sert à vérifier si votre revenu de l'année est exceptionnel.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">Contribution exceptionnelle à payer</span>
+      <span class="np-sim__headline-value" data-out="cehr">6 000 €</span>
+      <span class="np-sim__headline-note">soit <span data-out="taux">0,67 %</span> de votre revenu fiscal de référence</span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Revenu au-dessus du seuil</span><span class="np-sim__line-value" data-out="depassement">400 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">CEHR sans lissage</span><span class="np-sim__line-value" data-out="sans">12 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">CEHR avec lissage</span><span class="np-sim__line-value" data-out="avec">6 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Économie due au lissage</span><span class="np-sim__line-value" data-out="economie">6 000 €</span></div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : barème de l'article 223 sexies du CGI, identique pour les revenus 2025 et 2026, et lissage des revenus exceptionnels lorsque les deux années précédentes sont renseignées, en supposant que le foyer était imposable en France ces années-là. Hors contribution différentielle sur les hauts revenus (CDHR), changement de situation familiale sur la période et revenus exonérés par une convention fiscale. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- data-si="lissage" quand le lissage réduit la contribution, "normal" quand elle est due sans lissage, "aucun" sous le seuil -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Réduire la contribution sur vos hauts revenus</div>
+      <p class="np-sim__next-text" data-si="lissage">Le lissage ramène votre contribution de <strong data-out="sansCta">12 000 €</strong> à <strong data-out="avecCta">6 000 €</strong>. Vérifiez qu'il figure sur votre avis d'impôt : sinon, il se demande au centre des finances publiques. La CDHR a ses propres règles pour un revenu exceptionnel.</p>
+      <p class="np-sim__next-text" data-si="normal" hidden>Chaque euro au-delà du seuil supporte 3 ou 4 % de contribution en plus de l'impôt, et la CDHR peut s'y ajouter. Étaler un revenu exceptionnel sur deux années ou laisser des dividendes dans une holding change l'assiette : cela se décide avant la fin de l'année.</p>
+      <p class="np-sim__next-text" data-si="aucun" hidden>Votre revenu fiscal de référence reste sous le seuil de <strong data-out="seuil">500 000 €</strong> : pas de contribution. Une cession d'entreprise, une prime ou un dividende exceptionnel peut le faire franchir. Cela se prépare avant l'année où vous percevez ce revenu.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+    </div>
+  </div>
+</div>
