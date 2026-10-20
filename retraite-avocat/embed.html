@@ -1,0 +1,86 @@
+<!-- Simulateur de retraite d'un avocat à la CNBF (base forfaitaire et complémentaire) : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="retraite-avocat">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre carrière</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ra-naissance">Année de naissance</label>
+      <div class="np-sim__input"><input id="np-sim-ra-naissance" name="naissance" type="number" inputmode="numeric" min="1960" max="2004" step="1" value="1981"></div>
+      <span class="np-sim__help">Elle fixe l'âge légal de départ et le nombre de trimestres du taux plein.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ra-debut">Année de votre première inscription au barreau</label>
+      <div class="np-sim__input"><input id="np-sim-ra-debut" name="debut" type="number" inputmode="numeric" min="1978" max="2026" step="1" value="2008"></div>
+      <span class="np-sim__help">Chaque année d'inscription valide quatre trimestres à la CNBF.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ra-autres">Trimestres validés dans d'autres régimes</label>
+      <div class="np-sim__input"><input id="np-sim-ra-autres" name="autres" type="number" inputmode="numeric" min="0" max="172" step="1" value="0"></div>
+      <span class="np-sim__help">Salariat avant le barreau, service national : ils comptent pour le taux plein, pas pour le montant CNBF.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ra-revenu">Revenu professionnel net annuel</label>
+      <div class="np-sim__input"><input id="np-sim-ra-revenu" name="revenu" type="number" inputmode="numeric" min="0" step="1000" value="100000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Votre bénéfice non commercial ou votre rémunération, supposé constant jusqu'au départ.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-ra-classe">Classe de la retraite complémentaire</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-ra-classe">
+        <label class="np-sim__choice"><input type="radio" name="classe" value="c1" checked><span>Classe 1</span></label>
+        <label class="np-sim__choice"><input type="radio" name="classe" value="c2"><span>Classe 2</span></label>
+        <label class="np-sim__choice"><input type="radio" name="classe" value="c2p"><span>Classe 2 majorée</span></label>
+      </div>
+      <span class="np-sim__help">La classe 1 s'applique par défaut. Elle rejoint la classe 2 en 2029.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ra-age">Âge de départ souhaité</label>
+      <div class="np-sim__input"><input id="np-sim-ra-age" name="age" type="number" inputmode="numeric" min="62" max="75" step="1" value="64"><span class="np-sim__unit">ans</span></div>
+      <span class="np-sim__help">Sous l'âge légal, le simulateur retient l'âge légal.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-ra-enfants">Trois enfants ou plus</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-ra-enfants">
+        <label class="np-sim__choice"><input type="radio" name="enfants" value="non" checked><span>Non</span></label>
+        <label class="np-sim__choice"><input type="radio" name="enfants" value="oui"><span>Oui</span></label>
+      </div>
+      <span class="np-sim__help">Eus ou élevés : vos deux retraites sont majorées de 10 %.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ra-points">Points de complémentaire déjà acquis (facultatif)</label>
+      <div class="np-sim__input"><input id="np-sim-ra-points" name="points" type="number" inputmode="numeric" min="0" step="100" placeholder="Relevé de points CNBF"></div>
+      <span class="np-sim__help">Sur votre espace CNBF. Sinon, le simulateur estime vos années passées.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">Retraite CNBF estimée, brute par mois</span>
+      <span class="np-sim__headline-value" data-out="mensuel">3 140 €</span>
+      <span class="np-sim__headline-note">soit <span data-out="annuel">37 676 €</span> par an, en euros d'aujourd'hui</span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Retraite de base, par an</span><span class="np-sim__line-value" data-out="base">14 009 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Retraite complémentaire, par an</span><span class="np-sim__line-value" data-out="complementaire">23 667 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Âge de départ retenu</span><span class="np-sim__line-value" data-out="age">64 ans</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Trimestres tous régimes</span><span class="np-sim__line-value" data-out="trimestres">148 sur 172</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Taux appliqué</span><span class="np-sim__line-value" data-out="taux">décote de 15,00 %</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Part de votre revenu actuel</span><span class="np-sim__line-value" data-out="remplacement">37,7 %</span></div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, barème CNBF 2026 : retraite de base de 19 154 € par an pour une carrière complète, point de complémentaire à 1,0262 € acheté 12,5229 €, âges et durées de la loi du 30 décembre 2025. Montants bruts, avant CSG, CRDS et impôt. Hypothèses : revenu constant, quatre trimestres par année d'inscription, barème 2026 appliqué aux années passées si vos points ne sont pas saisis, rendement du point réduit chaque année du minimum prévu par le règlement, jusqu'à 7,5 %. Hors rachat de trimestres, retraite anticipée et cumul emploi-retraite. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- data-si="decote" quand le départ choisi subit une décote, data-si="plein" sinon -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Combler l'écart avant le départ</div>
+      <p class="np-sim__next-text" data-si="decote">Partir à <strong data-out="ageCta">67 ans</strong> supprimerait la décote : <strong data-out="plein">852 €</strong> brut de plus par mois.</p>
+      <p class="np-sim__next-text" data-si="plein" hidden>Votre retraite CNBF laisserait <strong data-out="ecart">62 324 €</strong> de moins par an que votre revenu actuel.</p>
+      <p class="np-sim__next-text">Vos versements sur un PER sont déductibles de votre bénéfice jusqu'à <strong data-out="per">17 791 €</strong> en 2026, plafond des travailleurs non salariés.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma retraite</button>
+    </div>
+  </div>
+</div>

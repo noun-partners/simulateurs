@@ -281,6 +281,90 @@
         },
         si: meilleur
       }
+    },
+
+    'retraite-avocat': function (form) {
+      // Barème CNBF 2026 (assemblée générale, barème du 19/01/2026) et règlement du régime complémentaire
+      var BASE = 19154 // retraite de base forfaitaire entière, par an
+      var POINT = 1.0262 // valeur de service du point de retraite complémentaire
+      var ACHAT = 12.5229 // coût d'acquisition du point en 2026
+      var TRANCHE = 42507 // largeur des cinq tranches de revenu du régime complémentaire
+      // Taux de cotisation du régime complémentaire par tranche : la classe 1 rejoint la classe unique en 2029,
+      // la majoration de 2,5 points de la dernière tranche (C2+) n'existe que pendant la période transitoire
+      var UNIQUE = [.07, .116, .137, .158, .179]
+      var CLASSES = {
+        c1: { 2026: [.07, .104, .122, .14, .158], 2027: [.07, .108, .127, .146, .165], 2028: [.07, .112, .132, .152, .172] },
+        c2: {},
+        c2p: { 2026: [.07, .116, .137, .158, .204], 2027: [.07, .116, .137, .158, .204], 2028: [.07, .116, .137, .158, .204] }
+      }
+      var PASS = 48060 // plafond annuel de la sécurité sociale 2026
+
+      var naissance = Math.round(nombre(form.naissance, 1960, 2004))
+      var debut = Math.round(nombre(form.debut, naissance + 18, 2026))
+      var autres = Math.round(nombre(form.autres, 0, 172))
+      var revenu = nombre(form.revenu, 0, 1e7)
+      var classe = CLASSES[form.classe.value] ? form.classe.value : 'c1'
+      var enfants = form.enfants.value === 'oui' ? 1.1 : 1
+      var acquis = nombre(form.points, 0, 3e5)
+
+      // Âge légal (en mois) et durée d'assurance pour le taux plein, selon l'année de naissance (loi du 30/12/2025)
+      var legal = naissance <= 1961 ? 744 : { 1962: 750, 1963: 753, 1964: 753, 1965: 756, 1966: 759, 1967: 762, 1968: 765 }[naissance] || 768
+      var requis = naissance <= 1960 ? 167 : naissance === 1961 ? 168 : naissance === 1962 ? 169 : naissance === 1963 ? 170 : naissance === 1964 ? 171 : 172
+      var PLEIN = 804 // 67 ans : taux plein quelle que soit la durée d'assurance
+
+      function pension(ageMois) {
+        // Carrière comptée en trimestres, de janvier de l'année de début au départ (naissance supposée au 1er janvier)
+        var fin = naissance * 12 + ageMois
+        var cnbf = Math.max(0, Math.floor((fin - debut * 12) / 3))
+        var total = cnbf + autres
+        // Décote : 1,25 % par trimestre manquant, au plus favorable entre durée et âge du taux plein, 20 au plus
+        var manque = Math.min(20, Math.max(0, requis - total), Math.max(0, Math.ceil((PLEIN - ageMois) / 3)))
+        // Surcote de la retraite de base : 1,25 % par trimestre cotisé au-delà de l'âge légal et de la durée requise
+        var surcote = Math.max(0, Math.min(total - requis, Math.floor((ageMois - legal) / 3)))
+        var base = BASE * Math.min(1, cnbf / requis) * (1 - .0125 * manque + .0125 * surcote) * enfants
+
+        // Complémentaire : points = cotisation / coût du point. Rendement du point (valeur de service / coût d'achat)
+        // de 8,19 % en 2026, baissé chaque année du minimum du règlement (2,4 points de plus sur le coût d'achat)
+        // jusqu'au plafond de 7,5 %. Revenu et barème 2026 appliqués aux années passées, sauf points saisis
+        var euros = 0
+        for (var annee = debut; annee * 12 < fin; annee++) {
+          var part = Math.min(1, (fin - annee * 12) / 12)
+          if (annee < 2026 && acquis > 0) continue
+          var taux = annee <= 2028 && CLASSES[classe][Math.max(2026, annee)] || UNIQUE
+          var cotisation = 0
+          for (var t = 0; t < 5; t++) cotisation += Math.max(0, Math.min(revenu, (t + 1) * TRANCHE) - t * TRANCHE) * taux[t]
+          var rendement = Math.max(.075, POINT / ACHAT / Math.pow(1.024, Math.max(0, annee - 2026)))
+          euros += cotisation * part * rendement
+        }
+        var complementaire = (acquis > 0 ? acquis * POINT : 0) + euros
+        complementaire *= (1 - .0125 * manque) * enfants
+        return { base: base, complementaire: complementaire, total: base + complementaire, cnbf: cnbf, trimestres: total, manque: manque, surcote: surcote }
+      }
+
+      var age = Math.max(legal, Math.round(nombre(form.age, 62, 75)) * 12)
+      var p = pension(age)
+      var plein = pension(Math.max(age, PLEIN))
+      // Plafond de déduction des versements PER d'un travailleur non salarié (CGI, art. 154 bis), revenus 2026
+      var bnc = Math.min(revenu, 8 * PASS)
+      var plafondPer = Math.max(.1 * PASS, .1 * bnc + .15 * Math.max(0, bnc - PASS))
+      function ans(mois) { return Math.floor(mois / 12) + ' ans' + (mois % 12 ? ' et ' + mois % 12 + ' mois' : '') }
+      return {
+        out: {
+          mensuel: eur.format(p.total / 12),
+          annuel: eur.format(p.total),
+          base: eur.format(p.base),
+          complementaire: eur.format(p.complementaire),
+          age: ans(age),
+          trimestres: p.trimestres + ' sur ' + requis,
+          taux: p.manque ? 'décote de ' + pct2.format(.0125 * p.manque) : p.surcote ? 'surcote de ' + pct2.format(.0125 * p.surcote) + ' sur la base' : 'taux plein',
+          remplacement: pct.format(revenu ? p.total / revenu : 0),
+          ecart: eur.format(Math.max(0, revenu - p.total)),
+          plein: eur.format(Math.max(0, plein.total - p.total) / 12),
+          ageCta: ans(Math.max(age, PLEIN)),
+          per: eur.format(plafondPer)
+        },
+        si: p.manque ? 'decote' : 'plein'
+      }
     }
   }
 
