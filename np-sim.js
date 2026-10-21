@@ -315,9 +315,12 @@
       var enfants = form.enfants.value === 'oui' ? 1.1 : 1
       var acquis = nombre(form.points, 0, 3e5)
 
-      // Âge légal (en mois) et durée d'assurance pour le taux plein, selon l'année de naissance (loi du 30/12/2025)
+      // Âge légal (en mois) et durée d'assurance pour le taux plein, selon l'année de naissance (loi du 30/12/2025,
+      // tableau à partir du 1er septembre 2026 : service-public.gouv.fr/particuliers/actualites/A18825).
+      // Le mois de naissance n'est pas saisi : 1965 compte 171 trimestres (nés à partir du 1er avril, 63 ans),
+      // les nés avant le 1er avril 1965 (170 trimestres, 62 ans et 9 mois) ne sont pas distingués
       var legal = naissance <= 1961 ? 744 : { 1962: 750, 1963: 753, 1964: 753, 1965: 756, 1966: 759, 1967: 762, 1968: 765 }[naissance] || 768
-      var requis = naissance <= 1960 ? 167 : naissance === 1961 ? 168 : naissance === 1962 ? 169 : naissance === 1963 ? 170 : naissance === 1964 ? 171 : 172
+      var requis = naissance <= 1960 ? 167 : naissance === 1961 ? 168 : naissance === 1962 ? 169 : naissance <= 1964 ? 170 : naissance === 1965 ? 171 : 172
       var PLEIN = 804 // 67 ans : taux plein quelle que soit la durée d'assurance
 
       function pension(ageMois) {
