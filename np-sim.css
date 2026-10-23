@@ -32,6 +32,21 @@
 .np-sim__line{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.18)}
 .np-sim__line-label{font-size:16px;color:#CFD1DE}
 .np-sim__line-value{font-size:20px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.np-sim__compare{display:flex;flex-direction:column;gap:12px}
+.np-sim__compare[hidden]{display:none}
+.np-sim__compare-title{font-size:16px;font-weight:700}
+.np-sim__bar-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:8px;font-size:14px;color:#CFD1DE}
+.np-sim__bar-head strong{font-size:16px;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
+.np-sim__bar{display:flex;height:12px;overflow:hidden;background:#272A4A}
+.np-sim__bar span{display:block;height:100%}
+.np-sim__bar-net{background:#CF9804}
+.np-sim__bar-ps{background:#C3A583}
+.np-sim__bar-ir{background:#9698AE}
+.np-sim__legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:4px;font-size:13px;color:#CFD1DE}
+.np-sim__legend span{display:flex;align-items:center;gap:6px;background:none}
+.np-sim__legend span:before{content:"";width:10px;height:10px;background:#CF9804}
+.np-sim__legend .np-sim__bar-ps:before{background:#C3A583}
+.np-sim__legend .np-sim__bar-ir:before{background:#9698AE}
 .np-sim__disclaimer{grid-column:1/-1;margin:4px 0 0;font-size:14px;line-height:1.5;color:#737373}
 
 /* CTA sous le calcul : fond doré clair des encarts auteur du site */

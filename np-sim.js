@@ -81,23 +81,16 @@
     return Math.max(0, minimum - deja - (f.couple ? 12500 : 0) - 1500 * f.enfants)
   }
 
+  // Droits de donation et de succession en ligne directe, après l'abattement de 100 000 € : [plafond de la tranche, taux]
+  var LIGNE_DIRECTE = [[8072, .05], [12109, .10], [15932, .15], [552324, .20], [902838, .30], [1805677, .40], [Infinity, .45]]
+  function droits(taxable) { return Math.round(bareme(taxable, LIGNE_DIRECTE)) }
+
   // Impôt sur les sociétés : 15 % jusqu'à 42 500 €, 25 % au-delà
   function impotSocietes(benefice) { return .15 * Math.min(benefice, 42500) + .25 * Math.max(0, benefice - 42500) }
 
   var MOTEURS = {
     'droits-succession': function (form) {
       var ABATTEMENT = 100000
-      // Barème en ligne directe : [plafond de la tranche, taux]
-      var TRANCHES = [[8072, .05], [12109, .10], [15932, .15], [552324, .20], [902838, .30], [1805677, .40], [Infinity, .45]]
-      function droits(taxable) {
-        var total = 0, bas = 0
-        TRANCHES.forEach(function (t) {
-          if (taxable > bas) total += (Math.min(taxable, t[0]) - bas) * t[1]
-          bas = t[0]
-        })
-        return Math.round(total)
-      }
-
       var patrimoine = nombre(form.patrimoine, 0, 1e9)
       var enfants = Math.round(nombre(form.enfants, 1, 10))
       var part = patrimoine / enfants
@@ -467,6 +460,7 @@
       var retraite = form.retraite.value === 'oui'
       var autres = nombre(form.autres, 0, 1e8)
       var enfants = Math.round(nombre(form.enfants, 0, 10))
+      var patrimoine = nombre(form.patrimoine, 0, 1e10)
 
       // Abattement pour durée de détention (CGI, art. 150-0 D, 1 ter et 1 quater) : titres acquis avant 2018, au barème
       // seulement. Cédés en 2026, ils sont tous détenus depuis plus de 8 ans : 65 %, ou 85 % pour l'abattement renforcé
@@ -527,10 +521,26 @@
 
       var r = impots(prix, achat, frais)
       // Donation avant la cession, dans la limite de 100 000 € par parent et par enfant (deux parents pour un couple) :
-      // pas de droits si rien n'a été donné depuis 15 ans, et une plus-value nulle pour les enfants qui revendent à ce prix
-      var donne = Math.min(prix, 100000 * enfants * (f.couple ? 2 : 1))
+      // pas de droits si rien n'a été donné depuis 15 ans, et une plus-value nulle pour les enfants qui revendent à ce prix.
+      // Prix d'acquisition et frais répartis au prorata des titres vendus par chacun
+      var parents = f.couple ? 2 : 1
+      var donne = Math.min(prix, 100000 * enfants * parents)
       var reste = prix ? (prix - donne) / prix : 0
-      var gain = r.total - impots(prix - donne, achat * reste, frais * reste).total
+      var d = impots(prix - donne, achat * reste, frais * reste)
+      var gain = r.total - d.total
+      var net = Math.max(0, prix - frais)
+      // Succession au barème actuel, sans revalorisation : chaque parent transmet sa part à parts égales, décès plus de 15 ans
+      // après la donation (abattements reconstitués). Le prix des titres donnés n'est plus dans le patrimoine des parents
+      function succession(conserve) {
+        return enfants ? parents * enfants * droits(Math.max(0, (patrimoine + conserve) / parents / enfants - 100000)) : 0
+      }
+      var evites = succession(net - r.total) - succession(Math.max(0, prix - donne - frais * reste - d.total))
+      // Barres : part du prix net de frais qui reste à la famille, prélèvements sociaux, impôt sur le revenu et contributions
+      function barre(x) {
+        var p = function (v) { return (net ? Math.max(0, v) / net * 100 : 0).toFixed(1) + '%' }
+        return [p(net - x.total), p(x.ps), p(x.ir + x.contributions)]
+      }
+      var sans = barre(r), avec = barre(d)
       var abattement = r.ret ? 'l\'abattement retraite' : r.bar && taux ? 'l\'abattement de ' + pct.format(taux) : ''
       return {
         out: {
@@ -545,8 +555,12 @@
           flat: eur.format(r.flat),
           donne: eur.format(donne),
           gain: eur.format(gain),
-          enfants: enfants > 1 ? 'vos ' + enfants + ' enfants' : 'votre enfant'
+          enfants: enfants > 1 ? 'vos ' + enfants + ' enfants' : 'votre enfant',
+          evites: eur.format(evites),
+          familleSans: eur.format(net - r.total),
+          familleAvec: eur.format(net - d.total)
         },
+        largeurs: { sansNet: sans[0], sansPs: sans[1], sansIr: sans[2], avecNet: avec[0], avecPs: avec[1], avecIr: avec[2] },
         si: r.pv === 0 ? 'aucun' : gain >= 1 ? 'donation' : 'autre'
       }
     }
@@ -573,6 +587,11 @@
       Object.keys(r.out).forEach(function (nom) {
         var el = sim.querySelector('[data-out="' + nom + '"]')
         if (el) el.textContent = r.out[nom]
+      })
+      // Barres : largeur en pourcentage des éléments data-largeur
+      Object.keys(r.largeurs || {}).forEach(function (nom) {
+        var el = sim.querySelector('[data-largeur="' + nom + '"]')
+        if (el) el.style.width = r.largeurs[nom]
       })
       sim.querySelectorAll('[data-si]').forEach(function (el) {
         el.hidden = el.getAttribute('data-si') !== r.si

@@ -61,6 +61,11 @@
       <div class="np-sim__input"><input id="np-sim-ce-enfants" name="enfants" type="number" inputmode="numeric" min="0" max="10" step="1" value="2"></div>
       <span class="np-sim__help">Pour chiffrer une donation de titres avant la vente.</span>
     </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ce-patrimoine">Patrimoine hors entreprise</label>
+      <div class="np-sim__input"><input id="np-sim-ce-patrimoine" name="patrimoine" type="number" inputmode="numeric" min="0" step="10000" value="800000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Immobilier, placements, liquidités du foyer : il sert à estimer les droits de succession.</span>
+    </div>
   </form>
 
   <div class="np-sim__result" aria-live="polite">
@@ -77,15 +82,28 @@
       <div class="np-sim__line"><span class="np-sim__line-label">Ce que vous conservez</span><span class="np-sim__line-value" data-out="net">984 640 €</span></div>
       <div class="np-sim__line"><span class="np-sim__line-label">Impôt à la flat tax sans abattement</span><span class="np-sim__line-value" data-out="flat">455 360 €</span></div>
     </div>
+    <div class="np-sim__compare" data-si="donation">
+      <span class="np-sim__compare-title">Avec une donation de <span data-out="donne">400 000 €</span> à <span data-out="enfants">vos 2 enfants</span> avant la vente</span>
+      <div class="np-sim__lines">
+        <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur la cession en moins</span><span class="np-sim__line-value" data-out="gain">127 509 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Droits de donation</span><span class="np-sim__line-value">0 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Droits de succession évités</span><span class="np-sim__line-value" data-out="evites">51 296 €</span></div>
+      </div>
+      <div class="np-sim__bar-head"><span>Sans donation, pour vous et vos enfants</span><strong data-out="familleSans">984 640 €</strong></div>
+      <div class="np-sim__bar"><span class="np-sim__bar-net" data-largeur="sansNet" style="width:68.4%"></span><span class="np-sim__bar-ps" data-largeur="sansPs" style="width:18.0%"></span><span class="np-sim__bar-ir" data-largeur="sansIr" style="width:13.7%"></span></div>
+      <div class="np-sim__bar-head"><span>Avec donation, pour vous et vos enfants</span><strong data-out="familleAvec">1 112 149 €</strong></div>
+      <div class="np-sim__bar"><span class="np-sim__bar-net" data-largeur="avecNet" style="width:77.2%"></span><span class="np-sim__bar-ps" data-largeur="avecPs" style="width:13.2%"></span><span class="np-sim__bar-ir" data-largeur="avecIr" style="width:9.6%"></span></div>
+      <div class="np-sim__legend"><span class="np-sim__bar-net">Vous et vos enfants</span><span class="np-sim__bar-ps">Prélèvements sociaux</span><span class="np-sim__bar-ir">Impôt sur le revenu et contributions</span></div>
+    </div>
   </div>
 
-  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : cession en 2026 de titres détenus en direct, flat tax de 31,4 % ou barème de l'impôt sur le revenu 2026 avec système du quotient, abattements pour durée de détention des titres acquis avant 2018 ou abattement retraite de 500 000 €, dont les conditions sont supposées remplies, CSG déductible l'année suivante, CEHR avec lissage et CDHR. Le simulateur retient le régime le moins imposé. Il suppose des autres revenus identiques les années précédentes et suivante, aucun autre revenu de capitaux mobiliers, des enfants hors du foyer fiscal et aucune donation depuis 15 ans. Hors apport-cession, compléments de prix, moins-values antérieures et frais de donation. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : cession en 2026 de titres détenus en direct, flat tax de 31,4 % ou barème de l'impôt sur le revenu 2026 avec système du quotient, abattements pour durée de détention des titres acquis avant 2018 ou abattement retraite de 500 000 €, dont les conditions sont supposées remplies, CSG déductible l'année suivante, CEHR avec lissage et CDHR. Le simulateur retient le régime le moins imposé. Il suppose des autres revenus identiques les années précédentes et suivante, aucun autre revenu de capitaux mobiliers, des enfants hors du foyer fiscal et aucune donation depuis 15 ans. Succession au barème actuel, patrimoine non revalorisé, décès plus de 15 ans après la donation, chaque parent transmettant la moitié. Hors apport-cession, compléments de prix, moins-values antérieures et frais de donation. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
 
   <!-- data-si="donation" quand une donation aux enfants dans la limite des abattements réduit l'impôt, "autre" sans enfant, "aucun" sans plus-value -->
   <div class="np-sim__next">
     <div class="np-sim__next-content">
       <div class="heading-style-h4 np-sim__next-title">Préparer la cession avant la lettre d'intention</div>
-      <p class="np-sim__next-text" data-si="donation">Donner <strong data-out="donne">400 000 €</strong> de titres à <span data-out="enfants">vos 2 enfants</span> avant de signer, dans la limite des abattements de 100 000 € par parent et par enfant, réduit l'impôt sur la cession de <strong data-out="gain">127 509 €</strong>. La donation doit précéder tout engagement de vente, et vos enfants doivent pouvoir disposer librement du prix.</p>
+      <p class="np-sim__next-text" data-si="donation">La donation doit précéder tout engagement de vente, et vos enfants doivent pouvoir disposer librement du prix. Montant, pleine ou nue-propriété, calendrier : nous les chiffrons sur votre dossier, avec votre notaire.</p>
       <p class="np-sim__next-text" data-si="autre" hidden>Régime d'imposition, apport des titres à une holding, calendrier de la vente : ces choix se font avant la lettre d'intention. Une fois le prix signé, la plupart des options sont fermées.</p>
       <p class="np-sim__next-text" data-si="aucun" hidden>Sans plus-value, la cession ne déclenche pas d'impôt. Une moins-value s'impute sur les plus-values de même nature de l'année et des dix années suivantes.</p>
     </div>
