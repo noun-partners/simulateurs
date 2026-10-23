@@ -452,6 +452,103 @@
         },
         si: sans === 0 ? 'aucun' : avec < sans ? 'lissage' : 'normal'
       }
+    },
+
+    'cession': function (form) {
+      // Cession de titres par une personne physique, en 2026. Enfants supposés majeurs et hors du foyer fiscal :
+      // ils ne comptent que pour la donation. Revenus des années précédentes supposés égaux aux autres revenus
+      var f = { couple: form.situation.value === 'couple', enfants: 0 }
+      f.adultes = f.parts = f.couple ? 2 : 1
+      var prix = nombre(form.prix, 0, 1e10)
+      var achat = nombre(form.achat, 0, 1e10)
+      var frais = nombre(form.frais, 0, 1e10)
+      var avant2018 = form.avant2018.value === 'oui'
+      var renforce = form.renforce.value === 'oui'
+      var retraite = form.retraite.value === 'oui'
+      var autres = nombre(form.autres, 0, 1e8)
+      var enfants = Math.round(nombre(form.enfants, 0, 10))
+
+      // Abattement pour durée de détention (CGI, art. 150-0 D, 1 ter et 1 quater) : titres acquis avant 2018, au barème
+      // seulement. Cédés en 2026, ils sont tous détenus depuis plus de 8 ans : 65 %, ou 85 % pour l'abattement renforcé
+      var taux = avant2018 ? (renforce ? .85 : .65) : 0
+
+      // Impôts du foyer sans la cession : impôt sur le revenu, CEHR et CDHR
+      var avant = impot(autres, f) + cehr(autres, f) + cdhr(autres, impotBrut(autres, f) + cehr(autres, f), f)
+
+      // Impôts dus du fait de la cession, pour un régime donné
+      function regime(pv, bar, ret) {
+        // Abattement fixe de 500 000 € du dirigeant qui part à la retraite (art. 150-0 D ter) : impôt sur le revenu
+        // seulement, au PFU comme au barème, non cumulable avec l'abattement pour durée de détention
+        var abattement = ret ? Math.min(500000, pv) : bar ? pv * taux : 0
+        var imposable = pv - abattement
+        // Plus-value exceptionnelle par son montant : au-delà des revenus des trois années précédentes (art. 163-0 A et 224)
+        var exceptionnel = imposable > autres
+        // Droits simples, sans quotient : barème sur le revenu global, ou barème sur les autres revenus et 12,8 %
+        var simples = bar ? impotBrut(autres + imposable, f) : impotBrut(autres, f) + .128 * imposable
+        var ir = bar ? impot(autres + imposable, f) : impot(autres, f) + Math.round(.128 * imposable)
+        // Au barème, système du quotient sur demande pour une plus-value exceptionnelle (diviseur 4)
+        if (bar && exceptionnel) {
+          var b = impotBrut(autres, f)
+          ir = Math.min(ir, Math.round(decote(b + 4 * (impotBrut(autres + imposable / 4, f) - b), f)))
+        }
+        ir -= impot(autres, f)
+        // Au barème, 6,8 % de CSG déductible du revenu de l'année suivante, supposé égal aux autres revenus (art. 154 quinquies II) :
+        // sur la plus-value entière avec l'abattement de droit commun, sur la plus-value imposée avec l'abattement renforcé ou retraite
+        var csg = bar ? .068 * (ret || renforce ? imposable : pv) : 0
+        var deductible = csg ? impot(autres, f) - impot(Math.max(0, autres - csg), f) : 0
+        var ps = Math.round(.186 * pv)
+        // CEHR sur le revenu fiscal de référence, plus-value avant abattements, lissée si c'est plus favorable
+        var rfr = autres + pv
+        var ce = cehr(rfr, f)
+        var lissee = cehrLissee(rfr, autres, autres, f)
+        if (lissee !== null) ce = Math.min(ce, lissee)
+        // CDHR (art. 224 ; BOI-IR-CDHR-10 § 160, BOI-IR-CDHR-20 § 150 et 180). Revenu de référence : sans l'abattement retraite,
+        // abattements pour durée de détention compris. Une plus-value exceptionnelle y compte pour le quart de son montant avant
+        // abattements, et l'impôt et la CEHR qui s'y rapportent pour le quart aussi
+        var irPv = bar ? simples * (imposable ? imposable / (autres + imposable) : 0) : .128 * imposable
+        var cePv = rfr ? ce * pv / rfr : 0
+        var quart = exceptionnel ? .25 : 1
+        var reference = autres + (exceptionnel ? pv / 4 : pv - (ret ? abattement : 0))
+        var cd = cdhr(reference, simples - irPv + ce - cePv + quart * (irPv + cePv), f)
+        var contributions = Math.max(0, Math.round(ce + cd + impot(autres, f) - avant))
+        return { bar: bar, ret: ret, ir: ir - deductible, ps: ps, contributions: contributions, total: ir - deductible + ps + contributions }
+      }
+
+      // Le régime le moins imposé parmi ceux auxquels vous avez droit
+      function impots(prix, achat, frais) {
+        var pv = Math.max(0, prix - achat - frais)
+        var liste = [regime(pv, false, false), regime(pv, true, false)]
+        if (retraite) liste.push(regime(pv, false, true), regime(pv, true, true))
+        var r = liste.reduce(function (a, b) { return b.total < a.total ? b : a })
+        r.pv = pv
+        r.flat = liste[0].total
+        return r
+      }
+
+      var r = impots(prix, achat, frais)
+      // Donation avant la cession, dans la limite de 100 000 € par parent et par enfant (deux parents pour un couple) :
+      // pas de droits si rien n'a été donné depuis 15 ans, et une plus-value nulle pour les enfants qui revendent à ce prix
+      var donne = Math.min(prix, 100000 * enfants * (f.couple ? 2 : 1))
+      var reste = prix ? (prix - donne) / prix : 0
+      var gain = r.total - impots(prix - donne, achat * reste, frais * reste).total
+      var abattement = r.ret ? 'l\'abattement retraite' : r.bar && taux ? 'l\'abattement de ' + pct.format(taux) : ''
+      return {
+        out: {
+          impot: eur.format(r.total),
+          taux: pct.format(r.pv ? r.total / r.pv : 0),
+          net: eur.format(Math.max(0, prix - frais - r.total)),
+          pv: eur.format(r.pv),
+          regime: (r.bar ? 'au barème' : 'avec la flat tax') + (abattement && (r.bar ? ' avec ' : ' et ') + abattement),
+          ir: eur.format(r.ir),
+          ps: eur.format(r.ps),
+          contributions: eur.format(r.contributions),
+          flat: eur.format(r.flat),
+          donne: eur.format(donne),
+          gain: eur.format(gain),
+          enfants: enfants > 1 ? 'vos ' + enfants + ' enfants' : 'votre enfant'
+        },
+        si: r.pv === 0 ? 'aucun' : gain >= 1 ? 'donation' : 'autre'
+      }
     }
   }
 

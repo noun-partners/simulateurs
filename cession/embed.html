@@ -1,0 +1,96 @@
+<!-- Simulateur d'impôt sur la cession d'entreprise (plus-value de cession de titres) : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="cession">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre cession</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ce-prix">Prix de cession de vos titres</label>
+      <div class="np-sim__input"><input id="np-sim-ce-prix" name="prix" type="number" inputmode="numeric" min="0" step="10000" value="1500000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">La part du prix qui vous revient, pour vos titres détenus en direct.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ce-achat">Prix d'acquisition ou de souscription</label>
+      <div class="np-sim__input"><input id="np-sim-ce-achat" name="achat" type="number" inputmode="numeric" min="0" step="1000" value="50000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Capital souscrit ou prix d'achat de ces titres, augmentations de capital comprises.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ce-frais">Frais de cession à votre charge</label>
+      <div class="np-sim__input"><input id="np-sim-ce-frais" name="frais" type="number" inputmode="numeric" min="0" step="1000" value="60000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Honoraires d'intermédiaire ou d'avocat que vous payez vous-même.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-ce-avant2018">Titres acquis avant 2018</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-ce-avant2018">
+        <label class="np-sim__choice"><input type="radio" name="avant2018" value="non" checked><span>Non</span></label>
+        <label class="np-sim__choice"><input type="radio" name="avant2018" value="oui"><span>Oui</span></label>
+      </div>
+      <span class="np-sim__help">Détenus depuis plus de 8 ans : au barème, 65 % de la plus-value échappe à l'impôt sur le revenu.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-ce-renforce">Société créée depuis moins de 10 ans à votre entrée au capital</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-ce-renforce">
+        <label class="np-sim__choice"><input type="radio" name="renforce" value="non" checked><span>Non</span></label>
+        <label class="np-sim__choice"><input type="radio" name="renforce" value="oui"><span>Oui</span></label>
+      </div>
+      <span class="np-sim__help">Pour des titres acquis avant 2018 : l'abattement renforcé passe à 85 %.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-ce-retraite">Départ à la retraite</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-ce-retraite">
+        <label class="np-sim__choice"><input type="radio" name="retraite" value="non" checked><span>Non</span></label>
+        <label class="np-sim__choice"><input type="radio" name="retraite" value="oui"><span>Oui</span></label>
+      </div>
+      <span class="np-sim__help">Vous dirigez la société, en détenez au moins 25 % et prenez votre retraite dans les deux ans avant ou après la vente.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-ce-situation">Situation familiale</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-ce-situation">
+        <label class="np-sim__choice"><input type="radio" name="situation" value="seul"><span>Seul</span></label>
+        <label class="np-sim__choice"><input type="radio" name="situation" value="couple" checked><span>Marié ou pacsé</span></label>
+      </div>
+      <span class="np-sim__help">Déclaration commune pour un couple marié ou pacsé.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ce-autres">Autres revenus imposables du foyer par an</label>
+      <div class="np-sim__input"><input id="np-sim-ce-autres" name="autres" type="number" inputmode="numeric" min="0" step="1000" value="120000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Salaires après l'abattement de 10 %, revenus fonciers, bénéfices, hors plus-value.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-ce-enfants">Enfants</label>
+      <div class="np-sim__input"><input id="np-sim-ce-enfants" name="enfants" type="number" inputmode="numeric" min="0" max="10" step="1" value="2"></div>
+      <span class="np-sim__help">Pour chiffrer une donation de titres avant la vente.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">Impôt sur votre cession</span>
+      <span class="np-sim__headline-value" data-out="impot">455 360 €</span>
+      <span class="np-sim__headline-note">soit <span data-out="taux">32,8 %</span> de la plus-value, <span data-out="regime">avec la flat tax</span></span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Plus-value</span><span class="np-sim__line-value" data-out="pv">1 390 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur le revenu</span><span class="np-sim__line-value" data-out="ir">177 920 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Prélèvements sociaux (18,6 %)</span><span class="np-sim__line-value" data-out="ps">258 540 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">CEHR et CDHR</span><span class="np-sim__line-value" data-out="contributions">18 900 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Ce que vous conservez</span><span class="np-sim__line-value" data-out="net">984 640 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt à la flat tax sans abattement</span><span class="np-sim__line-value" data-out="flat">455 360 €</span></div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : cession en 2026 de titres détenus en direct, flat tax de 31,4 % ou barème de l'impôt sur le revenu 2026 avec système du quotient, abattements pour durée de détention des titres acquis avant 2018 ou abattement retraite de 500 000 €, dont les conditions sont supposées remplies, CSG déductible l'année suivante, CEHR avec lissage et CDHR. Le simulateur retient le régime le moins imposé. Il suppose des autres revenus identiques les années précédentes et suivante, aucun autre revenu de capitaux mobiliers, des enfants hors du foyer fiscal et aucune donation depuis 15 ans. Hors apport-cession, compléments de prix, moins-values antérieures et frais de donation. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- data-si="donation" quand une donation aux enfants dans la limite des abattements réduit l'impôt, "autre" sans enfant, "aucun" sans plus-value -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Préparer la cession avant la lettre d'intention</div>
+      <p class="np-sim__next-text" data-si="donation">Donner <strong data-out="donne">400 000 €</strong> de titres à <span data-out="enfants">vos 2 enfants</span> avant de signer, dans la limite des abattements de 100 000 € par parent et par enfant, réduit l'impôt sur la cession de <strong data-out="gain">127 509 €</strong>. La donation doit précéder tout engagement de vente, et vos enfants doivent pouvoir disposer librement du prix.</p>
+      <p class="np-sim__next-text" data-si="autre" hidden>Régime d'imposition, apport des titres à une holding, calendrier de la vente : ces choix se font avant la lettre d'intention. Une fois le prix signé, la plupart des options sont fermées.</p>
+      <p class="np-sim__next-text" data-si="aucun" hidden>Sans plus-value, la cession ne déclenche pas d'impôt. Une moins-value s'impute sur les plus-values de même nature de l'année et des dix années suivantes.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma cession</button>
+    </div>
+  </div>
+</div>
