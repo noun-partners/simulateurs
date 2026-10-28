@@ -641,13 +641,14 @@
       var f = foyer(form)
       var dividende = nombre(form.dividende, 0, 1e8)
       var besoin = nombre(form.besoin, 0, 1e8)
-      var frais = nombre(form.frais, 0, 1e6)
       var annees = Math.round(nombre(form.annees, 1, 40))
       var rendement = nombre(form.rendement, 0, 15) / 100
       var autres = nombre(form.autres, 0, 1e8)
       var sortie = form.sortie.value === 'tout' ? 'tout' : 'garder'
       // Régime mère-fille (CGI, art. 145 et 216) : quote-part de frais et charges de 5 % imposée à l'IS à 25 %, soit 1,25 %
       var QUOTE_PART = .05 * .25, IS = .25, PFU = .314
+      // Frais annuels d'une holding simple, comptabilité et juridique : 2 000 à 3 000 € selon Malek
+      var frais = 2500
 
       // Impôts du foyer sans dividendes : impôt sur le revenu, CEHR et CDHR
       var avant = impot(autres, f) + cehr(autres, f) + cdhr(autres, impotBrut(autres, f) + cehr(autres, f), f)
@@ -725,6 +726,8 @@
         placeHolding: eur.format(placeHolding),
         gainsDirect: eur.format(Math.max(0, direct - placeDirect)),
         gainsHolding: eur.format(Math.max(0, holding - placeHolding)),
+        gainsLabelDirect: 'de gains nets, à ' + pct.format(rendement) + ' par an pendant ' + duree,
+        gainsLabelHolding: 'de gains nets, à ' + pct.format(rendement) + ' par an pendant ' + duree,
         dansHolding: eur.format(Math.max(0, holding)),
         latent: eur.format(latent),
         finDirect: eur.format(direct),

@@ -33,11 +33,6 @@
       <span class="np-sim__help">Avant impôt, identique en direct et dans la holding. Une hypothèse, pas une promesse.</span>
     </div>
     <div class="np-sim__field">
-      <label class="np-sim__label" for="np-sim-dh-frais">Frais annuels de la holding</label>
-      <div class="np-sim__input"><input id="np-sim-dh-frais" name="frais" type="number" inputmode="numeric" min="0" step="500" value="2500"><span class="np-sim__unit">€</span></div>
-      <span class="np-sim__help">Comptabilité et juridique : 2 000 à 3 000 € pour une holding simple.</span>
-    </div>
-    <div class="np-sim__field">
       <span class="np-sim__label" id="np-sim-dh-situation">Situation familiale</span>
       <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-dh-situation">
         <label class="np-sim__choice"><input type="radio" name="situation" value="seul"><span>Seul</span></label>
@@ -74,12 +69,12 @@
         <div class="np-sim__boite" style="grid-area:2/1"><span class="np-sim__boite-valeur" data-out="totalDirect">1 000 000 €</span><span class="np-sim__boite-label">de dividendes</span></div>
         <div class="np-sim__fleche" style="grid-area:3/1"><span class="np-sim__fleche-montant">− <span data-out="sortDirect">514 000 €</span></span><span class="np-sim__fleche-nom">impôts et <span data-out="vivreDirect">200 000 €</span> pour vivre</span><span class="np-sim__pointe"></span></div>
         <div class="np-sim__boite" style="grid-area:4/1"><span class="np-sim__boite-valeur" data-out="placeDirect">486 000 €</span><span class="np-sim__boite-label">placés</span></div>
-        <div class="np-sim__fleche" style="grid-area:5/1/8/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsDirect">64 620 €</span></span><span class="np-sim__fleche-nom">gains nets des placements</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__fleche np-sim__fleche-plus" style="grid-area:5/1/8/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsDirect">64 620 €</span></span><span class="np-sim__fleche-nom"><span data-out="gainsLabelDirect">de gains nets, à 4 % par an pendant 10 ans</span></span><span class="np-sim__pointe"></span></div>
         <div class="np-sim__boite" style="grid-area:8/1"><span class="np-sim__boite-valeur" data-out="finDirect">550 620 €</span><span class="np-sim__boite-label">pour vous</span></div>
         <div class="np-sim__boite" style="grid-area:2/2"><span class="np-sim__boite-valeur" data-out="totalHolding">1 000 000 €</span><span class="np-sim__boite-label">de dividendes</span></div>
         <div class="np-sim__fleche" style="grid-area:3/2"><span class="np-sim__fleche-montant">− <span data-out="sortHolding">317 410 €</span></span><span class="np-sim__fleche-nom">impôts, frais et <span data-out="vivreHolding">200 000 €</span> pour vivre</span><span class="np-sim__pointe"></span></div>
         <div class="np-sim__boite" style="grid-area:4/2"><span class="np-sim__boite-valeur" data-out="placeHolding">682 590 €</span><span class="np-sim__boite-label">placés</span></div>
-        <div class="np-sim__fleche" style="grid-area:5/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsHolding">99 923 €</span></span><span class="np-sim__fleche-nom">gains nets des placements</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__fleche np-sim__fleche-plus" style="grid-area:5/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsHolding">99 923 €</span></span><span class="np-sim__fleche-nom"><span data-out="gainsLabelHolding">de gains nets, à 4 % par an pendant 10 ans</span></span><span class="np-sim__pointe"></span></div>
         <div class="np-sim__boite np-sim__boite-accent" style="grid-area:6/2"><span class="np-sim__boite-valeur" data-out="dansHolding">782 513 €</span><span class="np-sim__boite-label">dans la holding</span></div>
         <div class="np-sim__fleche" style="grid-area:7/2"><span class="np-sim__fleche-montant">− <span data-out="latent">298 592 €</span></span><span class="np-sim__fleche-nom">impôt si elle vous verse tout</span><span class="np-sim__pointe"></span></div>
         <div class="np-sim__boite" style="grid-area:8/2"><span class="np-sim__boite-valeur" data-out="finHolding">483 921 €</span><span class="np-sim__boite-label">pour vous</span></div>
@@ -88,7 +83,7 @@
     </div>
   </div>
 
-  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : régime mère-fille, dont les conditions sont supposées remplies, avec une quote-part de frais et charges de 5 % imposée à l'impôt sur les sociétés à 25 %, soit 1,25 % des dividendes ; flat tax de 31,4 % ou barème de l'impôt sur le revenu avec l'abattement de 40 % et la CSG déductible, le moins imposé chaque année ; CEHR et CDHR. Montants constants chaque année. Placement au même rendement des deux côtés, imposé chaque année : flat tax en direct, impôt sur les sociétés à 25 % dans la holding, frais de la holding non déduits. Hors frais de création de la holding. Tout placement comporte un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : régime mère-fille, dont les conditions sont supposées remplies, avec une quote-part de frais et charges de 5 % imposée à l'impôt sur les sociétés à 25 %, soit 1,25 % des dividendes ; flat tax de 31,4 % ou barème de l'impôt sur le revenu avec l'abattement de 40 % et la CSG déductible, le moins imposé chaque année ; CEHR et CDHR. Montants constants chaque année. Placement au même rendement des deux côtés, imposé chaque année : flat tax en direct, impôt sur les sociétés à 25 % dans la holding, frais de la holding de 2 500 € par an, non déduits. Hors frais de création de la holding. Tout placement comporte un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
 
   <!-- Blocs data-si : garder (capital laissé dans la holding, au-dessus du direct), tout (tout récupéré, au-dessus du direct), perdante sinon -->
   <div class="np-sim__next">
