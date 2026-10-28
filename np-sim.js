@@ -635,6 +635,92 @@
         largeurs: { sansNet: sans[0], sansPs: sans[1], sansIr: sans[2], avecNet: avec[0], avecPs: avec[1], avecIr: avec[2] },
         si: r.pv === 0 ? 'aucun' : gain >= 1 ? 'donation' : 'autre'
       }
+    },
+
+    'dividendes-holding': function (form) {
+      var f = foyer(form)
+      var dividende = nombre(form.dividende, 0, 1e8)
+      var besoin = nombre(form.besoin, 0, 1e8)
+      var frais = nombre(form.frais, 0, 1e6)
+      var annees = Math.round(nombre(form.annees, 1, 40))
+      var rendement = nombre(form.rendement, 0, 15) / 100
+      var autres = nombre(form.autres, 0, 1e8)
+      var sortie = form.sortie.value === 'tout' ? 'tout' : 'garder'
+      // Régime mère-fille (CGI, art. 145 et 216) : quote-part de frais et charges de 5 % imposée à l'IS à 25 %, soit 1,25 %
+      var QUOTE_PART = .05 * .25, IS = .25, PFU = .314
+
+      // Impôts du foyer sans dividendes : impôt sur le revenu, CEHR et CDHR
+      var avant = impot(autres, f) + cehr(autres, f) + cdhr(autres, impotBrut(autres, f) + cehr(autres, f), f)
+      // Impôts dus sur des dividendes perçus dans l'année : flat tax ou, sur option globale, barème avec l'abattement de 40 %
+      // et 6,8 % de CSG déductible l'année suivante (revenus supposés égaux). CEHR, lissée si c'est plus favorable, et CDHR.
+      // precedent : revenu fiscal de référence des deux années précédentes, pour le lissage
+      function impots(d, precedent) {
+        var rfr = autres + d
+        var ce = cehr(rfr, f)
+        var lissee = cehrLissee(rfr, precedent, precedent, f)
+        if (lissee !== null) ce = Math.min(ce, lissee)
+        var flat = impot(autres, f) + Math.round(.128 * d) + ce + cdhr(rfr, impotBrut(autres, f) + .128 * d + ce, f)
+        var deductible = impot(autres, f) - impot(Math.max(0, autres - .068 * d), f)
+        var bar = impot(autres + .6 * d, f) - deductible + ce + cdhr(rfr, impotBrut(autres + .6 * d, f) + ce, f)
+        return Math.max(0, Math.round(Math.min(flat, bar) + .186 * d - avant))
+      }
+      function net(d) { return d - impots(d, autres + d) }
+
+      // Montant à distribuer pour toucher un net donné (le net croît avec le montant distribué)
+      function brutPour(n) {
+        var bas = 0, haut = 2 * n + 1
+        while (net(haut) < n) haut *= 2
+        for (var i = 0; i < 60; i++) {
+          var milieu = (bas + haut) / 2
+          if (net(milieu) < n) bas = milieu
+          else haut = milieu
+        }
+        return haut
+      }
+
+      // Ce que la holding encaisse chaque année, après la quote-part et ses frais
+      var encaisse = dividende * (1 - QUOTE_PART) - frais
+      var netDirect = net(dividende)
+      // Le même revenu pour vivre des deux côtés, dans la limite de ce que chacun permet
+      var vivre = Math.min(besoin, netDirect, encaisse > 0 ? net(encaisse) : 0)
+      var verse = vivre ? Math.min(Math.max(0, encaisse), brutPour(vivre)) : 0
+
+      // Placement identique des deux côtés, imposé chaque année : flat tax en direct, IS à 25 % dans la holding
+      var direct = 0, holding = 0
+      for (var a = 0; a < annees; a++) {
+        direct += direct * rendement * (1 - PFU) + netDirect - vivre
+        holding += Math.max(0, holding) * rendement * (1 - IS) + encaisse - verse
+      }
+      // Sortie : la holding distribue tout son capital la dernière année, en plus du revenu pour vivre
+      var latent = holding > 0 ? impots(verse + holding, autres + verse) - impots(verse, autres + verse) : 0
+      var finHolding = holding - (sortie === 'tout' ? latent : 0)
+      var ecart = finHolding - direct
+      var plus = Math.max(direct, finHolding, 1)
+      var duree = annees > 1 ? annees + ' ans' : '1 an'
+      return {
+        out: {
+          titre: (sortie === 'tout' ? 'Ce qui vous reste au bout de ' : 'Capital dans la holding au bout de ') + duree,
+          capital: eur.format(Math.max(0, finHolding)),
+          direct: eur.format(direct),
+          placeDirect: eur.format(netDirect - vivre),
+          placeHolding: eur.format(Math.max(0, encaisse - verse)),
+          impotDirect: eur.format(dividende - netDirect),
+          impotHolding: eur.format(Math.round(dividende * QUOTE_PART) + verse - vivre),
+          fraisTotal: eur.format(frais * annees),
+          latent: eur.format(latent),
+          barreHolding: eur.format(Math.max(0, finHolding)),
+          barreDirect: eur.format(direct),
+          ecartGarder: eur.format(Math.max(0, ecart)),
+          ecartTout: eur.format(Math.max(0, ecart)),
+          perte: eur.format(Math.max(0, -ecart))
+        },
+        largeurs: {
+          holding: (Math.max(0, finHolding) / plus * 100).toFixed(1) + '%',
+          direct: (direct / plus * 100).toFixed(1) + '%'
+        },
+        // Laissé dans la holding, le capital n'est pas encore à vous : le texte le dit, même quand il dépasse le direct
+        si: ecart < 1 ? 'perdante' : sortie
+      }
     }
   }
 

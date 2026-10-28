@@ -1,0 +1,96 @@
+<!-- Simulateur dividendes en direct ou remontés en holding : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="dividendes-holding">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Vos dividendes</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-dh-dividende">Dividendes distribués chaque année</label>
+      <div class="np-sim__input"><input id="np-sim-dh-dividende" name="dividende" type="number" inputmode="numeric" min="0" step="5000" value="100000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Montant brut versé par votre société.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-dh-besoin">Ce qu'il vous faut pour vivre, chaque année</label>
+      <div class="np-sim__input"><input id="np-sim-dh-besoin" name="besoin" type="number" inputmode="numeric" min="0" step="1000" value="20000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Net, après impôts. Avec une holding, elle vous le reverse en dividendes.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-dh-sortie">Au bout de la période</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-dh-sortie">
+        <label class="np-sim__choice"><input type="radio" name="sortie" value="garder" checked><span>Le capital reste dans la holding</span></label>
+        <label class="np-sim__choice"><input type="radio" name="sortie" value="tout"><span>Je récupère tout</span></label>
+      </div>
+      <span class="np-sim__help">Tout récupérer : la holding vous distribue son capital la dernière année.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-dh-annees">Durée</label>
+      <div class="np-sim__input"><input id="np-sim-dh-annees" name="annees" type="number" inputmode="numeric" min="1" max="40" step="1" value="10"><span class="np-sim__unit">ans</span></div>
+      <span class="np-sim__help">Années de dividendes et de placement.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-dh-rendement">Rendement annuel des placements</label>
+      <div class="np-sim__input"><input id="np-sim-dh-rendement" name="rendement" type="number" inputmode="decimal" min="0" max="15" step="0.5" value="4"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">Avant impôt, identique en direct et dans la holding. Une hypothèse, pas une promesse.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-dh-frais">Frais annuels de la holding</label>
+      <div class="np-sim__input"><input id="np-sim-dh-frais" name="frais" type="number" inputmode="numeric" min="0" step="500" value="2500"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Comptabilité et juridique : 2 000 à 3 000 € pour une holding simple.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-dh-situation">Situation familiale</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-dh-situation">
+        <label class="np-sim__choice"><input type="radio" name="situation" value="seul"><span>Seul</span></label>
+        <label class="np-sim__choice"><input type="radio" name="situation" value="couple" checked><span>Marié ou pacsé</span></label>
+      </div>
+      <span class="np-sim__help">Déclaration commune pour un couple marié ou pacsé.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-dh-enfants">Enfants à charge</label>
+      <div class="np-sim__input"><input id="np-sim-dh-enfants" name="enfants" type="number" inputmode="numeric" min="0" max="10" step="1" value="2"></div>
+      <span class="np-sim__help">Une demi-part pour chacun des deux premiers, une part à partir du troisième.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-dh-autres">Autres revenus imposables du foyer</label>
+      <div class="np-sim__input"><input id="np-sim-dh-autres" name="autres" type="number" inputmode="numeric" min="0" step="1000" value="60000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Votre rémunération de dirigeant, le salaire du conjoint : montants nets imposables.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label" data-out="titre">Capital dans la holding au bout de 10 ans</span>
+      <span class="np-sim__headline-value" data-out="capital">782 513 €</span>
+      <span class="np-sim__headline-note">contre <span data-out="direct">550 620 €</span> en percevant vos dividendes en direct et en plaçant le même surplus</span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Placé chaque année en direct</span><span class="np-sim__line-value" data-out="placeDirect">48 600 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Placé chaque année par la holding</span><span class="np-sim__line-value" data-out="placeHolding">68 259 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt chaque année en direct</span><span class="np-sim__line-value" data-out="impotDirect">31 400 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt chaque année avec la holding</span><span class="np-sim__line-value" data-out="impotHolding">9 241 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Frais de la holding, au total</span><span class="np-sim__line-value" data-out="fraisTotal">25 000 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Impôt si la holding vous verse tout</span><span class="np-sim__line-value" data-out="latent">298 592 €</span></div>
+    </div>
+    <div class="np-sim__compare">
+      <div class="np-sim__bar-head"><span>Avec la holding</span><strong data-out="barreHolding">782 513 €</strong></div>
+      <div class="np-sim__bar"><span class="np-sim__bar-net" data-largeur="holding" style="width:100.0%"></span></div>
+      <div class="np-sim__bar-head"><span>En direct</span><strong data-out="barreDirect">550 620 €</strong></div>
+      <div class="np-sim__bar"><span class="np-sim__bar-ps" data-largeur="direct" style="width:70.4%"></span></div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : régime mère-fille, dont les conditions sont supposées remplies, avec une quote-part de frais et charges de 5 % imposée à l'impôt sur les sociétés à 25 %, soit 1,25 % des dividendes ; flat tax de 31,4 % ou barème de l'impôt sur le revenu avec l'abattement de 40 % et la CSG déductible, le moins imposé chaque année ; CEHR et CDHR. Montants constants chaque année. Placement au même rendement des deux côtés, imposé chaque année : flat tax en direct, impôt sur les sociétés à 25 % dans la holding, frais de la holding non déduits. Hors frais de création de la holding. Tout placement comporte un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- Blocs data-si : garder (capital laissé dans la holding, au-dessus du direct), tout (tout récupéré, au-dessus du direct), perdante sinon -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Une holding, pour quel projet ?</div>
+      <p class="np-sim__next-text" data-si="garder">Laissé dans la holding, votre capital dépasse de <strong data-out="ecartGarder">231 892 €</strong> ce que vous auriez placé en direct. Ce n'est pas encore de l'argent à vous : le jour où vous le récupérez, il supporte la flat tax. La holding sert quand ce capital finance un projet réel : réinvestir, racheter une société, transmettre.</p>
+      <p class="np-sim__next-text" data-si="tout" hidden>Même en récupérant tout, la holding vous laisse <strong data-out="ecartTout">231 892 €</strong> de plus. Elle doit détenir au moins 5 % de votre société pendant deux ans et servir un projet réel : une holding créée pour le seul gain fiscal s'expose à l'abus de droit.</p>
+      <p class="np-sim__next-text" data-si="perdante" hidden>Avec ces hypothèses, la holding vous laisse <strong data-out="perte">0 €</strong> de moins qu'une perception en direct : ce que le régime mère-fille fait gagner ne couvre pas ses frais, ni l'impôt quand vous récupérez le capital. Elle se justifie plutôt à partir d'un budget de rémunération de 150 à 200 k€ par an, ou d'une trésorerie stable de 250 k€, quand le capital reste au travail.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+    </div>
+  </div>
+</div>
