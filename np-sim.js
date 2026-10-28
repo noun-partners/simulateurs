@@ -685,39 +685,66 @@
       var vivre = Math.min(besoin, netDirect, encaisse > 0 ? net(encaisse) : 0)
       var verse = vivre ? Math.min(Math.max(0, encaisse), brutPour(vivre)) : 0
 
+      // Impôt dû si la holding distribue tout son capital dans l'année, en plus du revenu pour vivre
+      function sortieHolding(capital) {
+        return capital > 0 ? impots(verse + capital, autres + verse) - impots(verse, autres + verse) : 0
+      }
+
+      // Graphique : au plus 10 années, réparties sur la durée (la dernière toujours)
+      var points = Math.min(annees, 10), jalons = {}
+      for (var k = 1; k <= points; k++) jalons[Math.round(annees * k / points)] = k
+
       // Placement identique des deux côtés, imposé chaque année : flat tax en direct, IS à 25 % dans la holding
-      var direct = 0, holding = 0
-      for (var a = 0; a < annees; a++) {
+      var direct = 0, holding = 0, serie = []
+      for (var a = 1; a <= annees; a++) {
         direct += direct * rendement * (1 - PFU) + netDirect - vivre
         holding += Math.max(0, holding) * rendement * (1 - IS) + encaisse - verse
+        if (jalons[a]) serie.push({ an: a, direct: direct, holding: Math.max(0, holding), impot: sortieHolding(holding) })
       }
-      // Sortie : la holding distribue tout son capital la dernière année, en plus du revenu pour vivre
-      var latent = holding > 0 ? impots(verse + holding, autres + verse) - impots(verse, autres + verse) : 0
+      // Sortie : la holding distribue tout son capital la dernière année
+      var latent = sortieHolding(holding)
       var finHolding = holding - (sortie === 'tout' ? latent : 0)
       var ecart = finHolding - direct
-      var plus = Math.max(direct, finHolding, 1)
       var duree = annees > 1 ? annees + ' ans' : '1 an'
+
+      var out = {
+        titre: (sortie === 'tout' ? 'Ce qui vous reste au bout de ' : 'Capital dans la holding au bout de ') + duree,
+        capital: eur.format(Math.max(0, finHolding)),
+        direct: eur.format(direct),
+        dividendeAn: eur.format(dividende),
+        placeDirect: eur.format(netDirect - vivre),
+        placeHolding: eur.format(Math.max(0, encaisse - verse)),
+        impotDirect: eur.format(dividende - netDirect),
+        impotHolding: eur.format(Math.round(dividende * QUOTE_PART) + verse - vivre),
+        fraisTotal: eur.format(frais * annees),
+        latent: eur.format(latent),
+        ecartGarder: eur.format(Math.max(0, ecart)),
+        ecartTout: eur.format(Math.max(0, ecart)),
+        perte: eur.format(Math.max(0, -ecart))
+      }
+
+      // Où va le dividende de l'année, en part du dividende : pour vivre, placé, impôts, frais de la holding
+      function part(x) { return (dividende ? Math.min(100, Math.max(0, x) / dividende * 100) : 0).toFixed(1) + '%' }
+      var largeurs = {
+        dVivre: part(vivre), dPlace: part(netDirect - vivre), dImpot: part(dividende - netDirect),
+        hVivre: part(vivre), hPlace: part(encaisse - verse), hImpot: part(dividende * QUOTE_PART + verse - vivre), hFrais: part(frais)
+      }
+      // Colonnes : capital en direct, capital de la holding dont l'impôt si elle distribuait tout cette année-là.
+      // Hauteurs en part du plus grand capital ; les colonnes inutilisées ont une largeur nulle
+      var plus = Math.max.apply(null, serie.map(function (p) { return Math.max(p.direct, p.holding) }).concat(1))
+      var hauteurs = {}
+      for (k = 1; k <= 10; k++) {
+        var p = serie[k - 1]
+        out['an' + k] = p ? String(p.an) : ''
+        largeurs['col' + k] = (p ? 100 / points : 0).toFixed(1) + '%'
+        hauteurs['direct' + k] = (p ? p.direct / plus * 100 : 0).toFixed(1) + '%'
+        hauteurs['holding' + k] = (p ? p.holding / plus * 100 : 0).toFixed(1) + '%'
+        hauteurs['impot' + k] = (p && p.holding ? Math.min(100, p.impot / p.holding * 100) : 0).toFixed(1) + '%'
+      }
       return {
-        out: {
-          titre: (sortie === 'tout' ? 'Ce qui vous reste au bout de ' : 'Capital dans la holding au bout de ') + duree,
-          capital: eur.format(Math.max(0, finHolding)),
-          direct: eur.format(direct),
-          placeDirect: eur.format(netDirect - vivre),
-          placeHolding: eur.format(Math.max(0, encaisse - verse)),
-          impotDirect: eur.format(dividende - netDirect),
-          impotHolding: eur.format(Math.round(dividende * QUOTE_PART) + verse - vivre),
-          fraisTotal: eur.format(frais * annees),
-          latent: eur.format(latent),
-          barreHolding: eur.format(Math.max(0, finHolding)),
-          barreDirect: eur.format(direct),
-          ecartGarder: eur.format(Math.max(0, ecart)),
-          ecartTout: eur.format(Math.max(0, ecart)),
-          perte: eur.format(Math.max(0, -ecart))
-        },
-        largeurs: {
-          holding: (Math.max(0, finHolding) / plus * 100).toFixed(1) + '%',
-          direct: (direct / plus * 100).toFixed(1) + '%'
-        },
+        out: out,
+        largeurs: largeurs,
+        hauteurs: hauteurs,
         // Laissé dans la holding, le capital n'est pas encore à vous : le texte le dit, même quand il dépasse le direct
         si: ecart < 1 ? 'perdante' : sortie
       }
@@ -750,6 +777,11 @@
       Object.keys(r.largeurs || {}).forEach(function (nom) {
         var el = sim.querySelector('[data-largeur="' + nom + '"]')
         if (el) el.style.width = r.largeurs[nom]
+      })
+      // Colonnes : hauteur en pourcentage des éléments data-hauteur
+      Object.keys(r.hauteurs || {}).forEach(function (nom) {
+        var el = sim.querySelector('[data-hauteur="' + nom + '"]')
+        if (el) el.style.height = r.hauteurs[nom]
       })
       sim.querySelectorAll('[data-si]').forEach(function (el) {
         el.hidden = el.getAttribute('data-si') !== r.si

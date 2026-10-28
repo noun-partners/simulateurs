@@ -49,6 +49,21 @@
 .np-sim__legend .np-sim__bar-ir:before{background:#9698AE}
 .np-sim__disclaimer{grid-column:1/-1;margin:4px 0 0;font-size:14px;line-height:1.5;color:#737373}
 
+/* Barres empilées : couleur des frais (pour vivre en taupe, placé en or, impôts en gris) */
+.np-sim__bar-frais{background:#E7E8F1}
+.np-sim__legend .np-sim__bar-frais:before{background:#E7E8F1}
+/* Colonnes : une par année, deux barres côte à côte. La largeur et la hauteur viennent du moteur (data-largeur, data-hauteur) */
+.np-sim__chart{display:flex;height:180px;margin-top:4px}
+.np-sim__col{display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.np-sim__col-bars{flex:1;display:flex;align-items:flex-end;justify-content:center;gap:3px;border-bottom:1px solid rgba(255,255,255,.18)}
+.np-sim__col-direct,.np-sim__col-holding{display:flex;flex-direction:column;width:35%;max-width:16px}
+.np-sim__col-direct{background:#E7E8F1}
+.np-sim__col-holding{background:#CF9804}
+.np-sim__col-impot{display:block;flex-shrink:0;background:#9698AE}
+.np-sim__col-label{padding-top:6px;font-size:12px;line-height:1;text-align:center;color:#CFD1DE;font-variant-numeric:tabular-nums}
+.np-sim__legend .np-sim__key-direct:before{background:#E7E8F1}
+.np-sim__legend .np-sim__key-impot:before{background:#9698AE}
+
 /* CTA sous le calcul : fond doré clair des encarts auteur du site */
 .np-sim__next{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:32px;margin-top:12px;padding:24px 32px;border-radius:16px;background:#FFF9EB}
 .np-sim__next-content{display:flex;flex-direction:column;gap:8px;max-width:62ch}
