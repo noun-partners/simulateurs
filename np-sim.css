@@ -51,18 +51,24 @@
 
 /* Colonne de droite qui empile le bloc résultat et un schéma, à côté d'un formulaire long */
 .np-sim__droite{display:flex;flex-direction:column;gap:20px;min-width:0}
-/* Schéma en deux colonnes sur fond crème : étapes d'un montant, retraits entre les étapes.
-   Les deux colonnes ont la même hauteur : le retrait long remplit l'écart pour aligner les montants finaux */
-.np-sim__trajet{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 24px;padding:24px;border-radius:12px;background:#F8F4F0}
-.np-sim__trajet-titre{grid-column:1/-1;margin:0 0 20px;font-family:"Playfair Display",Georgia,serif;font-size:24px;font-weight:600;line-height:1.2}
-.np-sim__trajet-col{display:flex;flex-direction:column}
-.np-sim__trajet-nom{margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #CFD1DE;font-size:16px;font-weight:700}
-.np-sim__etape{display:flex;flex-direction:column;gap:2px}
-.np-sim__etape-valeur{font-family:"Playfair Display",Georgia,serif;font-size:30px;font-weight:600;line-height:1.15;font-variant-numeric:tabular-nums lining-nums}
-.np-sim__etape-label{font-size:14px;line-height:1.4;color:rgba(18,20,38,.7)}
-.np-sim__retrait{margin:10px 0 10px 8px;padding:6px 0 6px 14px;border-left:2px solid #CFD1DE;font-size:14px;line-height:1.4;color:rgba(18,20,38,.7)}
-.np-sim__retrait-long{flex:1}
-.np-sim__trajet-note{grid-column:1/-1;margin:20px 0 0;font-size:16px;line-height:1.5}
+/* Schéma en étapes, dans le style des schémas Noun : boîtes blanches à bord sombre, flèches avec le montant
+   en gras et sa nature en gris, une seule boîte or. La place de chaque élément dans la grille est dans l'embed */
+.np-sim__schema{padding:24px;border-radius:12px;background:#F8F4F0}
+.np-sim__schema-titre{margin:0 0 20px;font-family:"Playfair Display",Georgia,serif;font-size:24px;font-weight:600;line-height:1.2}
+.np-sim__schema-grille{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:20px}
+.np-sim__schema-entete{margin-bottom:12px;font-size:16px;font-weight:700;text-align:center}
+.np-sim__boite{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 10px;border:2px solid #121426;border-radius:16px;background:#fff;text-align:center}
+.np-sim__boite-accent{background:#CF9804}
+.np-sim__boite-valeur{font-size:24px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}
+.np-sim__boite-label{font-size:14px;line-height:1.3}
+.np-sim__fleche{display:flex;flex-direction:column;align-items:center;text-align:center}
+.np-sim__fleche:before{content:"";flex:1;min-height:10px;border-left:2px solid #121426}
+.np-sim__fleche-montant{padding-top:4px;font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.np-sim__fleche-nom{font-size:13px;line-height:1.3;color:rgba(18,20,38,.7)}
+.np-sim__pointe{flex:1;display:flex;flex-direction:column;align-items:center;padding-top:4px}
+.np-sim__pointe:before{content:"";flex:1;min-height:8px;border-left:2px solid #121426}
+.np-sim__pointe:after{content:"";border:7px solid transparent;border-top:10px solid #121426;border-bottom:0}
+.np-sim__schema-note{margin:20px 0 0;font-size:16px;line-height:1.5}
 
 /* CTA sous le calcul : fond doré clair des encarts auteur du site */
 .np-sim__next{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:32px;margin-top:12px;padding:24px 32px;border-radius:16px;background:#FFF9EB}
@@ -82,8 +88,8 @@
 }
 /* Conserver les espacements mobiles du gabarit, dont les marges changent à 767 px. */
 @media (max-width:767px){
-  .np-sim__form,.np-sim__trajet{padding:20px}
-  .np-sim__etape-valeur{font-size:26px}
+  .np-sim__form,.np-sim__schema{padding:20px}
+  .np-sim__boite-valeur{font-size:22px}
   .np-sim__result{padding:24px 20px}
   .np-sim__next{padding:20px}
   .np-sim__headline-value{font-size:34px}

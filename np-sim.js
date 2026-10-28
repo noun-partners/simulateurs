@@ -724,6 +724,7 @@
       var trajet = { pourVous: 100 - 100 * taux, impot: 100 * taux, quotePart: 100 * QUOTE_PART, frais: fraisCent, dansHolding: dansHolding, sortie: dansHolding * taux, recupere: dansHolding * (1 - taux) }
       Object.keys(trajet).forEach(function (k) { out['t' + k.charAt(0).toUpperCase() + k.slice(1)] = cent.format(trajet[k]) })
       out.tPlaceHolding = cent.format(dansHolding)
+      out.tRetenue = cent.format(100 * QUOTE_PART + fraisCent)
       out.tPlaceDirect = cent.format(trajet.pourVous)
       return {
         out: out,
