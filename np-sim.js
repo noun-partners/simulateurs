@@ -709,8 +709,6 @@
         direct: eur.format(direct),
         placeDirect: eur.format(netDirect - vivre),
         placeHolding: eur.format(Math.max(0, encaisse - verse)),
-        impotDirect: eur.format(dividende - netDirect),
-        impotHolding: eur.format(Math.round(dividende * QUOTE_PART) + verse - vivre),
         fraisTotal: eur.format(frais * annees),
         latent: eur.format(latent),
         ecartGarder: eur.format(Math.max(0, ecart)),
@@ -718,7 +716,6 @@
         perte: eur.format(Math.max(0, -ecart))
       }
 
-      var largeurs = {}
       // Trajet de 100 € de dividendes. En direct : l'impôt de l'année. Holding : quote-part et frais, puis, le jour où elle
       // vous les verse, le même taux d'impôt que vos dividendes actuels
       var taux = dividende ? (dividende - netDirect) / dividende : 0
@@ -728,16 +725,8 @@
       Object.keys(trajet).forEach(function (k) { out['t' + k.charAt(0).toUpperCase() + k.slice(1)] = cent.format(trajet[k]) })
       out.tPlaceHolding = cent.format(dansHolding)
       out.tPlaceDirect = cent.format(trajet.pourVous)
-      function l(x) { return Math.max(0, x).toFixed(1) + '%' }
-      largeurs.trDirect = l(trajet.pourVous)
-      largeurs.trDirectImpot = l(trajet.impot)
-      largeurs.trHolding = l(dansHolding)
-      largeurs.trHoldingImpot = l(100 - dansHolding)
-      largeurs.trRecupere = l(trajet.recupere)
-      largeurs.trRecupereImpot = l(100 - trajet.recupere)
       return {
         out: out,
-        largeurs: largeurs,
         // Laissé dans la holding, le capital n'est pas encore à vous : le texte le dit, même quand il dépasse le direct
         si: ecart < 1 ? 'perdante' : sortie
       }
