@@ -61,32 +61,30 @@
     <div class="np-sim__result" aria-live="polite">
       <div class="np-sim__headline">
         <span class="np-sim__headline-label" data-out="titre">Capital dans la holding au bout de 10 ans</span>
-        <span class="np-sim__headline-value" data-out="capital">782 513 €</span>
-        <span class="np-sim__headline-note">contre <span data-out="direct">550 620 €</span> en percevant vos dividendes en direct et en plaçant le même surplus</span>
-      </div>
-      <div class="np-sim__lines">
-        <div class="np-sim__line"><span class="np-sim__line-label">Placé chaque année en direct</span><span class="np-sim__line-value" data-out="placeDirect">48 600 €</span></div>
-        <div class="np-sim__line"><span class="np-sim__line-label">Placé chaque année par la holding</span><span class="np-sim__line-value" data-out="placeHolding">68 259 €</span></div>
-        <div class="np-sim__line"><span class="np-sim__line-label">Frais de la holding, au total</span><span class="np-sim__line-value" data-out="fraisTotal">25 000 €</span></div>
-        <div class="np-sim__line"><span class="np-sim__line-label">Impôt si la holding vous verse tout</span><span class="np-sim__line-value" data-out="latent">298 592 €</span></div>
+        <span class="np-sim__headline-value" data-out="capital">782 513 €</span>
+        <span class="np-sim__headline-note">contre <span data-out="direct">550 620 €</span> en percevant vos dividendes en direct et en plaçant le même surplus</span>
       </div>
     </div>
 
     <div class="np-sim__schema">
-      <div class="np-sim__schema-titre">Ce que deviennent 100 € de dividendes</div>
+      <div class="np-sim__schema-titre">Ce que deviennent vos dividendes en <span data-out="schemaDuree">10 ans</span></div>
       <div class="np-sim__schema-grille">
         <span class="np-sim__schema-entete" style="grid-area:1/1">En direct</span>
         <span class="np-sim__schema-entete" style="grid-area:1/2">Avec la holding</span>
-        <div class="np-sim__boite" style="grid-area:2/1"><span class="np-sim__boite-valeur">100 €</span><span class="np-sim__boite-label">dividende</span></div>
-        <div class="np-sim__fleche" style="grid-area:3/1/6/2"><span class="np-sim__fleche-montant">− <span data-out="tImpot">31,40 €</span></span><span class="np-sim__fleche-nom">impôt</span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite" style="grid-area:6/1"><span class="np-sim__boite-valeur" data-out="tPourVous">68,60 €</span><span class="np-sim__boite-label">pour vous, tout de suite</span></div>
-        <div class="np-sim__boite" style="grid-area:2/2"><span class="np-sim__boite-valeur">100 €</span><span class="np-sim__boite-label">dividende</span></div>
-        <div class="np-sim__fleche" style="grid-area:3/2"><span class="np-sim__fleche-montant">− <span data-out="tRetenue">3,75 €</span></span><span class="np-sim__fleche-nom">impôt <span data-out="tQuotePart">1,25 €</span> et frais <span data-out="tFrais">2,50 €</span></span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite np-sim__boite-accent" style="grid-area:4/2"><span class="np-sim__boite-valeur" data-out="tDansHolding">96,25 €</span><span class="np-sim__boite-label">dans la holding, à placer</span></div>
-        <div class="np-sim__fleche" style="grid-area:5/2"><span class="np-sim__fleche-montant">− <span data-out="tSortie">30,22 €</span></span><span class="np-sim__fleche-nom">impôt quand elle vous les verse</span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite" style="grid-area:6/2"><span class="np-sim__boite-valeur" data-out="tRecupere">66,03 €</span><span class="np-sim__boite-label">pour vous, plus tard</span></div>
+        <div class="np-sim__boite" style="grid-area:2/1"><span class="np-sim__boite-valeur" data-out="totalDirect">1 000 000 €</span><span class="np-sim__boite-label">de dividendes</span></div>
+        <div class="np-sim__fleche" style="grid-area:3/1"><span class="np-sim__fleche-montant">− <span data-out="sortDirect">514 000 €</span></span><span class="np-sim__fleche-nom">impôts et <span data-out="vivreDirect">200 000 €</span> pour vivre</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite" style="grid-area:4/1"><span class="np-sim__boite-valeur" data-out="placeDirect">486 000 €</span><span class="np-sim__boite-label">placés</span></div>
+        <div class="np-sim__fleche" style="grid-area:5/1/8/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsDirect">64 620 €</span></span><span class="np-sim__fleche-nom">gains nets des placements</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite" style="grid-area:8/1"><span class="np-sim__boite-valeur" data-out="finDirect">550 620 €</span><span class="np-sim__boite-label">pour vous</span></div>
+        <div class="np-sim__boite" style="grid-area:2/2"><span class="np-sim__boite-valeur" data-out="totalHolding">1 000 000 €</span><span class="np-sim__boite-label">de dividendes</span></div>
+        <div class="np-sim__fleche" style="grid-area:3/2"><span class="np-sim__fleche-montant">− <span data-out="sortHolding">317 410 €</span></span><span class="np-sim__fleche-nom">impôts, frais et <span data-out="vivreHolding">200 000 €</span> pour vivre</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite" style="grid-area:4/2"><span class="np-sim__boite-valeur" data-out="placeHolding">682 590 €</span><span class="np-sim__boite-label">placés</span></div>
+        <div class="np-sim__fleche" style="grid-area:5/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsHolding">99 923 €</span></span><span class="np-sim__fleche-nom">gains nets des placements</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite np-sim__boite-accent" style="grid-area:6/2"><span class="np-sim__boite-valeur" data-out="dansHolding">782 513 €</span><span class="np-sim__boite-label">dans la holding</span></div>
+        <div class="np-sim__fleche" style="grid-area:7/2"><span class="np-sim__fleche-montant">− <span data-out="latent">298 592 €</span></span><span class="np-sim__fleche-nom">impôt si elle vous verse tout</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite" style="grid-area:8/2"><span class="np-sim__boite-valeur" data-out="finHolding">483 921 €</span><span class="np-sim__boite-label">pour vous</span></div>
       </div>
-      <p class="np-sim__schema-note">La holding ne supprime pas l'impôt, elle le reporte. Son intérêt : placer <strong data-out="tPlaceHolding">96,25 €</strong> au lieu de <strong data-out="tPlaceDirect">68,60 €</strong> en attendant.</p>
+      <p class="np-sim__schema-note" data-out="conclusion">Laissé dans la holding, le capital dépasse de 231 892 € celui constitué en direct. Récupéré en une fois, il vous laisse 66 700 € de moins.</p>
     </div>
   </div>
 

@@ -89,7 +89,8 @@
 /* Conserver les espacements mobiles du gabarit, dont les marges changent à 767 px. */
 @media (max-width:767px){
   .np-sim__form,.np-sim__schema{padding:20px}
-  .np-sim__boite-valeur{font-size:22px}
+  .np-sim__boite{padding:12px 6px}
+  .np-sim__boite-valeur{font-size:20px}
   .np-sim__result{padding:24px 20px}
   .np-sim__next{padding:20px}
   .np-sim__headline-value{font-size:34px}

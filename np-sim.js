@@ -4,7 +4,6 @@
   var eur = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
   var pct = new Intl.NumberFormat('fr-FR', { style: 'percent', maximumFractionDigits: 1 })
   var pct2 = new Intl.NumberFormat('fr-FR', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 })
-  var cent = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
   // Saisie bornée : vide, négative ou hors limites, jamais NaN
   function nombre(champ, min, max) {
@@ -703,29 +702,40 @@
       var ecart = finHolding - direct
       var duree = annees > 1 ? annees + ' ans' : '1 an'
 
+      // Schéma sur toute la durée : dividendes, ce qui en sort (impôts, frais, revenu pour vivre), ce qui est placé,
+      // les gains nets des placements, puis l'impôt si la holding verse tout la dernière année
+      var placeDirect = (netDirect - vivre) * annees
+      var placeHolding = Math.max(0, encaisse - verse) * annees
+      var total = dividende * annees
+      var vivreTotal = eur.format(vivre * annees)
+      var ecartCapital = holding - direct
+      var ecartSortie = holding - latent - direct
       var out = {
         titre: (sortie === 'tout' ? 'Ce qui vous reste au bout de ' : 'Capital dans la holding au bout de ') + duree,
         capital: eur.format(Math.max(0, finHolding)),
         direct: eur.format(direct),
-        placeDirect: eur.format(netDirect - vivre),
-        placeHolding: eur.format(Math.max(0, encaisse - verse)),
-        fraisTotal: eur.format(frais * annees),
+        schemaDuree: duree,
+        totalDirect: eur.format(total),
+        totalHolding: eur.format(total),
+        sortDirect: eur.format(total - placeDirect),
+        sortHolding: eur.format(total - placeHolding),
+        vivreDirect: vivreTotal,
+        vivreHolding: vivreTotal,
+        placeDirect: eur.format(placeDirect),
+        placeHolding: eur.format(placeHolding),
+        gainsDirect: eur.format(Math.max(0, direct - placeDirect)),
+        gainsHolding: eur.format(Math.max(0, holding - placeHolding)),
+        dansHolding: eur.format(Math.max(0, holding)),
         latent: eur.format(latent),
+        finDirect: eur.format(direct),
+        finHolding: eur.format(Math.max(0, holding - latent)),
+        conclusion: (ecartCapital >= 0 ? 'Laissé dans la holding, le capital dépasse de ' + eur.format(ecartCapital) + ' celui constitué en direct. '
+          : 'Même laissé dans la holding, le capital reste inférieur de ' + eur.format(-ecartCapital) + ' à celui constitué en direct. ')
+          + 'Récupéré en une fois, il vous laisse ' + eur.format(Math.abs(ecartSortie)) + (ecartSortie >= 0 ? ' de plus.' : ' de moins.'),
         ecartGarder: eur.format(Math.max(0, ecart)),
         ecartTout: eur.format(Math.max(0, ecart)),
         perte: eur.format(Math.max(0, -ecart))
       }
-
-      // Trajet de 100 € de dividendes. En direct : l'impôt de l'année. Holding : quote-part et frais, puis, le jour où elle
-      // vous les verse, le même taux d'impôt que vos dividendes actuels
-      var taux = dividende ? (dividende - netDirect) / dividende : 0
-      var fraisCent = dividende ? Math.min(100 - 100 * QUOTE_PART, frais / dividende * 100) : 0
-      var dansHolding = 100 - 100 * QUOTE_PART - fraisCent
-      var trajet = { pourVous: 100 - 100 * taux, impot: 100 * taux, quotePart: 100 * QUOTE_PART, frais: fraisCent, dansHolding: dansHolding, sortie: dansHolding * taux, recupere: dansHolding * (1 - taux) }
-      Object.keys(trajet).forEach(function (k) { out['t' + k.charAt(0).toUpperCase() + k.slice(1)] = cent.format(trajet[k]) })
-      out.tPlaceHolding = cent.format(dansHolding)
-      out.tRetenue = cent.format(100 * QUOTE_PART + fraisCent)
-      out.tPlaceDirect = cent.format(trajet.pourVous)
       return {
         out: out,
         // Laissé dans la holding, le capital n'est pas encore à vous : le texte le dit, même quand il dépasse le direct
