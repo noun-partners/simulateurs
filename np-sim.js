@@ -645,8 +645,8 @@
       var rendement = nombre(form.rendement, 0, 15) / 100
       var autres = nombre(form.autres, 0, 1e8)
       var sortie = form.sortie.value === 'tout' ? 'tout' : 'garder'
-      // Régime mère-fille (CGI, art. 145 et 216) : quote-part de frais et charges de 5 % imposée à l'IS à 25 %, soit 1,25 %
-      var QUOTE_PART = .05 * .25, IS = .25, PFU = .314
+      // Régime mère-fille (CGI, art. 145 et 216) : seule une quote-part de frais et charges de 5 % des dividendes reste imposable
+      var QUOTE_PART = .05, PFU = .314
       // Frais annuels d'une holding simple, comptabilité et juridique : 2 000 à 3 000 € selon Malek
       var frais = 2500
 
@@ -679,25 +679,31 @@
         return haut
       }
 
-      // Ce que la holding encaisse chaque année, après la quote-part et ses frais
-      var encaisse = dividende * (1 - QUOTE_PART) - frais
+      // Impôt sur les sociétés de la holding (taux réduit de 15 % jusqu'à 42 500 € supposé applicable) : quote-part et gains
+      // des placements, frais déduits, déficit de l'année perdu. Sans gains, ce qui reste de l'impôt sur la quote-part
+      function isHolding(gains) { return impotSocietes(Math.max(0, dividende * QUOTE_PART + gains - frais)) }
+      // Ce que la holding encaisse chaque année, après l'impôt sur la quote-part et ses frais
+      var encaisse = dividende - frais - isHolding(0)
       var netDirect = net(dividende)
       // Le même revenu pour vivre des deux côtés, dans la limite de ce que chacun permet
       var vivre = Math.min(besoin, netDirect, encaisse > 0 ? net(encaisse) : 0)
       var verse = vivre ? Math.min(Math.max(0, encaisse), brutPour(vivre)) : 0
 
-      // Impôt dû si la holding distribue tout son capital dans l'année, en plus du revenu pour vivre
-      function sortieHolding(capital) {
-        return capital > 0 ? impots(verse + capital, autres + verse) - impots(verse, autres + verse) : 0
-      }
+      // Sortie progressive : la holding vous verse son capital peu à peu, imposé au même taux que vos dividendes de l'année
+      var taux = dividende ? (dividende - netDirect) / dividende : PFU
+      function sortieHolding(capital) { return capital > 0 ? Math.round(capital * taux) : 0 }
 
-      // Placement identique des deux côtés, imposé chaque année : flat tax en direct, IS à 25 % dans la holding
+      // Placement identique des deux côtés, imposé chaque année : flat tax en direct, impôt sur les sociétés dans la holding
       var direct = 0, holding = 0
       for (var a = 0; a < annees; a++) {
         direct += direct * rendement * (1 - PFU) + netDirect - vivre
-        holding += Math.max(0, holding) * rendement * (1 - IS) + encaisse - verse
+        var gains = Math.max(0, holding) * rendement
+        holding += gains - (isHolding(gains) - isHolding(0)) + encaisse - verse
       }
-      // Sortie : la holding distribue tout son capital la dernière année
+      // Montants à l'euro : les écarts affichés se recalculent à partir des montants affichés
+      direct = Math.round(direct)
+      holding = Math.round(holding)
+      // Sortie : la holding vous verse tout son capital, progressivement
       var latent = sortieHolding(holding)
       var finHolding = holding - (sortie === 'tout' ? latent : 0)
       var ecart = finHolding - direct
@@ -734,7 +740,7 @@
         finHolding: eur.format(Math.max(0, holding - latent)),
         conclusion: (ecartCapital >= 0 ? 'Laissé dans la holding, le capital dépasse de ' + eur.format(ecartCapital) + ' celui constitué en direct. '
           : 'Même laissé dans la holding, le capital reste inférieur de ' + eur.format(-ecartCapital) + ' à celui constitué en direct. ')
-          + 'Récupéré en une fois, il vous laisse ' + eur.format(Math.abs(ecartSortie)) + (ecartSortie >= 0 ? ' de plus.' : ' de moins.'),
+          + 'Récupéré peu à peu, imposé comme vos dividendes d\'aujourd\'hui, il vous laisse ' + eur.format(Math.abs(ecartSortie)) + (ecartSortie >= 0 ? ' de plus.' : ' de moins.'),
         ecartGarder: eur.format(Math.max(0, ecart)),
         ecartTout: eur.format(Math.max(0, ecart)),
         perte: eur.format(Math.max(0, -ecart))
