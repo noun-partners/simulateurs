@@ -447,6 +447,78 @@
       }
     },
 
+    'bnc-selarl': function (form) {
+      var f = foyer(form)
+      var benefice = nombre(form.benefice, 0, 1e7)
+      var frais = Math.min(benefice, nombre(form.frais, 0, 1e6))
+      var capital = nombre(form.capital, 0, 1e8)
+      var autres = nombre(form.autres, 0, 1e7)
+      // Cotisations du travailleur non salarié, au même taux moyen en BNC et pour le gérant majoritaire de SELARL que
+      // le simulateur salaire-dirigeant : 1,40 € de coût par euro net, net imposable de 1,028 € (CSG et CRDS non
+      // déductibles). Depuis 2025, la rémunération technique de l'associé de SEL est imposée en BNC : pas d'abattement de 10 %
+      var COUT = 1.40, IMPOSABLE = 1.028
+
+      // Impôts du foyer : impôt sur le revenu, CEHR et CDHR, dividendes à la flat tax comptés dans le revenu de référence
+      function impotsFoyer(imposable, dividendes) {
+        var ir = impot(imposable, f), rfr = imposable + dividendes
+        var c = cehr(rfr, f)
+        return ir + c + cdhr(rfr, ir + c + .128 * dividendes, f)
+      }
+      var avant = impotsFoyer(autres, 0)
+
+      // BNC : tout le bénéfice supporte les cotisations et l'impôt sur le revenu l'année où il est réalisé
+      var bncNet = benefice / COUT
+      var bncIr = impotsFoyer(bncNet * IMPOSABLE + autres, 0) - avant
+      var bnc = { cotisations: benefice - bncNet, ir: bncIr, poche: bncNet - bncIr, societe: 0 }
+
+      // SELARL : rémunération choisie (cotisations comprises, dans la limite du bénéfice après frais), impôt sur les
+      // sociétés sur le reste, dividendes prélevés sur le bénéfice après impôt, le solde reste dans la société
+      var remu = Math.min(nombre(form.remuneration, 0, 1e7), (benefice - frais) / COUT)
+      var impotSoc = impotSocietes(benefice - frais - remu * COUT)
+      var apresIs = benefice - frais - remu * COUT - impotSoc
+      var dividendes = Math.min(nombre(form.dividendes, 0, 1e7), apresIs)
+      // Au-delà de 10 % du capital, primes et comptes courants : cotisations sociales en plus des 12,8 % d'impôt,
+      // coefficient net de 0,692 retenu par Malek pour salaire-dirigeant
+      var franchise = Math.min(dividendes, .1 * capital)
+      var prelevements = .314 * franchise + (1 - .692) * (dividendes - franchise)
+      var selIr = impotsFoyer(remu * IMPOSABLE + autres, dividendes) - avant
+      var sel = {
+        cotisations: remu * (COUT - 1), impotSoc: impotSoc, prelevements: prelevements, ir: selIr, frais: frais,
+        poche: remu + dividendes - prelevements - selIr, societe: apresIs - dividendes
+      }
+
+      var ecart = sel.poche + sel.societe - bnc.poche
+      // Barres : part du bénéfice dans votre poche, laissée dans la société, et partie en cotisations, impôts et frais
+      function barre(x) {
+        var p = function (v) { return (benefice ? Math.max(0, v) / benefice * 100 : 0).toFixed(1) + '%' }
+        return [p(x.poche), p(x.societe), p(benefice - x.poche - x.societe)]
+      }
+      var b = barre(bnc), s = barre(sel)
+      return {
+        out: {
+          sens: Math.abs(ecart) < 1 ? 'Écart entre la SELARL et le BNC' : ecart > 0 ? 'La SELARL vous laisse de plus chaque année' : 'Le BNC vous laisse de plus chaque année',
+          ecart: eur.format(Math.abs(ecart)),
+          bncTotal: eur.format(bnc.poche),
+          selTotal: eur.format(sel.poche + sel.societe),
+          bncCotisations: eur.format(bnc.cotisations),
+          bncIr: eur.format(bnc.ir),
+          bncPoche: eur.format(bnc.poche),
+          selRemu: eur.format(remu),
+          selDividendes: eur.format(dividendes),
+          selCotisations: eur.format(sel.cotisations),
+          selIs: eur.format(sel.impotSoc),
+          selPrelevements: eur.format(sel.prelevements),
+          selIr: eur.format(sel.ir),
+          selFrais: eur.format(sel.frais),
+          selPoche: eur.format(sel.poche),
+          selSociete: eur.format(sel.societe),
+          ecartCta: eur.format(Math.abs(ecart))
+        },
+        largeurs: { bncPoche: b[0], bncSociete: b[1], bncPrel: b[2], selPoche: s[0], selSociete: s[1], selPrel: s[2] },
+        si: benefice === 0 ? 'aucun' : ecart >= 1 ? 'selarl' : 'bnc'
+      }
+    },
+
     'cession': function (form) {
       // Cession de titres par une personne physique, en 2026. Enfants supposés majeurs et hors du foyer fiscal :
       // ils ne comptent que pour la donation. Revenus des années précédentes supposés égaux aux autres revenus

@@ -1,0 +1,101 @@
+<!-- Simulateur BNC ou SELARL : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="bnc-selarl">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre activité libérale</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-bs-benefice">Bénéfice avant vos cotisations sociales</label>
+      <div class="np-sim__input"><input id="np-sim-bs-benefice" name="benefice" type="number" inputmode="numeric" min="0" step="5000" value="150000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Honoraires moins charges du cabinet, avant vos cotisations personnelles.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-bs-remuneration">Rémunération nette versée par la SELARL</label>
+      <div class="np-sim__input"><input id="np-sim-bs-remuneration" name="remuneration" type="number" inputmode="numeric" min="0" step="5000" value="70000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Ce dont vous avez besoin pour vivre, avant impôt sur le revenu.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-bs-dividendes">Dividendes versés par la SELARL</label>
+      <div class="np-sim__input"><input id="np-sim-bs-dividendes" name="dividendes" type="number" inputmode="numeric" min="0" step="5000" value="0"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Le reste du bénéfice après impôt reste dans la société.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-bs-capital">Capital, primes d'émission et comptes courants</label>
+      <div class="np-sim__input"><input id="np-sim-bs-capital" name="capital" type="number" inputmode="numeric" min="0" step="1000" value="10000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Les dividendes au-delà de 10 % de ce montant supportent des cotisations sociales.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-bs-frais">Frais annuels propres à la société</label>
+      <div class="np-sim__input"><input id="np-sim-bs-frais" name="frais" type="number" inputmode="numeric" min="0" step="500" value="3000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Comptable, juridique, banque : le surcoût par rapport au BNC.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-bs-situation">Situation familiale</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-bs-situation">
+        <label class="np-sim__choice"><input type="radio" name="situation" value="seul"><span>Seul</span></label>
+        <label class="np-sim__choice"><input type="radio" name="situation" value="couple" checked><span>Marié ou pacsé</span></label>
+      </div>
+      <span class="np-sim__help">Déclaration commune pour un couple marié ou pacsé.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-bs-enfants">Enfants à charge</label>
+      <div class="np-sim__input"><input id="np-sim-bs-enfants" name="enfants" type="number" inputmode="numeric" min="0" max="10" step="1" value="2"></div>
+      <span class="np-sim__help">Une demi-part pour chacun des deux premiers, une part à partir du troisième.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-bs-autres">Autres revenus imposables du foyer</label>
+      <div class="np-sim__input"><input id="np-sim-bs-autres" name="autres" type="number" inputmode="numeric" min="0" step="1000" value="0"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Salaire du conjoint, revenus fonciers : montants nets imposables.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label" data-out="sens">La SELARL vous laisse de plus chaque année</span>
+      <span class="np-sim__headline-value" data-out="ecart">15 312 €</span>
+      <span class="np-sim__headline-note"><span data-out="bncTotal">91 506 €</span> en BNC, <span data-out="selTotal">106 818 €</span> en SELARL en comptant la trésorerie laissée dans la société</span>
+    </div>
+    <div class="np-sim__compare">
+      <div class="np-sim__bar-head"><span>Revenu disponible en BNC</span><strong data-out="bncPoche">91 506 €</strong></div>
+      <div class="np-sim__bar"><span class="np-sim__bar-net" data-largeur="bncPoche" style="width:61.0%"></span><span class="np-sim__bar-ps" data-largeur="bncSociete" style="width:0.0%"></span><span class="np-sim__bar-ir" data-largeur="bncPrel" style="width:39.0%"></span></div>
+      <div class="np-sim__bar-head"><span>Revenu disponible en SELARL</span><strong data-out="selPoche">65 818 €</strong></div>
+      <div class="np-sim__bar"><span class="np-sim__bar-net" data-largeur="selPoche" style="width:43.9%"></span><span class="np-sim__bar-ps" data-largeur="selSociete" style="width:27.3%"></span><span class="np-sim__bar-ir" data-largeur="selPrel" style="width:28.8%"></span></div>
+      <div class="np-sim__legend"><span class="np-sim__bar-net">Revenu disponible</span><span class="np-sim__bar-ps">Laissé dans la société</span><span class="np-sim__bar-ir">Cotisations, impôts et frais</span></div>
+    </div>
+    <div class="np-sim__compare">
+      <span class="np-sim__compare-title">En BNC</span>
+      <div class="np-sim__lines">
+        <div class="np-sim__line"><span class="np-sim__line-label">Cotisations sociales</span><span class="np-sim__line-value" data-out="bncCotisations">42 857 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur le revenu en plus</span><span class="np-sim__line-value" data-out="bncIr">15 637 €</span></div>
+      </div>
+    </div>
+    <div class="np-sim__compare">
+      <span class="np-sim__compare-title">En SELARL</span>
+      <div class="np-sim__lines">
+        <div class="np-sim__line"><span class="np-sim__line-label">Rémunération nette versée</span><span class="np-sim__line-value" data-out="selRemu">70 000 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Dividendes versés</span><span class="np-sim__line-value" data-out="selDividendes">0 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Cotisations sociales</span><span class="np-sim__line-value" data-out="selCotisations">28 000 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur les sociétés</span><span class="np-sim__line-value" data-out="selIs">8 000 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Prélèvements sur les dividendes</span><span class="np-sim__line-value" data-out="selPrelevements">0 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur le revenu en plus</span><span class="np-sim__line-value" data-out="selIr">4 182 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Frais de la société</span><span class="np-sim__line-value" data-out="selFrais">3 000 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Trésorerie laissée dans la société</span><span class="np-sim__line-value" data-out="selSociete">41 000 €</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : même taux moyen de cotisations en BNC et pour le gérant majoritaire, rémunération imposée en BNC sans abattement de 10 %, impôt sur les sociétés à 15 % puis 25 %, flat tax de 31,4 % sur les dividendes jusqu'à 10 % du capital et coefficient net de 0,692 au-delà, barème de l'impôt sur le revenu, CEHR et CDHR. La trésorerie laissée dans la société sera imposée si elle vous est distribuée. Hors coût du passage en société, retraite et prévoyance. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- data-si="selarl" quand la SELARL laisse plus (poche et société), "bnc" sinon, "aucun" sans bénéfice -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Avant de passer en SELARL</div>
+      <p class="np-sim__next-text" data-si="selarl">Ces <strong data-out="ecartCta">15 312 €</strong> par an supposent que vous laissiez la trésorerie travailler dans la société. Moins de cotisations, c'est aussi moins de droits à la retraite. Apport ou cession de la clientèle, prévoyance, placement de la trésorerie : nous chiffrons le passage sur votre dossier.</p>
+      <p class="np-sim__next-text" data-si="bnc" hidden>Avec ces choix, la SELARL ne vous laisse pas plus que le BNC. Le BNC reste plus simple, et d'autres leviers existent : épargne retraite, prévoyance, investissement du surplus.</p>
+      <p class="np-sim__next-text" data-si="aucun" hidden>Indiquez votre bénéfice annuel pour comparer les deux modes d'exercice.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire étudier mon passage en SELARL</button>
+    </div>
+  </div>
+</div>
