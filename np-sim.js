@@ -750,6 +750,55 @@
         // Laissé dans la holding, le capital n'est pas encore à vous : le texte le dit, même quand il dépasse le direct
         si: ecart < 1 ? 'perdante' : sortie
       }
+    },
+
+    'frais-notaire-succession': function (form) {
+      // Tarif des notaires, France métropolitaine (code de commerce, art. A444-53 : en vigueur jusqu'au 29/02/2028),
+      // émoluments hors taxes sans remise : [plafond de la tranche, taux]
+      var DECLARATION = [[6500, .01548], [17000, .00851], [30000, .0058], [Infinity, .00426]] // art. A444-63, sur l'actif brut
+      var ATTESTATION = [[6500, .01935], [17000, .01064], [30000, .00726], [Infinity, .00532]] // art. A444-59, sur l'immobilier
+      var PARTAGE = [[6500, .04837], [17000, .01995], [60000, .0133], [Infinity, .00998]] // art. A444-121, sur l'actif brut
+      var NOTORIETE = 56.60 // art. A444-66
+      var immobilier = nombre(form.immobilier, 0, 1e9)
+      var autres = nombre(form.autres, 0, 1e9)
+      var enfants = Math.round(nombre(form.enfants, 1, 10))
+      var partage = form.partage.value === 'oui'
+      var actif = immobilier + autres
+      // Déclaration non obligatoire en ligne directe sous 50 000 € d'actif brut, sans donation antérieure (CGI, art. 800)
+      var declaration = actif >= 50000 ? bareme(actif, DECLARATION) : 0
+      var attestation = bareme(immobilier, ATTESTATION)
+      var notoriete = actif > 0 ? NOTORIETE : 0
+      var emolPartage = partage ? bareme(actif, PARTAGE) : 0
+      var tva = .2 * (declaration + attestation + notoriete + emolPartage)
+      // Contribution de sécurité immobilière : 0,10 % de la valeur publiée, 15 € au moins (CGI, art. 881 K et 881 M)
+      var csi = immobilier > 0 ? Math.max(15, .001 * immobilier) : 0
+      // Droit de partage de 2,5 % sur l'actif net partagé (CGI, art. 746), sans dettes
+      var droitPartage = partage ? .025 * actif : 0
+      // Formalités et débours : non tarifés à l'avance, estimation (200 €, plus 200 € avec un bien immobilier)
+      var debours = actif > 0 ? 200 + (immobilier > 0 ? 200 : 0) : 0
+      var frais = Math.round(declaration + attestation + notoriete + emolPartage + tva + csi + droitPartage + debours)
+      // Droits de succession des enfants, même calcul que le simulateur droits-succession (sans dettes)
+      var part = actif / enfants
+      var d = droits(Math.max(0, part - 100000))
+      var gain = (d - droits(Math.max(0, part - 200000))) * enfants
+      return {
+        out: {
+          frais: eur.format(frais),
+          taux: pct.format(actif ? frais / actif : 0),
+          declaration: actif >= 50000 || !actif ? eur.format(declaration) : 'Dispensée',
+          attestation: eur.format(attestation),
+          notoriete: eur.format(notoriete),
+          emolPartage: eur.format(emolPartage),
+          tva: eur.format(tva),
+          csi: eur.format(csi),
+          droitPartage: eur.format(droitPartage),
+          debours: eur.format(debours),
+          droits: eur.format(d * enfants),
+          total: eur.format(frais + d * enfants),
+          gain: eur.format(gain)
+        },
+        si: gain > 0 ? 'gain' : 'aucun'
+      }
     }
   }
 

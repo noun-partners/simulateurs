@@ -1,0 +1,71 @@
+<!-- Simulateur de frais de notaire d'une succession : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut sont écrits ici : la page est lisible sans JavaScript.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="frais-notaire-succession">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">La succession</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-fns-immobilier">Biens immobiliers</label>
+      <div class="np-sim__input"><input id="np-sim-fns-immobilier" name="immobilier" type="number" inputmode="numeric" min="0" step="10000" value="250000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Valeur au jour du décès : maison, appartement, terrain. 0 s'il n'y en a pas.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-fns-autres">Autres biens</label>
+      <div class="np-sim__input"><input id="np-sim-fns-autres" name="autres" type="number" inputmode="numeric" min="0" step="10000" value="50000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Comptes, livrets, placements, véhicule, mobilier. Hors assurance-vie.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-fns-enfants">Nombre d'enfants héritiers</label>
+      <div class="np-sim__input"><input id="np-sim-fns-enfants" name="enfants" type="number" inputmode="numeric" min="1" max="10" step="1" value="2"></div>
+      <span class="np-sim__help">Sert au calcul des droits de succession, partagés à parts égales.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-fns-partage">Partage des biens chez le notaire</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-fns-partage">
+        <label class="np-sim__choice"><input type="radio" name="partage" value="non" checked><span>Pas de partage</span></label>
+        <label class="np-sim__choice"><input type="radio" name="partage" value="oui"><span>Acte de partage</span></label>
+      </div>
+      <span class="np-sim__help">Sans partage, les héritiers restent en indivision. Le partage ajoute un émolument et un droit de 2,5 %.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__result" aria-live="polite">
+    <div class="np-sim__headline">
+      <span class="np-sim__headline-label">Frais de notaire de la succession</span>
+      <span class="np-sim__headline-value" data-out="frais">4 219 €</span>
+      <span class="np-sim__headline-note">soit <span data-out="taux">1,4 %</span> des biens transmis, TVA comprise</span>
+    </div>
+    <div class="np-sim__lines">
+      <div class="np-sim__line"><span class="np-sim__line-label">Déclaration de succession</span><span class="np-sim__line-value" data-out="declaration">1 416 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Attestation de propriété immobilière</span><span class="np-sim__line-value" data-out="attestation">1 502 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Acte de notoriété</span><span class="np-sim__line-value" data-out="notoriete">57 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Acte de partage</span><span class="np-sim__line-value" data-out="emolPartage">0 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">TVA à 20 % sur ces émoluments</span><span class="np-sim__line-value" data-out="tva">595 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Contribution de sécurité immobilière</span><span class="np-sim__line-value" data-out="csi">250 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Droit de partage</span><span class="np-sim__line-value" data-out="droitPartage">0 €</span></div>
+      <div class="np-sim__line"><span class="np-sim__line-label">Formalités et débours (estimation)</span><span class="np-sim__line-value" data-out="debours">400 €</span></div>
+    </div>
+    <div class="np-sim__compare">
+      <span class="np-sim__compare-title">En plus des frais de notaire</span>
+      <div class="np-sim__lines">
+        <div class="np-sim__line"><span class="np-sim__line-label">Droits de succession des enfants</span><span class="np-sim__line-value" data-out="droits">16 388 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Frais et droits réunis</span><span class="np-sim__line-value" data-out="total">20 607 €</span></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative : tarif des notaires en vigueur jusqu'au 29 février 2028 (France métropolitaine, émoluments sans remise) et barème des droits de succession 2026 en ligne directe. Succession sans dettes, sans testament ni donation antérieure ; déclaration de succession dispensée sous 50 000 € de biens. Les formalités et débours sont une estimation. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+
+  <!-- CTA : séparé du calcul. Le gain reprend le barème des droits (abattement reconstitué après 15 ans), comme droits-succession.
+       data-si="gain" s'affiche quand des droits sont dus, data-si="aucun" sinon. -->
+  <div class="np-sim__next">
+    <div class="np-sim__next-content">
+      <div class="heading-style-h4 np-sim__next-title">Les frais sont fixés, les droits se préparent</div>
+      <p class="np-sim__next-text" data-si="gain">Les émoluments du notaire suivent un tarif réglementé. Les droits de succession, eux, dépendent de ce que vous organisez avant : une donation de 100 000 € à chaque enfant, faite au moins 15 ans avant la succession, les réduirait de <strong data-out="gain">16 388 €</strong>.</p>
+      <p class="np-sim__next-text" data-si="aucun" hidden>L'abattement de 100 000 € couvre la part de chaque enfant : aucun droit n'est dû. Une donation déjà faite ou un bien qui prend de la valeur peuvent changer ce résultat.</p>
+    </div>
+    <div class="np-sim__next-action">
+      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+    </div>
+  </div>
+</div>
