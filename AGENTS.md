@@ -47,6 +47,10 @@ Le [README](README.md) décrit les fichiers, l'intégration dans Webflow et les 
 - **Reprendre les formes du site** : bloc de saisie crème à 12 px de rayon, bloc résultat sombre à 16 px, champs en capsule à bordure sombre, bouton avec les classes du site `button w-button`. Pas de nouvelles ombres, dégradés ou rayons.
 - **`np-sim.css` ne style que le simulateur.** Ce qui concerne la page (en-tête, texte, FAQ) va dans `gabarit/`.
 
+## L'assistant « audit patrimonial gratuit »
+
+`np-chat.js` et `np-chat.css` suivent les mêmes règles (IIFE, pas de `$`, garde `data-chat-pret`, tout cherché dans le conteneur, HTML seul dans l'embed, couleurs de la charte), avec quatre exceptions voulues par Younès : un script et une feuille à part, des sélecteurs qui commencent par `.np-chat`, un en-tête avec la photo de Malek (il faut dire qui parle et que c'est une IA), et une preuve sociale de la liste fermée (« 4,8/5 sur 102 avis Trustpilot · plus de 300 clients depuis 2020 ») dans l'encadré de rendez-vous. Le prompt et la clé du modèle restent dans l'API privée, jamais ici.
+
 ## Versions
 
 - **Le site charge un tag précis.** Rien de ce qui est poussé sur `main` n'est en ligne tant qu'Arthur n'a pas activé un nouveau tag dans Webflow, après recette en préprod.

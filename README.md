@@ -8,6 +8,7 @@ Code des simulateurs intégrés aux pages `/simulateurs/…` du site. Le HTML de
 |---|---|
 | `np-sim.css` | Styles communs à tous les simulateurs. |
 | `np-sim.js` | Script unique : le noyau (formatage, bornes de saisie, suivi, CTA) et un moteur de calcul par simulateur. |
+| `np-chat.css`, `np-chat.js` | L'assistant IA « audit patrimonial gratuit » (`audit-patrimonial-gratuit/embed.html`, conteneur `.np-chat[data-chat]`). Le script envoie la conversation à une API privée (projet Vercel `noun-audit-chat`, hors de ce dépôt), qui détient la clé du modèle et le prompt. Aucune clé ici. |
 | `<simulateur>/embed.html` | Le HTML à coller dans le bloc code de l'item CMS. Les choix exclusifs (situation familiale, forme de société) sont des boutons radio `.np-sim__choice`. Un bouton radio `data-remplit="<champ>"` recopie sa valeur dans ce champ, et une saisie dans le champ le décoche. |
 | `gabarit/` | Structure et styles de la page (en-tête, texte, FAQ), pour le gabarit Webflow. Ne concerne pas le simulateur lui-même. |
 
@@ -37,6 +38,15 @@ Dans le gabarit, une seule fois (remplacer `v1.0.0` par le tag activé) :
 ```
 
 Dans l'item CMS : le contenu de `<simulateur>/embed.html`. Chaque embed fait entre 3 500 et 6 500 caractères.
+
+Pour l'assistant « audit patrimonial gratuit », deux lignes de plus dans le même gabarit, au même tag. Le script ne fait rien sur une page sans `.np-chat[data-chat]` :
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/noun-partners/simulateurs@v1.8.0/np-chat.css">
+<script defer src="https://cdn.jsdelivr.net/gh/noun-partners/simulateurs@v1.8.0/np-chat.js"></script>
+```
+
+L'API n'accepte que les origines noun-partners.com et la préprod Webflow.
 
 ### Dans un article exporté par StickHub
 
@@ -85,6 +95,8 @@ Deux événements poussés dans `dataLayer`, sans donnée personnelle ni montant
 |---|---|---|
 | `simulateur_utilise` | Première modification d'un champ | `simulateur` : la valeur de `data-sim` |
 | `simulateur_cta` | Clic sur le bouton | `simulateur` : la valeur de `data-sim` |
+
+L'assistant « audit patrimonial gratuit » (`np-chat.js`, `data-chat="audit-patrimonial-gratuit"`) pousse les mêmes `simulateur_utilise` (premier message) et `simulateur_cta` (clic sur le rendez-vous), plus `audit_chat_diagnostic` quand le diagnostic est rendu. Seul paramètre : `simulateur`.
 
 ## Ajouter un simulateur
 

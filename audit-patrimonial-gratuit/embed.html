@@ -1,0 +1,31 @@
+<!-- Audit patrimonial gratuit (assistant IA) : HTML à coller dans le bloc code de l'item CMS.
+     Le message d'accueil et les premiers choix sont écrits ici : ils restent lisibles sans JavaScript.
+     np-chat.js envoie la conversation à l'API (projet Vercel privé noun-audit-chat), qui détient la clé et le prompt.
+     Balises limitées à div, span, p, form, label, input, button. -->
+<div class="np-chat" data-chat="audit-patrimonial-gratuit" data-api="https://noun-audit-chat.vercel.app/api/chat" data-cta="/consultation-offerte">
+  <div class="np-chat__head">
+    <span class="np-chat__avatar" role="img" aria-label="Photo de Malek Ziane"></span>
+    <div class="np-chat__who">
+      <p class="np-chat__name">Assistant IA de Noun Partners</p>
+      <p class="np-chat__status"><span class="np-chat__dot" aria-hidden="true"></span>D'après la méthode de Malek Ziane</p>
+    </div>
+  </div>
+  <div class="np-chat__log" aria-live="polite">
+    <div class="np-chat__msg np-chat__msg--bot"><p>Bonjour, je suis l'assistant IA de Noun Partners. Je vous pose les questions de Malek Ziane en premier rendez-vous, puis je vous rends un premier diagnostic. Des ordres de grandeur suffisent.</p><p>Pour commencer : qu'est-ce qui vous amène aujourd'hui ?</p></div>
+    <div class="np-chat__choices">
+      <button type="button" class="np-chat__choice">Ma rémunération de dirigeant</button>
+      <button type="button" class="np-chat__choice">De la trésorerie qui dort</button>
+      <button type="button" class="np-chat__choice">Je prépare une cession</button>
+      <button type="button" class="np-chat__choice">Transmettre à mes enfants</button>
+      <button type="button" class="np-chat__choice">Placer mon épargne</button>
+      <button type="button" class="np-chat__choice">Préparer ma retraite</button>
+    </div>
+  </div>
+  <form class="np-chat__form">
+    <label class="np-chat__label" for="np-chat-input">Votre réponse</label>
+    <input id="np-chat-input" class="np-chat__input" name="message" type="text" maxlength="500" autocomplete="off" placeholder="Écrivez votre réponse">
+    <input class="np-chat__trap" name="site" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit" class="button w-button np-chat__send">Envoyer</button>
+  </form>
+  <p class="np-chat__note">Assistant IA : il reprend la méthode de Malek, mais ce n'est pas Malek qui vous répond. Réponses générées automatiquement, indicatives, qui ne constituent pas un conseil personnalisé. Ne saisissez ni nom ni coordonnées. Nous ne conservons pas vos conversations.</p>
+</div>
