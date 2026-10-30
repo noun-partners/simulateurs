@@ -799,6 +799,68 @@
         },
         si: gain > 0 ? 'gain' : 'aucun'
       }
+    },
+
+    'scpi': function (form) {
+      // Hypothèses fixes d'octobre 2026 : frais de souscription compris dans le prix de la part (AMF : 5 à 12 %),
+      // assurance emprunteur par an sur le capital emprunté, prélèvements sociaux des revenus fonciers et des plus-values immobilières
+      var FRAIS = .10, ASSURANCE = .003, PS = .172
+      var credit = form.mode.value === 'credit'
+      var montant = nombre(form.montant, 0, 1e8)
+      var duree = Math.round(nombre(form.duree, 1, 30))
+      var tmi = nombre(form.tmi, 0, 45) / 100
+      var distribution = nombre(form.distribution, 0, 20) / 100
+      var etranger = nombre(form.etranger, 0, 100) / 100
+      var revalo = nombre(form.revalo, -20, 20) / 100
+      // Comptant : tout est apporté. Crédit amortissable sur la durée du placement, mensualités constantes
+      var apport = credit ? Math.min(montant, nombre(form.apport, 0, 1e8)) : montant
+      var emprunt = montant - apport
+      var i = nombre(form.taux, 0, 20) / 1200, mois = duree * 12
+      var mensualite = !emprunt ? 0 : i ? emprunt * i / (1 - Math.pow(1 + i, -mois)) : emprunt / mois
+      var assurance = emprunt * ASSURANCE / 12
+      var restant = emprunt, report = 0, cumulNet = 0, cumulEffort = 0, interetsTotal = 0, an1
+      for (var a = 0; a < duree; a++) {
+        var interets = 0
+        for (var m = 0; m < 12; m++) { interets += restant * i; restant -= mensualite - restant * i }
+        interetsTotal += interets
+        // Taux de distribution constant : les revenus suivent le prix de la part
+        var brut = montant * distribution * Math.pow(1 + revalo, a)
+        // Part française au régime réel : intérêts et assurance déduits au prorata, déficit reporté sur les années suivantes.
+        // Part étrangère : ni impôt ni prélèvements sociaux en France (impôt étranger et taux effectif non comptés)
+        var foncier = (brut - interets - 12 * assurance) * (1 - etranger) - report
+        report = Math.max(0, -foncier)
+        var net = brut - Math.max(0, foncier) * (tmi + PS)
+        cumulNet += net
+        cumulEffort += 12 * (mensualite + assurance) - net
+        if (!a) an1 = { brut: brut, net: net }
+      }
+      // Revente au prix de retrait. Plus-value des particuliers (CGI, art. 150 U et 150 VC) : 19 % et 17,2 %,
+      // abattements pour durée de détention (exonération d'impôt à 22 ans, de prélèvements sociaux à 30 ans)
+      var valeur = montant * (1 - FRAIS) * Math.pow(1 + revalo, duree)
+      var abIR = duree < 6 ? 0 : Math.min(1, .06 * (duree - 5))
+      var abPS = duree < 6 ? 0 : duree < 22 ? .0165 * (duree - 5) : Math.min(1, .28 + .09 * (duree - 22))
+      var patrimoine = valeur - Math.max(0, valeur - montant) * (.19 * (1 - abIR) + PS * (1 - abPS))
+      var ans = duree + (duree > 1 ? ' ans' : ' an')
+      return {
+        out: {
+          netMois: eur.format(an1.net / 12),
+          netAn: eur.format(an1.net),
+          brutAn: eur.format(an1.brut),
+          impotAn: eur.format(an1.brut - an1.net),
+          rendementNet: pct.format(montant ? an1.net / montant : 0),
+          effortMois: eur.format(Math.max(0, cumulEffort / mois)),
+          dureeCredit: ans,
+          mensualite: eur.format(mensualite + assurance),
+          netMoisCredit: eur.format(an1.net / 12),
+          coutCredit: eur.format(interetsTotal + assurance * mois),
+          dureeTerme: ans,
+          patrimoine: eur.format(patrimoine),
+          cumulNet: eur.format(cumulNet),
+          verse: eur.format(apport + Math.max(0, cumulEffort)),
+          rendementCta: pct.format(montant ? an1.net / montant : 0)
+        },
+        si: credit ? 'credit' : 'comptant'
+      }
     }
   }
 

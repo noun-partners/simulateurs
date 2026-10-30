@@ -33,7 +33,7 @@
 .np-sim__line-label{font-size:16px;color:#CFD1DE}
 .np-sim__line-value{font-size:20px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}
 .np-sim__compare{display:flex;flex-direction:column;gap:12px}
-.np-sim__compare[hidden]{display:none}
+.np-sim__compare[hidden],.np-sim__field[hidden],.np-sim__headline[hidden],.np-sim__line[hidden]{display:none}
 .np-sim__compare-title{font-size:16px;font-weight:700}
 .np-sim__bar-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:8px;font-size:14px;color:#CFD1DE}
 .np-sim__bar-head strong{font-size:16px;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap}

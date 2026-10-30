@@ -1,0 +1,108 @@
+<!-- Simulateur SCPI, au comptant ou à crédit : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut (comptant) sont écrits ici : la page est lisible sans JavaScript.
+     data-si="comptant" ou "credit" : champs, lignes et textes propres à chaque mode.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="scpi">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Votre investissement</h2>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-scpi-mode">Financement</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-scpi-mode">
+        <label class="np-sim__choice"><input type="radio" name="mode" value="comptant" checked><span>Au comptant</span></label>
+        <label class="np-sim__choice"><input type="radio" name="mode" value="credit"><span>À crédit</span></label>
+      </div>
+      <span class="np-sim__help">À crédit, les intérêts et l'assurance de l'emprunt se déduisent des revenus de source française.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-scpi-montant">Montant investi</label>
+      <div class="np-sim__input"><input id="np-sim-scpi-montant" name="montant" type="number" inputmode="numeric" min="0" step="5000" value="50000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Prix des parts, frais de souscription compris (10 % supposés).</span>
+    </div>
+    <div class="np-sim__field" data-si="credit" hidden>
+      <label class="np-sim__label" for="np-sim-scpi-apport">Apport personnel</label>
+      <div class="np-sim__input"><input id="np-sim-scpi-apport" name="apport" type="number" inputmode="numeric" min="0" step="1000" value="5000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Le reste est emprunté.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-scpi-duree">Durée du placement</label>
+      <div class="np-sim__input"><input id="np-sim-scpi-duree" name="duree" type="number" inputmode="numeric" min="1" max="30" step="1" value="15"><span class="np-sim__unit">ans</span></div>
+      <span class="np-sim__help">À crédit, c'est aussi la durée du prêt.</span>
+    </div>
+    <div class="np-sim__field" data-si="credit" hidden>
+      <label class="np-sim__label" for="np-sim-scpi-taux">Taux du crédit</label>
+      <div class="np-sim__input"><input id="np-sim-scpi-taux" name="taux" type="number" inputmode="decimal" min="0" max="20" step="0.05" value="3.4"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">3,40 % en moyenne en septembre 2026 (Observatoire Crédit Logement/CSA). Assurance de 0,30 % par an en plus.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-scpi-tmi">Votre tranche marginale d'imposition</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-scpi-tmi">
+        <label class="np-sim__choice"><input type="radio" name="tmi" value="0"><span>0 %</span></label>
+        <label class="np-sim__choice"><input type="radio" name="tmi" value="11"><span>11 %</span></label>
+        <label class="np-sim__choice"><input type="radio" name="tmi" value="30" checked><span>30 %</span></label>
+        <label class="np-sim__choice"><input type="radio" name="tmi" value="41"><span>41 %</span></label>
+        <label class="np-sim__choice"><input type="radio" name="tmi" value="45"><span>45 %</span></label>
+      </div>
+      <span class="np-sim__help">Les revenus de source française la supportent, avec 17,2 % de prélèvements sociaux.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-scpi-distribution">Taux de distribution</label>
+      <div class="np-sim__input"><input id="np-sim-scpi-distribution" name="distribution" type="number" inputmode="decimal" min="0" max="20" step="0.1" value="4.9"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">Revenus versés par an, avant impôt, rapportés au prix de la part. 4,91 % en moyenne en 2025 (ASPIM).</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-scpi-etranger">Part des revenus de source étrangère</label>
+      <div class="np-sim__input"><input id="np-sim-scpi-etranger" name="etranger" type="number" inputmode="numeric" min="0" max="100" step="10" value="0"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">SCPI européenne : loyers d'immeubles situés hors de France, sans prélèvements sociaux et sans impôt français direct.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-scpi-revalo">Évolution du prix de la part, par an</label>
+      <div class="np-sim__input"><input id="np-sim-scpi-revalo" name="revalo" type="number" inputmode="decimal" min="-10" max="10" step="0.5" value="0"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">Les revenus suivent le même rythme. Prix moyen des parts : − 3,45 % en 2025, − 2,4 % au premier semestre 2026 (ASPIM).</span>
+    </div>
+  </form>
+
+  <div class="np-sim__droite">
+    <div class="np-sim__result" aria-live="polite">
+      <div class="np-sim__headline" data-si="comptant">
+        <span class="np-sim__headline-label">Revenus nets de fiscalité</span>
+        <span class="np-sim__headline-value" data-out="netMois">108 €</span>
+        <span class="np-sim__headline-note">par mois la première année, soit <span data-out="netAn">1 294 €</span> par an</span>
+      </div>
+      <div class="np-sim__headline" data-si="credit" hidden>
+        <span class="np-sim__headline-label">Effort d'épargne mensuel</span>
+        <span class="np-sim__headline-value" data-out="effortMois">0 €</span>
+        <span class="np-sim__headline-note">en moyenne sur <span data-out="dureeCredit">15 ans</span> : la mensualité, moins les revenus nets des parts</span>
+      </div>
+      <div class="np-sim__lines">
+        <div class="np-sim__line"><span class="np-sim__line-label">Revenus distribués, la première année</span><span class="np-sim__line-value" data-out="brutAn">2 450 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Impôt et prélèvements sociaux</span><span class="np-sim__line-value" data-out="impotAn">1 156 €</span></div>
+        <div class="np-sim__line" data-si="comptant"><span class="np-sim__line-label">Rendement net de fiscalité</span><span class="np-sim__line-value" data-out="rendementNet">2,6 %</span></div>
+        <div class="np-sim__line" data-si="credit" hidden><span class="np-sim__line-label">Mensualité, assurance comprise</span><span class="np-sim__line-value" data-out="mensualite">0 €</span></div>
+        <div class="np-sim__line" data-si="credit" hidden><span class="np-sim__line-label">Revenus nets, par mois la première année</span><span class="np-sim__line-value" data-out="netMoisCredit">108 €</span></div>
+        <div class="np-sim__line" data-si="credit" hidden><span class="np-sim__line-label">Coût du crédit, intérêts et assurance</span><span class="np-sim__line-value" data-out="coutCredit">0 €</span></div>
+      </div>
+      <div class="np-sim__compare">
+        <span class="np-sim__compare-title">Au bout de <span data-out="dureeTerme">15 ans</span></span>
+        <div class="np-sim__lines">
+          <div class="np-sim__line"><span class="np-sim__line-label">Valeur estimée des parts, après impôt sur la plus-value</span><span class="np-sim__line-value" data-out="patrimoine">45 000 €</span></div>
+          <div class="np-sim__line" data-si="comptant"><span class="np-sim__line-label">Revenus nets perçus</span><span class="np-sim__line-value" data-out="cumulNet">19 404 €</span></div>
+          <div class="np-sim__line" data-si="credit" hidden><span class="np-sim__line-label">Versé de votre poche : apport et effort d'épargne</span><span class="np-sim__line-value" data-out="verse">50 000 €</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA : un texte par mode (data-si) -->
+    <div class="np-sim__next">
+      <div class="np-sim__next-content">
+        <div class="heading-style-h4 np-sim__next-title">Des SCPI, mais dans quelle enveloppe ?</div>
+        <p class="np-sim__next-text" data-si="comptant">Détenues en direct, ces parts vous rapportent <strong data-out="rendementCta">2,6 %</strong> par an après impôt et prélèvements sociaux. En assurance-vie, en nue-propriété ou dans une société à l'impôt sur les sociétés, les mêmes revenus ne sont pas imposés de la même façon. Nous comparons ces options sur votre situation.</p>
+        <p class="np-sim__next-text" data-si="credit" hidden>À crédit, les intérêts réduisent l'impôt des premières années, puis cet effet diminue à mesure que le prêt se rembourse. Apport, durée, part de SCPI européennes, détention par une société : nous chiffrons ces choix avec vous avant la signature.</p>
+      </div>
+      <div class="np-sim__next-action">
+        <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : revenus fonciers au régime réel, imposés à votre tranche marginale et à 17,2 % de prélèvements sociaux ; à crédit, intérêts et assurance déduits au prorata des revenus de source française, déficit reporté sur les années suivantes. Revenus de source étrangère sans impôt ni prélèvements sociaux en France : l'impôt payé dans le pays de l'immeuble et la hausse du taux moyen de vos autres revenus ne sont pas comptés. Taux de distribution constant ; frais de souscription de 10 % ; assurance emprunteur de 0,30 % par an du capital emprunté ; parts revendues au prix de retrait, plus-value imposée à 19 % et 17,2 % après abattements pour durée de détention. Hors délai de jouissance et CSG déductible. Les revenus et le prix des parts peuvent baisser : tout placement en SCPI comporte un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+</div>
