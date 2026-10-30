@@ -63,38 +63,43 @@
 
     <div class="np-sim__schema">
       <div class="np-sim__schema-titre">Ce que deviennent vos dividendes en <span data-out="schemaDuree">10 ans</span></div>
+      <p class="np-sim__schema-sous-titre">Ce qui reste à placer après les impôts, les frais de la holding et <span data-out="vivre">20 000 €</span> par an pour vivre.</p>
       <div class="np-sim__schema-grille">
         <span class="np-sim__schema-entete" style="grid-area:1/1">En direct</span>
         <span class="np-sim__schema-entete" style="grid-area:1/2">Avec la holding</span>
-        <div class="np-sim__boite" style="grid-area:2/1"><span class="np-sim__boite-valeur" data-out="totalDirect">1 000 000 €</span><span class="np-sim__boite-label">de dividendes</span></div>
-        <div class="np-sim__fleche" style="grid-area:3/1"><span class="np-sim__fleche-montant">− <span data-out="sortDirect">514 000 €</span></span><span class="np-sim__fleche-nom">impôts et <span data-out="vivreDirect">200 000 €</span> pour vivre</span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite" style="grid-area:4/1"><span class="np-sim__boite-valeur" data-out="placeDirect">486 000 €</span><span class="np-sim__boite-label">placés</span></div>
-        <div class="np-sim__fleche np-sim__fleche-plus" style="grid-area:5/1/8/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsDirect">64 620 €</span></span><span class="np-sim__fleche-nom"><span data-out="gainsLabelDirect">de gains nets, à 4 % par an pendant 10 ans</span></span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite" style="grid-area:8/1"><span class="np-sim__boite-valeur" data-out="finDirect">550 620 €</span><span class="np-sim__boite-label">pour vous</span></div>
-        <div class="np-sim__boite" style="grid-area:2/2"><span class="np-sim__boite-valeur" data-out="totalHolding">1 000 000 €</span><span class="np-sim__boite-label">de dividendes</span></div>
-        <div class="np-sim__fleche" style="grid-area:3/2"><span class="np-sim__fleche-montant">− <span data-out="sortHolding">308 660 €</span></span><span class="np-sim__fleche-nom">impôts, frais et <span data-out="vivreHolding">200 000 €</span> pour vivre</span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite" style="grid-area:4/2"><span class="np-sim__boite-valeur" data-out="placeHolding">691 340 €</span><span class="np-sim__boite-label">placés</span></div>
-        <div class="np-sim__fleche np-sim__fleche-plus" style="grid-area:5/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsHolding">115 960 €</span></span><span class="np-sim__fleche-nom"><span data-out="gainsLabelHolding">de gains nets, à 4 % par an pendant 10 ans</span></span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite np-sim__boite-accent" style="grid-area:6/2"><span class="np-sim__boite-valeur" data-out="dansHolding">807 300 €</span><span class="np-sim__boite-label">dans la holding</span></div>
-        <div class="np-sim__fleche" style="grid-area:7/2"><span class="np-sim__fleche-montant">− <span data-out="latent">253 492 €</span></span><span class="np-sim__fleche-nom">impôt quand elle vous le verse</span><span class="np-sim__pointe"></span></div>
-        <div class="np-sim__boite" style="grid-area:8/2"><span class="np-sim__boite-valeur" data-out="finHolding">553 808 €</span><span class="np-sim__boite-label">pour vous</span></div>
+        <div class="np-sim__boite" style="grid-area:2/1"><span class="np-sim__boite-valeur" data-out="placeDirect">486 000 €</span><span class="np-sim__boite-label">placés</span></div>
+        <div class="np-sim__fleche np-sim__fleche-plus" style="grid-area:3/1/6/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsDirect">64 620 €</span></span><span class="np-sim__fleche-nom" data-out="gainsLabelDirect">de gains nets, à 4 % par an</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite" style="grid-area:6/1"><span class="np-sim__boite-valeur" data-out="finDirect">550 620 €</span><span class="np-sim__boite-label">pour vous</span></div>
+        <div class="np-sim__boite" style="grid-area:2/2"><span class="np-sim__boite-valeur" data-out="placeHolding">691 340 €</span><span class="np-sim__boite-label">placés</span></div>
+        <div class="np-sim__fleche np-sim__fleche-plus" style="grid-area:3/2"><span class="np-sim__fleche-montant">+ <span data-out="gainsHolding">115 960 €</span></span><span class="np-sim__fleche-nom" data-out="gainsLabelHolding">de gains nets, à 4 % par an</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite np-sim__boite-accent" style="grid-area:4/2"><span class="np-sim__boite-valeur" data-out="dansHolding">807 300 €</span><span class="np-sim__boite-label">dans la holding</span></div>
+        <div class="np-sim__fleche" style="grid-area:5/2"><span class="np-sim__fleche-montant">− <span data-out="latent">253 492 €</span></span><span class="np-sim__fleche-nom">d'impôt quand elle vous le verse</span><span class="np-sim__pointe"></span></div>
+        <div class="np-sim__boite" style="grid-area:6/2"><span class="np-sim__boite-valeur" data-out="finHolding">553 808 €</span><span class="np-sim__boite-label">pour vous</span></div>
       </div>
-      <p class="np-sim__schema-note" data-out="conclusion">Laissé dans la holding, le capital dépasse de 256 680 € celui constitué en direct. Récupéré peu à peu, imposé comme vos dividendes d'aujourd'hui, il vous laisse 3 188 € de plus.</p>
+      <div class="np-sim__horizons">
+        <div class="np-sim__horizons-titre" data-out="horizons">Capital constitué selon la durée</div>
+        <div class="np-sim__horizons-grille">
+          <span class="np-sim__horizons-entete"></span><span class="np-sim__horizons-entete">En direct</span><span class="np-sim__horizons-entete">Avec la holding</span>
+          <span>5 ans</span><span data-out="direct5">256 707 €</span><span data-out="holding5">369 988 €</span>
+          <span>10 ans</span><span data-out="direct10">550 620 €</span><span data-out="holding10">807 300 €</span>
+          <span>20 ans</span><span data-out="direct20">1 272 421 €</span><span data-out="holding20">1 921 850 €</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blocs data-si : garder (capital laissé dans la holding, au-dessus du direct), tout (tout récupéré, au-dessus du direct), perdante sinon -->
+    <div class="np-sim__next">
+      <div class="np-sim__next-content">
+        <div class="heading-style-h4 np-sim__next-title">Une holding, pour quel projet ?</div>
+        <p class="np-sim__next-text" data-si="garder">Laissé dans la holding, votre capital dépasse de <strong data-out="ecartGarder">256 680 €</strong> ce que vous auriez placé en direct. Ce n'est pas encore de l'argent à vous : le jour où vous le récupérez, il supporte l'impôt sur les dividendes. La holding sert quand ce capital finance un projet réel : réinvestir, racheter une société, transmettre.</p>
+        <p class="np-sim__next-text" data-si="tout" hidden>Même une fois récupéré, le capital de la holding vous laisse <strong data-out="ecartTout">256 680 €</strong> de plus. Elle doit détenir au moins 5 % de votre société pendant deux ans et servir un projet réel : une holding créée pour le seul gain fiscal s'expose à l'abus de droit.</p>
+        <p class="np-sim__next-text" data-si="perdante" hidden>Avec ces hypothèses, la holding vous laisse <strong data-out="perte">0 €</strong> de moins qu'une perception en direct : ce que le régime mère-fille fait gagner ne couvre pas ses frais, ni l'impôt quand vous récupérez le capital. Elle se justifie plutôt à partir d'un budget de rémunération de 150 à 200 k€ par an, ou d'une trésorerie stable de 250 k€, quand le capital reste au travail.</p>
+      </div>
+      <div class="np-sim__next-action">
+        <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+      </div>
     </div>
   </div>
 
   <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : régime mère-fille, dont les conditions sont supposées remplies, avec une quote-part de frais et charges de 5 % des dividendes ; flat tax de 31,4 % ou barème de l'impôt sur le revenu avec l'abattement de 40 % et la CSG déductible, le moins imposé chaque année ; CEHR et CDHR. Montants constants chaque année. Placement au même rendement des deux côtés, imposé chaque année : flat tax en direct ; dans la holding, impôt sur les sociétés à 15 % jusqu'à 42 500 € puis 25 % (taux réduit supposé applicable) sur la quote-part et les gains, après 2 500 € de frais par an, sans report des déficits. Capital récupéré peu à peu, au même taux d'impôt que vos dividendes de l'année. Hors frais de création de la holding. Tout placement comporte un risque de perte en capital. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
-
-  <!-- Blocs data-si : garder (capital laissé dans la holding, au-dessus du direct), tout (tout récupéré, au-dessus du direct), perdante sinon -->
-  <div class="np-sim__next">
-    <div class="np-sim__next-content">
-      <div class="heading-style-h4 np-sim__next-title">Une holding, pour quel projet ?</div>
-      <p class="np-sim__next-text" data-si="garder">Laissé dans la holding, votre capital dépasse de <strong data-out="ecartGarder">256 680 €</strong> ce que vous auriez placé en direct. Ce n'est pas encore de l'argent à vous : le jour où vous le récupérez, il supporte l'impôt sur les dividendes. La holding sert quand ce capital finance un projet réel : réinvestir, racheter une société, transmettre.</p>
-      <p class="np-sim__next-text" data-si="tout" hidden>Même une fois récupéré, le capital de la holding vous laisse <strong data-out="ecartTout">256 680 €</strong> de plus. Elle doit détenir au moins 5 % de votre société pendant deux ans et servir un projet réel : une holding créée pour le seul gain fiscal s'expose à l'abus de droit.</p>
-      <p class="np-sim__next-text" data-si="perdante" hidden>Avec ces hypothèses, la holding vous laisse <strong data-out="perte">0 €</strong> de moins qu'une perception en direct : ce que le régime mère-fille fait gagner ne couvre pas ses frais, ni l'impôt quand vous récupérez le capital. Elle se justifie plutôt à partir d'un budget de rémunération de 150 à 200 k€ par an, ou d'une trésorerie stable de 250 k€, quand le capital reste au travail.</p>
-    </div>
-    <div class="np-sim__next-action">
-      <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
-    </div>
-  </div>
 </div>

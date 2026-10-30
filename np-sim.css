@@ -71,7 +71,16 @@
 .np-sim__pointe{flex:1;display:flex;flex-direction:column;align-items:center;padding-top:4px}
 .np-sim__pointe:before{content:"";flex:1;min-height:8px;border-left:2px solid #121426}
 .np-sim__pointe:after{content:"";border:7px solid transparent;border-top:10px solid #121426;border-bottom:0}
-.np-sim__schema-note{margin:20px 0 0;font-size:16px;line-height:1.5}
+.np-sim__schema-sous-titre{margin:-12px 0 20px;font-size:14px;line-height:1.4;color:rgba(18,20,38,.7)}
+/* Tableau sous le schéma : le même calcul à plusieurs durées */
+.np-sim__horizons{margin-top:24px;padding-top:20px;border-top:1px solid #CFD1DE}
+.np-sim__horizons-titre{margin-bottom:8px;font-size:16px;font-weight:700}
+.np-sim__horizons-grille{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);font-size:16px;font-variant-numeric:tabular-nums}
+.np-sim__horizons-grille span{padding:8px 0 8px 16px;border-bottom:1px solid #E7E8F1;text-align:right;white-space:nowrap}
+.np-sim__horizons-grille span:nth-child(3n+1){padding-left:0;text-align:left;font-weight:600}
+.np-sim__horizons-entete{font-size:14px;color:rgba(18,20,38,.7)}
+/* CTA placé dans la colonne de droite, juste sous le résultat */
+.np-sim__droite .np-sim__next{flex-direction:column;align-items:flex-start;gap:20px;margin-top:0}
 
 /* CTA sous le calcul : fond doré clair des encarts auteur du site */
 .np-sim__next{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:32px;margin-top:12px;padding:24px 32px;border-radius:16px;background:#FFF9EB}

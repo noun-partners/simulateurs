@@ -693,58 +693,58 @@
       var taux = dividende ? (dividende - netDirect) / dividende : PFU
       function sortieHolding(capital) { return capital > 0 ? Math.round(capital * taux) : 0 }
 
-      // Placement identique des deux côtés, imposé chaque année : flat tax en direct, impôt sur les sociétés dans la holding
-      var direct = 0, holding = 0
-      for (var a = 0; a < annees; a++) {
-        direct += direct * rendement * (1 - PFU) + netDirect - vivre
-        var gains = Math.max(0, holding) * rendement
-        holding += gains - (isHolding(gains) - isHolding(0)) + encaisse - verse
-      }
+      // Placement identique des deux côtés, imposé chaque année : flat tax en direct, impôt sur les sociétés dans la holding.
       // Montants à l'euro : les écarts affichés se recalculent à partir des montants affichés
-      direct = Math.round(direct)
-      holding = Math.round(holding)
-      // Sortie : la holding vous verse tout son capital, progressivement
+      function capitaux(n) {
+        var direct = 0, holding = 0
+        for (var a = 0; a < n; a++) {
+          direct += direct * rendement * (1 - PFU) + netDirect - vivre
+          var gains = Math.max(0, holding) * rendement
+          holding += gains - (isHolding(gains) - isHolding(0)) + encaisse - verse
+        }
+        holding = Math.round(holding)
+        // Sortie : la holding vous verse tout son capital, progressivement
+        return { direct: Math.round(direct), holding: holding, fin: holding - (sortie === 'tout' ? sortieHolding(holding) : 0) }
+      }
+      var c = capitaux(annees)
+      var direct = c.direct, holding = c.holding, finHolding = c.fin
       var latent = sortieHolding(holding)
-      var finHolding = holding - (sortie === 'tout' ? latent : 0)
       var ecart = finHolding - direct
       var duree = annees > 1 ? annees + ' ans' : '1 an'
 
-      // Schéma sur toute la durée : dividendes, ce qui en sort (impôts, frais, revenu pour vivre), ce qui est placé,
-      // les gains nets des placements, puis l'impôt si la holding verse tout la dernière année
+      // Schéma sur toute la durée : ce qui est placé après impôts, frais et revenu pour vivre, les gains nets des placements,
+      // puis l'impôt quand la holding vous verse son capital
       var placeDirect = (netDirect - vivre) * annees
       var placeHolding = Math.max(0, encaisse - verse) * annees
-      var total = dividende * annees
-      var vivreTotal = eur.format(vivre * annees)
-      var ecartCapital = holding - direct
-      var ecartSortie = holding - latent - direct
+      var gainsLabel = 'de gains nets, à ' + pct.format(rendement) + ' par an'
       var out = {
         titre: (sortie === 'tout' ? 'Ce qui vous reste au bout de ' : 'Capital dans la holding au bout de ') + duree,
         capital: eur.format(Math.max(0, finHolding)),
         direct: eur.format(direct),
         schemaDuree: duree,
-        totalDirect: eur.format(total),
-        totalHolding: eur.format(total),
-        sortDirect: eur.format(total - placeDirect),
-        sortHolding: eur.format(total - placeHolding),
-        vivreDirect: vivreTotal,
-        vivreHolding: vivreTotal,
+        vivre: eur.format(vivre),
         placeDirect: eur.format(placeDirect),
         placeHolding: eur.format(placeHolding),
         gainsDirect: eur.format(Math.max(0, direct - placeDirect)),
         gainsHolding: eur.format(Math.max(0, holding - placeHolding)),
-        gainsLabelDirect: 'de gains nets, à ' + pct.format(rendement) + ' par an pendant ' + duree,
-        gainsLabelHolding: 'de gains nets, à ' + pct.format(rendement) + ' par an pendant ' + duree,
+        gainsLabelDirect: gainsLabel,
+        gainsLabelHolding: gainsLabel,
         dansHolding: eur.format(Math.max(0, holding)),
         latent: eur.format(latent),
         finDirect: eur.format(direct),
         finHolding: eur.format(Math.max(0, holding - latent)),
-        conclusion: (ecartCapital >= 0 ? 'Laissé dans la holding, le capital dépasse de ' + eur.format(ecartCapital) + ' celui constitué en direct. '
-          : 'Même laissé dans la holding, le capital reste inférieur de ' + eur.format(-ecartCapital) + ' à celui constitué en direct. ')
-          + 'Récupéré peu à peu, imposé comme vos dividendes d\'aujourd\'hui, il vous laisse ' + eur.format(Math.abs(ecartSortie)) + (ecartSortie >= 0 ? ' de plus.' : ' de moins.'),
+        horizons: sortie === 'tout' ? 'Ce qui vous reste selon la durée' : 'Capital constitué selon la durée',
         ecartGarder: eur.format(Math.max(0, ecart)),
         ecartTout: eur.format(Math.max(0, ecart)),
         perte: eur.format(Math.max(0, -ecart))
       }
+      // Le temps fait le gain de la holding : capital à 5, 10 et 20 ans, avec la même sortie
+      var horizons = [5, 10, 20]
+      horizons.forEach(function (n) {
+        var h = capitaux(n)
+        out['direct' + n] = eur.format(h.direct)
+        out['holding' + n] = eur.format(Math.max(0, h.fin))
+      })
       return {
         out: out,
         // Laissé dans la holding, le capital n'est pas encore à vous : le texte le dit, même quand il dépasse le direct
