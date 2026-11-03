@@ -128,7 +128,7 @@
 
       // Contributions sur les hauts revenus, en supposant les revenus des années précédentes égaux au revenu habituel
       var rfr = revenu + exceptionnel
-      var avant = cehr(revenu, f) + cdhr(revenu, impotBrut(revenu, f) + cehr(revenu, f), f)
+      var avant = cehr(revenu, f) + cdhr(revenu, decote(impotBrut(revenu, f), f) + cehr(revenu, f), f)
       // CEHR lissée, les deux années précédentes au revenu habituel (même calcul que le simulateur cehr)
       var ce = cehr(rfr, f)
       var lissee = cehrLissee(rfr, revenu, revenu, f)
@@ -138,7 +138,7 @@
       // (droits simples sans quotient, CEHR sans lissage, au prorata)
       var quart = exceptionnel > revenu ? .25 : 1
       var retenu = rfr ? (revenu + quart * exceptionnel) / rfr : 0
-      var cd = cdhr(revenu + quart * exceptionnel, (impotBrut(rfr, f) + cehr(rfr, f)) * retenu, f)
+      var cd = cdhr(revenu + quart * exceptionnel, (decote(impotBrut(rfr, f), f) + cehr(rfr, f)) * retenu, f)
       var contributions = Math.round(ce + cd - avant)
       var total = ir + contributions
       return {
@@ -539,7 +539,7 @@
       var taux = avant2018 ? (renforce ? .85 : .65) : 0
 
       // Impôts du foyer sans la cession : impôt sur le revenu, CEHR et CDHR
-      var avant = impot(autres, f) + cehr(autres, f) + cdhr(autres, impotBrut(autres, f) + cehr(autres, f), f)
+      var avant = impot(autres, f) + cehr(autres, f) + cdhr(autres, decote(impotBrut(autres, f), f) + cehr(autres, f), f)
 
       // Impôts dus du fait de la cession, pour un régime donné
       function regime(pv, bar, ret) {
@@ -549,8 +549,8 @@
         var imposable = pv - abattement
         // Plus-value exceptionnelle par son montant : au-delà des revenus des trois années précédentes (art. 163-0 A et 224)
         var exceptionnel = imposable > autres
-        // Droits simples, sans quotient : barème sur le revenu global, ou barème sur les autres revenus et 12,8 %
-        var simples = bar ? impotBrut(autres + imposable, f) : impotBrut(autres, f) + .128 * imposable
+        // Droits simples, sans quotient, décote comprise (BOI-IR-CDHR-20 § 170) : barème sur le revenu global, ou barème sur les autres revenus et 12,8 %
+        var simples = bar ? decote(impotBrut(autres + imposable, f), f) : decote(impotBrut(autres, f), f) + .128 * imposable
         var ir = bar ? impot(autres + imposable, f) : impot(autres, f) + Math.round(.128 * imposable)
         // Au barème, système du quotient sur demande pour une plus-value exceptionnelle (diviseur 4)
         if (bar && exceptionnel) {
@@ -572,10 +572,12 @@
         // abattements pour durée de détention compris. Une plus-value exceptionnelle y compte pour le quart de son montant avant
         // abattements, et l'impôt et la CEHR qui s'y rapportent pour le quart aussi
         var irPv = bar ? simples * (imposable ? imposable / (autres + imposable) : 0) : .128 * imposable
-        var cePv = rfr ? ce * pv / rfr : 0
+        // CEHR sans lissage (art. 224 IV B 1° ; BOI-IR-CDHR-20 § 200), part de la plus-value au prorata du revenu fiscal de référence
+        var ceCdhr = cehr(rfr, f)
+        var cePv = rfr ? ceCdhr * pv / rfr : 0
         var quart = exceptionnel ? .25 : 1
         var reference = autres + (exceptionnel ? pv / 4 : pv - (ret ? abattement : 0))
-        var cd = cdhr(reference, simples - irPv + ce - cePv + quart * (irPv + cePv), f)
+        var cd = cdhr(reference, simples - irPv + ceCdhr - cePv + quart * (irPv + cePv), f)
         var contributions = Math.max(0, Math.round(ce + cd + impot(autres, f) - avant))
         return { bar: bar, ret: ret, ir: ir - deductible, ps: ps, contributions: contributions, total: ir - deductible + ps + contributions }
       }
@@ -651,7 +653,7 @@
       var frais = 2500
 
       // Impôts du foyer sans dividendes : impôt sur le revenu, CEHR et CDHR
-      var avant = impot(autres, f) + cehr(autres, f) + cdhr(autres, impotBrut(autres, f) + cehr(autres, f), f)
+      var avant = impot(autres, f) + cehr(autres, f) + cdhr(autres, decote(impotBrut(autres, f), f) + cehr(autres, f), f)
       // Impôts dus sur des dividendes perçus dans l'année : flat tax ou, sur option globale, barème avec l'abattement de 40 %
       // et 6,8 % de CSG déductible l'année suivante (revenus supposés égaux). CEHR, lissée si c'est plus favorable, et CDHR.
       // precedent : revenu fiscal de référence des deux années précédentes, pour le lissage
@@ -660,9 +662,10 @@
         var ce = cehr(rfr, f)
         var lissee = cehrLissee(rfr, precedent, precedent, f)
         if (lissee !== null) ce = Math.min(ce, lissee)
-        var flat = impot(autres, f) + Math.round(.128 * d) + ce + cdhr(rfr, impotBrut(autres, f) + .128 * d + ce, f)
+        // CDHR : impôt après décote, CEHR sans lissage (art. 224 IV B 1°)
+        var flat = impot(autres, f) + Math.round(.128 * d) + ce + cdhr(rfr, decote(impotBrut(autres, f), f) + .128 * d + cehr(rfr, f), f)
         var deductible = impot(autres, f) - impot(Math.max(0, autres - .068 * d), f)
-        var bar = impot(autres + .6 * d, f) - deductible + ce + cdhr(rfr, impotBrut(autres + .6 * d, f) + ce, f)
+        var bar = impot(autres + .6 * d, f) - deductible + ce + cdhr(rfr, decote(impotBrut(autres + .6 * d, f), f) + cehr(rfr, f), f)
         return Math.max(0, Math.round(Math.min(flat, bar) + .186 * d - avant))
       }
       function net(d) { return d - impots(d, autres + d) }
