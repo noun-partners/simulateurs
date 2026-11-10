@@ -1,0 +1,97 @@
+<!-- Simulateur crédit lombard : HTML à coller dans le bloc code de l'item CMS.
+     Les résultats du cas par défaut (compte-titres de 400 000 €, 150 000 € in fine sur 3 ans à 3,5 %) sont écrits ici :
+     la page est lisible sans JavaScript. data-si="infine" ou "amortissable" : lignes propres au remboursement.
+     Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
+<div class="np-sim" data-sim="credit-lombard">
+  <form class="np-sim__form">
+    <h2 class="heading-style-h4 np-sim__title">Vos placements et votre crédit</h2>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-euros">Fonds en euros</label>
+      <div class="np-sim__input"><input id="np-sim-cl-euros" name="euros" type="number" inputmode="numeric" min="0" step="10000" value="0"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Assurance-vie. Quotité retenue : 80 % de la valeur de rachat.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-uc">Unités de compte</label>
+      <div class="np-sim__input"><input id="np-sim-cl-uc" name="uc" type="number" inputmode="numeric" min="0" step="10000" value="0"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Assurance-vie, fonds diversifiés. Quotité retenue : 60 %.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-titres">Actions et ETF</label>
+      <div class="np-sim__input"><input id="np-sim-cl-titres" name="titres" type="number" inputmode="numeric" min="0" step="10000" value="400000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Compte-titres ou PEA. Quotité retenue : 50 %, celle que BoursoBank applique à tous ses supports (novembre 2026).</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-montant">Montant à emprunter</label>
+      <div class="np-sim__input"><input id="np-sim-cl-montant" name="montant" type="number" inputmode="numeric" min="0" step="10000" value="150000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">BoursoBank prête de 101 000 à 2 000 000 €. Les banques privées fixent leur seuil au cas par cas.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-duree">Durée du crédit</label>
+      <div class="np-sim__input"><input id="np-sim-cl-duree" name="duree" type="number" inputmode="numeric" min="1" max="15" step="1" value="3"><span class="np-sim__unit">ans</span></div>
+      <span class="np-sim__help">1 à 10 ans chez BoursoBank, souvent 1 à 5 ans selon la Chambre des notaires de Paris.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-taux">Taux du crédit</label>
+      <div class="np-sim__input"><input id="np-sim-cl-taux" name="taux" type="number" inputmode="decimal" min="0" max="15" step="0.05" value="3.5"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">3,50 % fixe sur 12 mois chez BoursoBank au 05/11/2026. À taux variable : Euribor 3 mois (2,759 % le 04/11/2026) plus la marge de la banque.</span>
+    </div>
+    <div class="np-sim__field">
+      <span class="np-sim__label" id="np-sim-cl-remboursement">Remboursement</span>
+      <div class="np-sim__choices" role="radiogroup" aria-labelledby="np-sim-cl-remboursement">
+        <label class="np-sim__choice"><input type="radio" name="remboursement" value="infine" checked><span>In fine</span></label>
+        <label class="np-sim__choice"><input type="radio" name="remboursement" value="amortissable"><span>Amortissable</span></label>
+      </div>
+      <span class="np-sim__help">In fine : les intérêts chaque trimestre, le capital en une fois au terme.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-pv">Plus-value latente des actions et ETF</label>
+      <div class="np-sim__input"><input id="np-sim-cl-pv" name="plusValue" type="number" inputmode="numeric" min="0" step="10000" value="150000"><span class="np-sim__unit">€</span></div>
+      <span class="np-sim__help">Valeur actuelle moins prix d'achat. Sert à comparer le crédit avec une vente de titres.</span>
+    </div>
+    <div class="np-sim__field">
+      <label class="np-sim__label" for="np-sim-cl-evolution">Évolution de la valeur des titres, par an</label>
+      <div class="np-sim__input"><input id="np-sim-cl-evolution" name="evolution" type="number" inputmode="decimal" min="-20" max="20" step="0.5" value="0"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">0 % par défaut : des titres stables. Leur gain est imposé le jour où vous les vendez.</span>
+    </div>
+  </form>
+
+  <div class="np-sim__droite">
+    <div class="np-sim__result" aria-live="polite">
+      <div class="np-sim__headline">
+        <span class="np-sim__headline-label">Montant que vous pouvez emprunter</span>
+        <span class="np-sim__headline-value" data-out="maximum">200 000 €</span>
+        <span class="np-sim__headline-note">au plus, sur <span data-out="placements">400 000 €</span> de placements nantis, selon la nature de chaque support</span>
+      </div>
+      <div class="np-sim__lines">
+        <div class="np-sim__line"><span class="np-sim__line-label">Montant emprunté</span><span class="np-sim__line-value" data-out="montant">150 000 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Part du maximum utilisée</span><span class="np-sim__line-value" data-out="partMax">75 %</span></div>
+        <div class="np-sim__line" data-si="infine"><span class="np-sim__line-label">Intérêts par trimestre</span><span class="np-sim__line-value" data-out="trimestre">1 313 €</span></div>
+        <div class="np-sim__line" data-si="amortissable" hidden><span class="np-sim__line-label">Mensualité</span><span class="np-sim__line-value" data-out="mensualite">4 395 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Coût du crédit, intérêts</span><span class="np-sim__line-value" data-out="interets">15 750 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Baisse des marchés avant l'appel de marge</span><span class="np-sim__line-value" data-out="baisse">32,5 %</span></div>
+      </div>
+      <div class="np-sim__compare">
+        <span class="np-sim__compare-title">Face à une vente de titres, au bout de <span data-out="dureeTerme">3 ans</span></span>
+        <div class="np-sim__lines">
+          <div class="np-sim__line"><span class="np-sim__line-label">Titres à vendre pour disposer du même montant</span><span class="np-sim__line-value" data-out="vendus">170 020 €</span></div>
+          <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur la plus-value, payé tout de suite</span><span class="np-sim__line-value" data-out="impotVente">20 020 €</span></div>
+          <div class="np-sim__line"><span class="np-sim__line-label">Intérêts du crédit</span><span class="np-sim__line-value" data-out="interetsVente">15 750 €</span></div>
+          <div class="np-sim__line"><span class="np-sim__line-label">Écart si vous gardez les titres</span><span class="np-sim__line-value" data-out="conserves">4 270 € pour le crédit</span></div>
+          <div class="np-sim__line"><span class="np-sim__line-label">Écart si vous vendez les titres au terme</span><span class="np-sim__line-value" data-out="revendus">15 750 € pour la vente</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="np-sim__next">
+      <div class="np-sim__next-content">
+        <div class="heading-style-h4 np-sim__next-title">Combien emprunter, et sur quels placements ?</div>
+        <p class="np-sim__next-text">Trois points fixent le bon montant : la baisse que vos placements doivent pouvoir encaisser, la plus-value latente de vos titres et la façon dont vous rembourserez. Nous les chiffrons avec vous, et comparons le crédit lombard avec l'avance sur assurance-vie et la vente.</p>
+      </div>
+      <div class="np-sim__next-action">
+        <button type="button" class="button w-button" data-cta="/consultation-offerte">Faire chiffrer ma situation</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : quotités supposées de 80 % pour le fonds en euros, 60 % pour les unités de compte et 50 % pour les actions et ETF ; appel de marge quand la valeur de prêt des placements passe sous 90 % du capital emprunté, comme la couverture de 180 % de BoursoBank (novembre 2026), fonds en euros supposé stable. Chaque banque fixe ses quotités, ses seuils, ses frais et son taux. Vente : titres d'un compte-titres, plus-value imposée au prélèvement forfaitaire unique de 31,4 % au prorata de la plus-value latente ; les titres conservés sont imposés au même taux le jour de leur vente. Le crédit est supposé remboursé par une autre rentrée d'argent. Intérêts non déductibles, sans frais de dossier. Hors PEA, assurance-vie et transmission. La valeur des placements nantis peut baisser : un placement en actions ou en unités de compte comporte un risque de perte en capital, et un appel de marge peut imposer une vente. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+</div>

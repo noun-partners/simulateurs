@@ -864,6 +864,63 @@
         },
         si: credit ? 'credit' : 'comptant'
       }
+    },
+
+    // Crédit lombard : montant empruntable selon les supports nantis, coût du crédit, baisse supportable avant l'appel
+    // de marge, et comparaison avec une vente de titres du compte-titres (10/11/2026). Quotités et seuil d'appel :
+    // hypothèses à valider par Malek. Seuil : la valeur de prêt des actifs passe sous 90 % du capital emprunté,
+    // ce qui reproduit la règle de BoursoBank (50 % de quotité, couverture de 200 % à la souscription, 180 % ensuite).
+    'credit-lombard': function (form) {
+      var Q_EUROS = .8, Q_UC = .6, Q_TITRES = .5, APPEL = .9, PFU = .314
+      var euros = nombre(form.euros, 0, 1e9)
+      var uc = nombre(form.uc, 0, 1e9)
+      var titres = nombre(form.titres, 0, 1e9)
+      var montant = nombre(form.montant, 0, 1e9)
+      var duree = Math.round(nombre(form.duree, 1, 15))
+      var taux = nombre(form.taux, 0, 15) / 100
+      var amortissable = form.remboursement.value === 'amortissable'
+      var maximum = Q_EUROS * euros + Q_UC * uc + Q_TITRES * titres
+
+      // In fine : intérêts chaque trimestre, capital au terme. Amortissable : mensualités constantes
+      var i = taux / 12, mois = duree * 12
+      var mensualite = !montant ? 0 : i ? montant * i / (1 - Math.pow(1 + i, -mois)) : montant / mois
+      var interets = amortissable ? mensualite * mois - montant : montant * taux * duree
+
+      // Baisse des unités de compte et des titres qui déclenche l'appel de marge (fonds en euros supposé stable)
+      var besoin = APPEL * montant - Q_EUROS * euros, risque = Q_UC * uc + Q_TITRES * titres
+      var baisse = !montant ? '—' : montant > maximum ? 'Au-delà du maximum' : besoin <= 0 ? 'Aucune, le fonds en euros suffit' : pct.format(1 - besoin / risque)
+
+      // Vente : titres du compte-titres vendus pour disposer du même montant net, plus-value au PFU de 31,4 % au prorata
+      var p = titres ? Math.min(nombre(form.plusValue, 0, 1e9), titres) / titres : 0
+      var vendus = montant / (1 - PFU * p)
+      var vente = titres > 0 && montant > 0 && vendus <= titres
+      var g = Math.pow(1 + nombre(form.evolution, -20, 20) / 100, duree)
+      function apresImpot(valeur, prixRevient) { return valeur - PFU * Math.max(0, valeur - prixRevient) }
+      // Au terme, le crédit est remboursé par une autre rentrée, que la vente laisse disponible
+      var reste = (titres - vendus) * g
+      var conserves = titres * g - interets - (reste + montant)
+      var revendus = apresImpot(titres * g, titres * (1 - p)) - interets - (apresImpot(reste, (titres - vendus) * (1 - p)) + montant)
+      function sens(x) { x = Math.round(x); return x >= 0 ? eur.format(x) + ' pour le crédit' : eur.format(-x) + ' pour la vente' }
+      var ans = duree + (duree > 1 ? ' ans' : ' an')
+      return {
+        out: {
+          maximum: eur.format(maximum),
+          placements: eur.format(euros + uc + titres),
+          montant: eur.format(montant),
+          partMax: maximum ? pct.format(montant / maximum) : '—',
+          trimestre: eur.format(montant * taux / 4),
+          mensualite: eur.format(mensualite),
+          interets: eur.format(interets),
+          baisse: baisse,
+          dureeTerme: ans,
+          vendus: vente ? eur.format(vendus) : titres ? 'Compte-titres insuffisant' : 'Aucun compte-titres',
+          impotVente: vente ? eur.format(vendus - montant) : '—',
+          interetsVente: eur.format(interets),
+          conserves: vente ? sens(conserves) : '—',
+          revendus: vente ? sens(revendus) : '—'
+        },
+        si: amortissable ? 'amortissable' : 'infine'
+      }
     }
   }
 
