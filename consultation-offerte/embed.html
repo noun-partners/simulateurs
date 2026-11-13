@@ -1,0 +1,37 @@
+<!-- Page /consultation-offerte : réponses automatiques qui préparent l'échange avec Malek, puis ouvrent son Calendly prérempli.
+     À coller à la place des deux blocs « calendly_widget » de la page (un seul exemplaire, dans la colonne de droite).
+     np-chat.js envoie la conversation à l'API (projet Vercel privé noun-audit-chat, route /api/consultation).
+     data-calendly : événement Calendly de la page. data-calendly-champs : quelle réponse va dans quelle question de l'événement
+     (a1 = 1re question personnalisée…), à revoir si Malek modifie les questions de son événement.
+     data-newsletter : formulaire Kit de la lettre (le même que le pied de page du site).
+     np-chat--questionnaire : présentation en questionnaire (question en cours en titre, réponses en liste, rendez-vous dans un bloc sombre), commune avec les assistants transmission et dirigeant.
+     np-chat--consultation : ce qui est propre à la page (marges de la carte dans la colonne de droite).
+     data-ecrit : texte de l'indicateur d'écriture (sans mention d'assistant).
+     Balises limitées à div, span, p, form, label, input, button. -->
+<div class="np-chat np-chat--questionnaire np-chat--consultation" data-chat="consultation-offerte" data-api="https://noun-audit-chat.vercel.app/api/consultation" data-calendly="https://calendly.com/noun-partners/consultation-offerte" data-calendly-champs="profession:a1, revenu:a2, patrimoine:a3, en_place:a4, objectif:a5, echeance:a7, source:a8" data-newsletter="https://app.kit.com/forms/5564714/subscriptions" data-ecrit="Un instant…">
+  <div class="np-chat__head">
+    <span class="np-chat__avatar" role="img" aria-label="Photo de Malek Ziane"></span>
+    <div class="np-chat__who">
+      <p class="np-chat__name">Votre échange avec Malek Ziane</p>
+      <p class="np-chat__status">30 minutes offertes, par téléphone ou en visio</p>
+    </div>
+  </div>
+  <div class="np-chat__log" aria-live="polite">
+    <div class="np-chat__msg np-chat__msg--bot np-chat__msg--ask"><p class="np-chat__amorce">Bonjour. Pour que Malek prépare votre échange : trois ou quatre questions à cliquer, puis vous choisissez votre créneau.</p><p class="np-chat__question">Pour commencer, vous êtes :</p></div>
+    <div class="np-chat__choices">
+      <button type="button" class="np-chat__choice">Dirigeant ou associé d'une société</button>
+      <button type="button" class="np-chat__choice">Indépendant ou freelance</button>
+      <button type="button" class="np-chat__choice">Médecin ou professionnel de santé</button>
+      <button type="button" class="np-chat__choice">Avocat ou autre profession libérale</button>
+      <button type="button" class="np-chat__choice">Cadre salarié</button>
+      <button type="button" class="np-chat__choice">Retraité ou particulier</button>
+    </div>
+  </div>
+  <form class="np-chat__form">
+    <label class="np-chat__label" for="np-chat-input">Votre réponse</label>
+    <input id="np-chat-input" class="np-chat__input" name="message" type="text" maxlength="500" autocomplete="off" placeholder="Votre réponse ou une question">
+    <input class="np-chat__trap" name="site" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button type="submit" class="np-chat__send">Envoyer</button>
+  </form>
+  <p class="np-chat__note">Réponses automatiques, transmises à Malek pour préparer l'échange : c'est lui qui vous reçoit ensuite. Vos coordonnées se renseignent à la réservation, ne les écrivez pas ici.</p>
+</div>

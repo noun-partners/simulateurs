@@ -53,6 +53,151 @@
 .np-chat__later{min-height:44px;padding:0;border:0;background:none;color:#121426;font:inherit;font-size:15px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .np-chat__later:focus-visible{outline:2px solid #CF9804;outline-offset:2px}
 
+/* Assistants transmission et dirigeant : encadré de rendez-vous qui dit ce que Malek regardera */
+.np-chat__next--rdv{align-self:stretch}
+.np-chat__next-sub{font-size:14px;line-height:1.4;color:rgba(18,20,38,.7)}
+.np-chat__next-list{margin:-4px 0 0;padding-left:20px;font-size:16px;line-height:1.5}
+.np-chat__next-list li+li{margin-top:4px}
+.np-chat__next-note{font-size:14px;line-height:1.4}
+.np-chat__reads-title{margin:8px 0 0;font-size:14px;font-weight:700;line-height:1.4}
+.np-chat__read-why{font-size:14px;line-height:1.4;color:rgba(18,20,38,.7)}
+
+/* Lectures proposées, inscription à la lettre, calendrier de Malek (page consultation, assistants transmission et dirigeant) */
+.np-chat__reads{display:flex;flex-direction:column;gap:8px;align-self:stretch}
+.np-chat__read{display:flex;flex-direction:column;gap:2px;margin:0;padding:12px 16px;border:1px solid #CFD1DE;border-radius:12px;background:#fff;color:#121426;text-decoration:none;transition:border-color .15s}
+a.np-chat__read:hover{border-color:#121426}
+a.np-chat__read:focus-visible{outline:2px solid #CF9804;outline-offset:2px}
+.np-chat__read-type{font-size:12px;font-weight:700;line-height:1.4;letter-spacing:.04em;text-transform:uppercase;color:rgba(18,20,38,.7)}
+.np-chat__read-title{font-size:16px;font-weight:600;line-height:1.4}
+.np-chat__letter-row{display:flex;gap:8px;margin-top:8px}
+.np-chat__letter .np-chat__input{height:48px;padding:0 16px}
+.np-chat__letter-note{margin-top:6px;font-size:12px;line-height:1.4;color:rgba(18,20,38,.7)}
+.np-chat__booking{display:flex;flex-direction:column;gap:12px;padding:16px var(--np-chat-marge);border-top:1px solid #EBE4DC;background:#FFF9EB}
+.np-chat__calendly{display:block;width:100%;height:690px;border:0;border-radius:12px;background:#fff}
+.np-chat--rdv .np-chat__log{height:min(280px,34vh)}
+
+/* Présentation en questionnaire (np-chat--questionnaire : page consultation, assistants transmission et dirigeant) : carte blanche,
+   la question en cours est en titre, les réponses en liste, l'historique en retrait.
+   Le rendez-vous s'ouvre dans un bloc sombre en bas de carte, comme le résultat des simulateurs. L'or reste au bouton de rendez-vous. */
+.np-chat--questionnaire{background:#fff}
+/* Page consultation : carte dans la colonne de droite de la landing, marges fixes (les assistants gardent la colonne de 760 px centrée) */
+.np-chat--consultation{--np-chat-marge:28px}
+.np-chat--questionnaire .np-chat__head{gap:16px;padding:28px var(--np-chat-marge) 0;border:0;background:none}
+.np-chat--questionnaire .np-chat__head .np-chat__avatar{width:72px;height:80px;border-radius:12px}
+.np-chat--questionnaire .np-chat__name{font-size:18px}
+.np-chat--questionnaire .np-chat__status{margin-top:4px;font-size:15px;line-height:1.4}
+/* Fil : pas de cadre qui défile, la carte grandit et c'est la page qui défile. Chaque bloc sur sa ligne ; les réponses données se suivent en pastilles */
+.np-chat--questionnaire .np-chat__log,.np-chat--questionnaire.np-chat--rdv .np-chat__log{flex-direction:row;flex-wrap:wrap;align-content:flex-start;gap:8px 6px;height:auto;padding:24px var(--np-chat-marge) 16px;overflow:visible}
+.np-chat--questionnaire .np-chat__log>*{flex:0 0 100%;max-width:100%}
+.np-chat--questionnaire .np-chat__log>*+*{margin-top:8px}
+.np-chat--questionnaire .np-chat__log>.np-chat__msg--user{flex:0 1 auto;margin-top:0}
+
+/* Messages : texte sans bulle. Une fois la réponse donnée, la question se replie (--pli) ; s'il y avait une explication avant elle, elle reste, en retrait (--done) */
+.np-chat--questionnaire .np-chat__msg--bot{padding:0;border-radius:0;background:none;line-height:1.55}
+.np-chat--questionnaire .np-chat__msg--ask .np-chat__question{margin-top:14px;font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:24px;line-height:1.25}
+.np-chat--questionnaire .np-chat__msg--ask .np-chat__question:first-child{margin-top:0}
+.np-chat--questionnaire .np-chat__msg--pli,.np-chat--questionnaire .np-chat__msg--done .np-chat__amorce,.np-chat--questionnaire .np-chat__msg--done .np-chat__question{display:none}
+.np-chat--questionnaire .np-chat__msg--done{font-size:15px;color:rgba(18,20,38,.62)}
+.np-chat--questionnaire .np-chat__msg--user{padding:7px 14px;border-radius:16px;font-size:14px;font-weight:500;line-height:1.4}
+.np-chat--questionnaire .np-chat__typing{flex-wrap:wrap;gap:6px 10px;padding:4px 0 0;background:none}
+.np-chat__ghost{flex:0 0 100%;height:50px;border-radius:12px;background:#F8F4F0;animation:np-chat-ghost 1.4s ease-in-out infinite}
+.np-chat__ghost:nth-of-type(3){margin-top:8px}
+.np-chat__ghost:nth-of-type(4){animation-delay:.15s}
+.np-chat__ghost:nth-of-type(5){animation-delay:.3s}
+
+/* Réponses proposées : une liste, une ligne par choix */
+.np-chat--questionnaire .np-chat__choices{flex-direction:column;flex-wrap:nowrap;gap:6px}
+.np-chat--questionnaire .np-chat__choice{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:50px;padding:11px 18px;border:0;border-radius:12px;background:#F8F4F0;font-size:16px;font-weight:500;line-height:1.35;transition:background .15s,color .15s,transform .1s}
+.np-chat--questionnaire .np-chat__choice::after{content:"";flex-shrink:0;width:8px;height:8px;margin-right:2px;border-top:2px solid #C3A583;border-right:2px solid #C3A583;transform:rotate(45deg);transition:transform .15s,border-color .15s}
+.np-chat--questionnaire .np-chat__choice:active{background:#EBE4DC;transform:scale(.99)}
+.np-chat--questionnaire .np-chat__choices.np-chat__new{animation:none}
+.np-chat--questionnaire .np-chat__choices.np-chat__new .np-chat__choice{animation:np-chat-in .3s ease-out both}
+.np-chat--questionnaire .np-chat__choices.np-chat__new .np-chat__choice:nth-child(2){animation-delay:.05s}
+.np-chat--questionnaire .np-chat__choices.np-chat__new .np-chat__choice:nth-child(3){animation-delay:.1s}
+.np-chat--questionnaire .np-chat__choices.np-chat__new .np-chat__choice:nth-child(4){animation-delay:.15s}
+.np-chat--questionnaire .np-chat__choices.np-chat__new .np-chat__choice:nth-child(5){animation-delay:.2s}
+.np-chat--questionnaire .np-chat__choices.np-chat__new .np-chat__choice:nth-child(6){animation-delay:.25s}
+
+/* Lectures et lettre : lignes crème, flèche à droite */
+.np-chat--questionnaire .np-chat__read{position:relative;padding:14px 48px 14px 18px;border:0;background:#F8F4F0;transition:background .15s,color .15s}
+.np-chat--questionnaire .np-chat__read-type{font-size:13px;font-weight:500;letter-spacing:0;text-transform:none;color:rgba(18,20,38,.65);transition:color .15s}
+.np-chat--questionnaire a.np-chat__read::after{content:"";position:absolute;top:50%;right:20px;width:8px;height:8px;margin-top:-4px;border-top:2px solid #C3A583;border-right:2px solid #C3A583;transform:rotate(45deg);transition:transform .15s,border-color .15s}
+.np-chat--questionnaire a.np-chat__read:active{background:#EBE4DC}
+.np-chat--questionnaire .np-chat__letter{padding-right:18px}
+.np-chat--questionnaire .np-chat__next-actions,.np-chat--questionnaire .np-chat__next-actions .button{width:100%;text-align:center}
+
+/* Rendez-vous : bloc sombre en bas de la carte, réponses rappelées au-dessus du calendrier */
+.np-chat--questionnaire .np-chat__booking{order:1;gap:20px;padding:28px var(--np-chat-marge);border:0;background:#121426;color:#fff}
+.np-chat--questionnaire .np-chat__booking .np-chat__avatar{display:none}
+.np-chat--questionnaire .np-chat__booking .np-chat__next-title{font-size:26px}
+.np-chat--questionnaire .np-chat__booking .np-chat__next-text{margin-top:6px;color:rgba(255,255,255,.8)}
+.np-chat--questionnaire .np-chat__booking .np-chat__next-proof{color:rgba(255,255,255,.7)}
+.np-chat__recap{display:flex;flex-direction:column;gap:6px}
+.np-chat__recap-title{margin-bottom:4px;font-size:14px;line-height:1.4;color:#C3A583}
+.np-chat__recap-row{display:grid;grid-template-columns:132px minmax(0,1fr);gap:12px;font-size:15px;line-height:1.4}
+.np-chat__recap-label{color:rgba(255,255,255,.65)}
+
+/* Saisie en retrait : le clic sur un choix est l'action principale */
+.np-chat--questionnaire .np-chat__form{position:relative;padding:8px var(--np-chat-marge) 0;border:0;background:#fff}
+.np-chat--questionnaire .np-chat__form .np-chat__input{height:52px;padding:0 60px 0 20px;border-color:#CFD1DE;transition:border-color .15s}
+.np-chat--questionnaire .np-chat__form .np-chat__input:hover{border-color:#121426}
+.np-chat--questionnaire .np-chat__form .np-chat__input:focus-visible{border-color:#CF9804;outline-offset:-1px}
+.np-chat--questionnaire .np-chat__send{position:absolute;right:calc(var(--np-chat-marge) + 6px);bottom:6px;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:#121426 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M6 11l6-6 6 6'/%3E%3C/svg%3E") center/18px no-repeat;color:transparent;font-size:0;cursor:pointer;transition:background-color .15s,transform .1s}
+.np-chat--questionnaire .np-chat__send:hover{background-color:#CF9804}
+.np-chat--questionnaire .np-chat__send:active{transform:scale(.94)}
+.np-chat--questionnaire .np-chat__send:focus-visible{outline:2px solid #CF9804;outline-offset:2px}
+.np-chat--questionnaire .np-chat__send:disabled{background-color:#CFD1DE;opacity:1}
+.np-chat--questionnaire .np-chat__note{padding:12px var(--np-chat-marge) 24px;background:none;font-size:13px;line-height:1.5;color:rgba(18,20,38,.62)}
+
+/* Assistants transmission et dirigeant : carte du calcul (chiffres de l'API), même bloc sombre que le résultat des simulateurs */
+.np-chat__calc{display:flex;flex-direction:column;gap:12px;align-self:stretch;padding:20px;border-radius:16px;background:#121426;color:#fff}
+.np-chat__calc-title{font-family:"Playfair Display",Georgia,serif;font-weight:600;font-size:22px;line-height:1.3}
+.np-chat__calc-sub{font-size:15px;line-height:1.4;color:rgba(255,255,255,.8)}
+.np-chat__calc-grid{display:flex;flex-direction:column}
+.np-chat__calc-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid #272A4A;font-size:15px;line-height:1.35}
+.np-chat__calc-row span+span{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.np-chat__calc-row--head{border-top:0;padding-top:0;font-size:13px;font-weight:700;line-height:1.3;color:#C3A583}
+.np-chat__calc-row--head span+span{white-space:normal}
+.np-chat__calc-row--total{font-weight:700;font-size:17px}
+.np-chat__calc-row--total span+span{color:#CF9804}
+.np-chat__calc-note{padding:12px 14px;border-radius:12px;background:#272A4A;font-size:15px;line-height:1.45}
+.np-chat__calc-disclaimer{font-size:12px;line-height:1.45;color:rgba(255,255,255,.7)}
+.np-chat__calc-key{padding:16px;border-radius:12px;background:#272A4A}
+.np-chat__calc-key-label{font-size:14px;line-height:1.4;color:#C3A583}
+.np-chat__calc-key-value{margin-top:2px;font-size:36px;font-weight:700;line-height:1.15;color:#CF9804;font-variant-numeric:tabular-nums}
+.np-chat__calc-key-detail{margin-top:4px;font-size:15px;line-height:1.4;color:rgba(255,255,255,.8)}
+.np-chat__calc-label{font-size:13px;font-weight:700;line-height:1.3;color:#C3A583}
+.np-chat__calc-chart{display:flex;flex-direction:column;gap:10px}
+.np-chat__calc-bar{display:flex;flex-direction:column;gap:5px}
+.np-chat__calc-bar-text{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:1.35;color:rgba(255,255,255,.85)}
+.np-chat__calc-bar-text strong{font-weight:600;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums}
+.np-chat__calc-track{display:block;height:10px;border-radius:5px;background:#272A4A;overflow:hidden}
+.np-chat__calc-fill{display:block;height:100%;border-radius:5px;background:#9698AE}
+.np-chat__calc-bar--depart .np-chat__calc-fill{background:#C3A583}
+.np-chat__calc-bar--moins .np-chat__calc-fill{background:#CFD1DE;opacity:.45}
+.np-chat__calc-bar--accent .np-chat__calc-fill{background:#CF9804}
+.np-chat__calc-bar--accent .np-chat__calc-bar-text strong{color:#CF9804}
+.np-chat__calc-more{border-top:1px solid #272A4A;padding-top:10px}
+.np-chat__calc-more summary{cursor:pointer;font-size:14px;font-weight:600;color:#C3A583}
+.np-chat__calc-more[open] summary{margin-bottom:8px}
+
+/* Questionnaire, assistants transmission et dirigeant : la carte du calcul ouvre la réponse, sous les réponses données, et le commentaire suit en texte.
+   L'encadré de rendez-vous garde le fond des CTA du site ; les points que Malek regardera sont des lignes, le bouton prend toute la largeur. */
+.np-chat--questionnaire .np-chat__log>.np-chat__calc{margin-top:16px;padding:24px;gap:14px}
+.np-chat--questionnaire .np-chat__calc-title{font-size:24px;line-height:1.25}
+.np-chat--questionnaire .np-chat__log>.np-chat__calc+*{margin-top:20px}
+.np-chat--questionnaire .np-chat__log>.np-chat__next--rdv{gap:16px;margin-top:24px;padding:24px}
+.np-chat--questionnaire .np-chat__next--rdv .np-chat__avatar--small{width:48px;height:54px;border-radius:10px}
+.np-chat--questionnaire .np-chat__next--rdv .np-chat__next-title{font-size:24px;line-height:1.25}
+.np-chat--questionnaire .np-chat__next--rdv .np-chat__next-sub{margin-top:4px}
+.np-chat--questionnaire .np-chat__next-list{align-self:stretch;margin:-6px 0 0;padding:0;list-style:none}
+.np-chat--questionnaire .np-chat__next-list li{position:relative;padding:10px 0 10px 22px;border-bottom:1px solid #EBE4DC}
+.np-chat--questionnaire .np-chat__next-list li+li{margin-top:0}
+.np-chat--questionnaire .np-chat__next-list li::before{content:"";position:absolute;top:19px;left:3px;width:7px;height:7px;border-radius:50%;background:#C3A583}
+.np-chat--questionnaire .np-chat__next--rdv .np-chat__next-actions{flex-direction:column;align-items:stretch;gap:10px;margin-top:4px}
+.np-chat--questionnaire .np-chat__next--rdv .np-chat__next-note{color:rgba(18,20,38,.7)}
+.np-chat--questionnaire .np-chat__reads-title{margin:16px 0 0;font-size:15px;font-weight:600}
+
 /* Saisie */
 .np-chat__form{display:flex;gap:10px;margin:0;padding:16px var(--np-chat-marge);border-top:1px solid #EBE4DC;background:#fff}
 .np-chat__label,.np-chat__trap{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -63,10 +208,18 @@
 .np-chat__note{padding:0 var(--np-chat-marge) 16px;background:#fff;font-size:12px;line-height:1.45;color:rgba(18,20,38,.7)}
 
 @keyframes np-chat-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes np-chat-ghost{0%,100%{opacity:.4}50%{opacity:1}}
 @keyframes np-chat-dot{0%,60%,100%{opacity:.35;transform:none}30%{opacity:1;transform:translateY(-3px)}}
 
+/* Survol : fond sombre et flèche or, avec un pointeur seulement (au toucher, l'état resterait affiché) */
+@media (hover:hover){
+  .np-chat--questionnaire .np-chat__choice:hover,.np-chat--questionnaire a.np-chat__read:hover{background:#121426;color:#fff}
+  .np-chat--questionnaire a.np-chat__read:hover .np-chat__read-type{color:rgba(255,255,255,.7)}
+  .np-chat--questionnaire .np-chat__choice:hover::after,.np-chat--questionnaire a.np-chat__read:hover::after{border-color:#CF9804;transform:translateX(3px) rotate(45deg)}
+}
+
 @media (prefers-reduced-motion:reduce){
-  .np-chat__new{animation:none}
+  .np-chat__new,.np-chat--questionnaire .np-chat__choices.np-chat__new .np-chat__choice,.np-chat__ghost{animation:none}
   .np-chat__dots span{animation:none;opacity:.7}
 }
 
@@ -82,4 +235,29 @@
   .np-chat__next-actions .button{width:100%;text-align:center}
   .np-chat__input{height:48px;padding:0 16px}
   .np-chat__note{padding:0 16px 12px}
+  .np-chat--rdv .np-chat__log{height:auto}
+  .np-chat--questionnaire{--np-chat-marge:20px}
+  .np-chat--questionnaire .np-chat__head{gap:14px;padding:20px var(--np-chat-marge) 0}
+  .np-chat--questionnaire .np-chat__head .np-chat__avatar{width:60px;height:68px}
+  .np-chat--questionnaire .np-chat__name{font-size:17px}
+  .np-chat--questionnaire .np-chat__log,.np-chat--questionnaire.np-chat--rdv .np-chat__log{padding:20px var(--np-chat-marge) 8px}
+  .np-chat--questionnaire .np-chat__msg--ask .np-chat__question{font-size:22px}
+  .np-chat--questionnaire .np-chat__form{padding:8px var(--np-chat-marge)}
+  .np-chat--questionnaire .np-chat__form .np-chat__input{height:48px;padding:0 48px 0 16px}
+  .np-chat--questionnaire .np-chat__send{bottom:14px;width:36px;height:36px}
+  .np-chat--questionnaire .np-chat__note{padding:4px var(--np-chat-marge) 20px}
+  .np-chat--questionnaire .np-chat__booking{padding:24px var(--np-chat-marge)}
+  .np-chat--questionnaire .np-chat__booking .np-chat__next-title{font-size:24px}
+  .np-chat__recap-row{grid-template-columns:116px minmax(0,1fr);gap:10px}
+  .np-chat__booking{padding:16px}
+  .np-chat__calendly{height:760px}
+  .np-chat__letter-row{flex-direction:column}
+  .np-chat__letter-row .np-chat__input{flex:none} /* en colonne, flex:1 écrasait le champ à la hauteur du texte */
+  .np-chat__calc{padding:16px}
+  .np-chat__calc-key-value{font-size:30px}
+  .np-chat__calc-row{gap:8px;font-size:14px}
+  .np-chat__calc-row--total{font-size:15px}
+  .np-chat--questionnaire .np-chat__log>.np-chat__calc,.np-chat--questionnaire .np-chat__log>.np-chat__next--rdv{padding:18px}
+  .np-chat--questionnaire .np-chat__calc-title,.np-chat--questionnaire .np-chat__next--rdv .np-chat__next-title{font-size:22px}
+  .np-chat--questionnaire .np-chat__next--rdv .np-chat__avatar{display:none}
 }
