@@ -1,5 +1,5 @@
 <!-- Simulateur crédit lombard : HTML à coller dans le bloc code de l'item CMS.
-     Les résultats du cas par défaut (compte-titres de 400 000 €, 150 000 € in fine sur 3 ans à 3,5 %) sont écrits ici :
+     Les résultats du cas par défaut (compte-titres de 400 000 €, 150 000 € in fine sur 3 ans à 3,94 %, €STR plus 1,5 point) sont écrits ici :
      la page est lisible sans JavaScript. data-si="infine" ou "amortissable" : lignes propres au remboursement.
      Balises limitées à div, span, p, h2, strong, form, label, input, button. -->
 <div class="np-sim" data-sim="credit-lombard">
@@ -32,8 +32,8 @@
     </div>
     <div class="np-sim__field">
       <label class="np-sim__label" for="np-sim-cl-taux">Taux du crédit</label>
-      <div class="np-sim__input"><input id="np-sim-cl-taux" name="taux" type="number" inputmode="decimal" min="0" max="15" step="0.05" value="3.5"><span class="np-sim__unit">%</span></div>
-      <span class="np-sim__help">3,50 % fixe sur 12 mois chez BoursoBank au 05/11/2026. À taux variable : Euribor 3 mois (2,759 % le 04/11/2026) plus la marge de la banque.</span>
+      <div class="np-sim__input"><input id="np-sim-cl-taux" name="taux" type="number" inputmode="decimal" min="0" max="15" step="0.05" value="3.94"><span class="np-sim__unit">%</span></div>
+      <span class="np-sim__help">Taux variable : €STR (2,443 % le 12/11/2026) plus la marge de la banque, 1,5 point en moyenne selon la Chambre des notaires de Paris. Les taux fixes sont rares.</span>
     </div>
     <div class="np-sim__field">
       <span class="np-sim__label" id="np-sim-cl-remboursement">Remboursement</span>
@@ -65,9 +65,9 @@
       <div class="np-sim__lines">
         <div class="np-sim__line"><span class="np-sim__line-label">Montant emprunté</span><span class="np-sim__line-value" data-out="montant">150 000 €</span></div>
         <div class="np-sim__line"><span class="np-sim__line-label">Part du maximum utilisée</span><span class="np-sim__line-value" data-out="partMax">75 %</span></div>
-        <div class="np-sim__line" data-si="infine"><span class="np-sim__line-label">Intérêts par trimestre</span><span class="np-sim__line-value" data-out="trimestre">1 313 €</span></div>
-        <div class="np-sim__line" data-si="amortissable" hidden><span class="np-sim__line-label">Mensualité</span><span class="np-sim__line-value" data-out="mensualite">4 395 €</span></div>
-        <div class="np-sim__line"><span class="np-sim__line-label">Coût du crédit, intérêts</span><span class="np-sim__line-value" data-out="interets">15 750 €</span></div>
+        <div class="np-sim__line" data-si="infine"><span class="np-sim__line-label">Intérêts par trimestre</span><span class="np-sim__line-value" data-out="trimestre">1 478 €</span></div>
+        <div class="np-sim__line" data-si="amortissable" hidden><span class="np-sim__line-label">Mensualité</span><span class="np-sim__line-value" data-out="mensualite">4 425 €</span></div>
+        <div class="np-sim__line"><span class="np-sim__line-label">Coût du crédit, intérêts</span><span class="np-sim__line-value" data-out="interets">17 730 €</span></div>
         <div class="np-sim__line"><span class="np-sim__line-label">Baisse des marchés avant l'appel de marge</span><span class="np-sim__line-value" data-out="baisse">32,5 %</span></div>
       </div>
       <div class="np-sim__compare">
@@ -75,9 +75,9 @@
         <div class="np-sim__lines">
           <div class="np-sim__line"><span class="np-sim__line-label">Titres à vendre pour disposer du même montant</span><span class="np-sim__line-value" data-out="vendus">170 020 €</span></div>
           <div class="np-sim__line"><span class="np-sim__line-label">Impôt sur la plus-value, payé tout de suite</span><span class="np-sim__line-value" data-out="impotVente">20 020 €</span></div>
-          <div class="np-sim__line"><span class="np-sim__line-label">Intérêts du crédit</span><span class="np-sim__line-value" data-out="interetsVente">15 750 €</span></div>
-          <div class="np-sim__line"><span class="np-sim__line-label">Écart si vous gardez les titres</span><span class="np-sim__line-value" data-out="conserves">4 270 € pour le crédit</span></div>
-          <div class="np-sim__line"><span class="np-sim__line-label">Écart si vous vendez les titres au terme</span><span class="np-sim__line-value" data-out="revendus">15 750 € pour la vente</span></div>
+          <div class="np-sim__line"><span class="np-sim__line-label">Intérêts du crédit</span><span class="np-sim__line-value" data-out="interetsVente">17 730 €</span></div>
+          <div class="np-sim__line"><span class="np-sim__line-label">Écart si vous gardez les titres</span><span class="np-sim__line-value" data-out="conserves">2 290 € pour le crédit</span></div>
+          <div class="np-sim__line"><span class="np-sim__line-label">Écart si vous vendez les titres au terme</span><span class="np-sim__line-value" data-out="revendus">17 730 € pour la vente</span></div>
         </div>
       </div>
     </div>
@@ -93,5 +93,5 @@
     </div>
   </div>
 
-  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : quotités supposées de 80 % pour le fonds en euros, 60 % pour les unités de compte et 50 % pour les actions et ETF ; appel de marge quand la valeur de prêt des placements passe sous 90 % du capital emprunté, comme la couverture de 180 % de BoursoBank (novembre 2026), fonds en euros supposé stable. Chaque banque fixe ses quotités, ses seuils, ses frais et son taux. Vente : titres d'un compte-titres, plus-value imposée au prélèvement forfaitaire unique de 31,4 % au prorata de la plus-value latente ; les titres conservés sont imposés au même taux le jour de leur vente. Le crédit est supposé remboursé par une autre rentrée d'argent. Intérêts non déductibles, sans frais de dossier. Hors PEA, assurance-vie et transmission. La valeur des placements nantis peut baisser : un placement en actions ou en unités de compte comporte un risque de perte en capital, et un appel de marge peut imposer une vente. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
+  <p class="np-sim__disclaimer">Estimation indicative, fiscalité 2026 : quotités supposées de 80 % pour le fonds en euros, 60 % pour les unités de compte et 50 % pour les actions et ETF ; appel de marge quand la valeur de prêt des placements passe sous 90 % du capital emprunté, comme la couverture de 180 % de BoursoBank (novembre 2026), fonds en euros supposé stable. Chaque banque fixe ses quotités, ses seuils, ses frais et sa marge ; le taux, indexé sur l'€STR, est supposé constant sur la durée du crédit. Vente : titres d'un compte-titres, plus-value imposée au prélèvement forfaitaire unique de 31,4 % au prorata de la plus-value latente ; les titres conservés sont imposés au même taux le jour de leur vente. Le crédit est supposé remboursé par une autre rentrée d'argent. Intérêts non déductibles, sans frais de dossier. Hors PEA, assurance-vie et transmission. La valeur des placements nantis peut baisser : un placement en actions ou en unités de compte comporte un risque de perte en capital, et un appel de marge peut imposer une vente. Ne constitue pas un conseil personnalisé ni un conseil financier.</p>
 </div>
